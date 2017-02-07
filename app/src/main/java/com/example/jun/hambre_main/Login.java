@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.jun.hambre_main.R;
+
 public class Login extends AppCompatActivity {
     private EditText email;
     private EditText password;
@@ -34,7 +36,8 @@ public class Login extends AppCompatActivity {
                     if(loginType.equalsIgnoreCase("google")){
                         //google Login
                     }else{
-                        //fb login
+                        //HI KRIKOR
+                        // fb login
                     }
 
                 }

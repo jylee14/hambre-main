@@ -16,31 +16,6 @@ public class Landing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
 
-        fb = (Button) findViewById(R.id.Facebook);
-        goog = (Button) findViewById(R.id.Google);
-        guest = (Button) findViewById(R.id.Guest);
-
-
-        guest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Landing.this, Preferences.class));
-            }
-        });
-
-        fb.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                login(LoginType.FACEBOOK);
-            }
-        });
-
-        goog.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                login(LoginType.GOOGLE);
-            }
-        });
     }
 
     private void login(LoginType type){
