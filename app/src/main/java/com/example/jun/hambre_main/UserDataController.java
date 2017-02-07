@@ -25,7 +25,7 @@ public class UserDataController {
      * Retrieve the user data
      * @param type LoginType to use, is name a Google Login or Facebook
      * @param name string username to retrieve data from database of that user
-     * @return UserModel to retrieve user data
+     * @return UserModel to retrieve user data to login
      */
     public UserModel getUser(LoginType type, String name) {
         // code to get a users data, maybe auth needs to be done here, or
