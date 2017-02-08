@@ -15,11 +15,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".Login" android:label="@string/app_name"/>
-
-
         <activity android:name=".DietRestriction" android:label="@string/app_name"/>
-
+        <activity android:name=".Login" android:label="@string/app_name"/>
         <activity android:name=".Preferences" android:label="@string/app_name"/>
     </application>
 </manifest>
