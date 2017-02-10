@@ -25,9 +25,9 @@ public class Login extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 if(email.getText().length() == 0)
-                    Toast.makeText(Login.this, "Please enter an E-Mail address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Please enter an email address", Toast.LENGTH_SHORT).show();
                 else if(password.getText().length() == 0)
-                    Toast.makeText(Login.this, "Please enter a Password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Login.this, "Please enter a password", Toast.LENGTH_SHORT).show();
                 else{
 
 
