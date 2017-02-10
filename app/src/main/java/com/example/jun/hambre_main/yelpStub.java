@@ -63,8 +63,9 @@ public class yelpStub extends AppCompatActivity{
 
                     // build params
                     HashMap<String, String> params = new HashMap<>();
-                    params.put("latitude", "37.786882");
-                    params.put("longitude", "-122.399972");
+                    params.put("location", "9450 Gilman Dr. La Jolla CA, 92092");
+                    //params.put("latitude", "37.786882");
+                    //params.put("longitude", "-122.399972");
                     params.put("categories", "food");
                     params.put("term", culture);
                     params.put("radius_filter", "40000");
