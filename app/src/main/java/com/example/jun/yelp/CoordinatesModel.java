@@ -14,4 +14,8 @@ public class CoordinatesModel {
     public double longitude() {
         return longitude;
     }
+
+    public String toString(){
+        return latitude + "\t" + longitude;
+    }
 }
