@@ -44,7 +44,7 @@ public class YelpApiTest {
         BusinessResponseModel businessResponse = api.businessSearch(params);
 
         for (BusinessModel business : businessResponse.businesses()) {
-            System.out.println(business.name());
+            System.out.println(business.toString());
         }
     }
 }

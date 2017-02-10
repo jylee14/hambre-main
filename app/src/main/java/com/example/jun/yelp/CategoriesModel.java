@@ -14,4 +14,8 @@ public class CategoriesModel {
     public String title() {
         return title;
     }
+
+    public String toString(){
+        return this.title + "\t" + this.alias;
+    }
 }
