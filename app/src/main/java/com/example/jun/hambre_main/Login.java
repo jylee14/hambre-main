@@ -7,8 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.jun.hambre_main.R;
-
 public class Login extends AppCompatActivity {
     private EditText email;
     private EditText password;
@@ -23,8 +21,7 @@ public class Login extends AppCompatActivity {
         password = (EditText)findViewById(R.id.password);
         button = (Button)findViewById(R.id.login);
 
-        Bundle bundle = getIntent().getExtras();
-        final String loginType = bundle.getString("type");
+
         button.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 if(email.getText().length() == 0)
@@ -32,13 +29,7 @@ public class Login extends AppCompatActivity {
                 else if(password.getText().length() == 0)
                     Toast.makeText(Login.this, "Please enter a Password", Toast.LENGTH_SHORT).show();
                 else{
-                    //logging in happens here
-                    if(loginType.equalsIgnoreCase("google")){
-                        //google Login
-                    }else{
-                        //HI KRIKOR
-                        // fb login
-                    }
+
 
                 }
             }

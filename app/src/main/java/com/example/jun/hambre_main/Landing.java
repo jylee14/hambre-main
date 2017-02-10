@@ -45,8 +45,6 @@ public class Landing extends AppCompatActivity {
 
     private void login(LoginType type){
         Intent i = new Intent(Landing.this, Login.class);
-        Bundle bundle = new Bundle();
-        bundle.putString("type", type.toString());
         startActivity(i);
     }
 }
