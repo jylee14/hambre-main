@@ -63,9 +63,7 @@ public class YelpApi {
             System.out.println(accessToken.access_token());
 
         } catch (Exception e) {
-
-            // TODO: add some actual exception processing. Maybe rethrow the exception
-            System.out.println("Dang");
+            System.out.println("IM A LITTLE TEAPOT SHORT AND STOUT");
         }
     }
 
@@ -130,12 +128,10 @@ public class YelpApi {
             System.out.println("API respons");
             System.out.println(response.toString());
         } catch (Exception e) {
+            System.out.println("BEAUTY AND THE BEAST");
             System.out.println(e.getMessage());
             System.out.println(e.getStackTrace());
         }
-
         return result;
-
     }
-
 }
