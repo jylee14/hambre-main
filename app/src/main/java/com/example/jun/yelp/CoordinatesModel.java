@@ -16,6 +16,6 @@ public class CoordinatesModel {
     }
 
     public String toString(){
-        return latitude + "\t" + longitude;
+        return latitude + "," + longitude;
     }
 }

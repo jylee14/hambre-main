@@ -27,25 +27,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
-        android:id="@+id/first"/>
+        android:id="@+id/first"
+        android:layout_margin="15sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
-        android:id="@+id/second"/>
+        android:id="@+id/second"
+        android:layout_margin="15sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
-        android:id="@+id/third"/>
+        android:id="@+id/third"
+        android:layout_margin="15sp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="32sp"
-        android:id="@+id/fourth"/>
+        android:id="@+id/fourth"
+        android:layout_margin="15sp"/>
 
 
     <Button

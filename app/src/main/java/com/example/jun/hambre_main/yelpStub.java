@@ -2,6 +2,8 @@ package com.example.jun.hambre_main;
 
 import com.google.gson.Gson;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -32,6 +34,7 @@ public class yelpStub extends AppCompatActivity{
     private TextView third;
     private TextView fourth;
 
+    private BusinessModel business1;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +71,7 @@ public class yelpStub extends AppCompatActivity{
 
                     BusinessResponseModel businessResponse = api.businessSearch(params);
                     try{
-                        BusinessModel business1 = (businessResponse.businesses())[0];
+                        business1 = (businessResponse.businesses())[0];
                         first.setText(business1.name());
                         BusinessModel business2 = (businessResponse.businesses())[1];
                         second.setText(business2.name());
@@ -81,6 +84,21 @@ public class yelpStub extends AppCompatActivity{
                         e.printStackTrace();
                     }
                 }
+            }
+        });
+
+        first.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String coordinates = business1.coordinates().toString();
+                String label = business1.name();
+                String uriBegin = "geo:" + coordinates;
+                String query = coordinates + "(" + label + ")";
+                String encodedQuery = Uri.encode(query);
+                String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
+                Uri uri = Uri.parse(uriString);
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+                startActivity(intent);
             }
         });
     }
