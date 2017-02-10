@@ -11,7 +11,8 @@ import android.os.Bundle;
 public class YelpLocationListener implements android.location.LocationListener {
     @Override
     public void onLocationChanged(Location location) {
-
+        location.getLatitude();
+        location.getLongitude();
     }
 
     @Override

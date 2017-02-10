@@ -2,11 +2,18 @@ package com.example.jun.hambre_main;
 
 import com.google.gson.Gson;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +33,8 @@ import java.util.HashMap;
  * allow the user to input a cuisine type/city name to see the responses of yelp api
  */
 
-public class yelpStub extends AppCompatActivity{
+public class yelpStub extends AppCompatActivity {
+    private Location location;
     private EditText cuisine;
     private Button show;
     private TextView first;
@@ -35,12 +43,22 @@ public class yelpStub extends AppCompatActivity{
     private TextView fourth;
 
     private BusinessModel business1;
+
+    private int LOCATION_ACCESS_VALUE = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        // gps
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // get permissions
+        final YelpLocationListener locationListener = new YelpLocationListener();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
         setContentView(R.layout.yelpstub);
 
@@ -60,11 +78,12 @@ public class yelpStub extends AppCompatActivity{
                 else {
                     YelpApi api = new YelpApi();
 
+                    locationListener.onLocationChanged(location);
 
                     // build params
                     HashMap<String, String> params = new HashMap<>();
-                    params.put("latitude", "37.786882");
-                    params.put("longitude", "-122.399972");
+                    params.put("latitude", String.valueOf(location.getLatitude()));
+                    params.put("longitude", String.valueOf(location.getLongitude()));
                     params.put("categories", "food");
                     params.put("term", culture);
                     params.put("radius_filter", "40000");
