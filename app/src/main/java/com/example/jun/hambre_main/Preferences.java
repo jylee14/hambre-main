@@ -20,10 +20,10 @@ public class Preferences extends AppCompatActivity {
     private RadioButton dist;
     private Button cont;
 
-
     protected static boolean byRating = true;  //for ordering later. Rating by default
-    protected int radius = 1;   //minimum radius is 1 mile, propagated throughout project
+    protected int radius = 1;   //minimum radius is 1mile, propagated throughout project in meters
     private int maxTaps = 5;    //we're not going to let the user tap on any button more than 5 times
+    private final int meterToMile = 1600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +86,7 @@ public class Preferences extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                radius = seekBar.getProgress();
+                radius = seekBar.getProgress() * meterToMile;
                 maxRad.setText(radius + " mi");
             }
         });
