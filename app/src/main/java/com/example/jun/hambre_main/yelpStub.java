@@ -46,20 +46,19 @@ public class yelpStub extends AppCompatActivity {
     private TextView fourth;
 
     private BusinessModel business1;
+
+    // for the GPS location
     private LocationManager locationManager;
     private String provider;
-    private Activity myself;
-
-    private int LOCATION_ACCESS_VALUE = 0;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        myself = this;
         super.onCreate(savedInstanceState);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
+        // initializes gps stuff
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         provider = locationManager.getBestProvider(criteria, false);
@@ -82,10 +81,14 @@ public class yelpStub extends AppCompatActivity {
                 else {
                     YelpApi api = new YelpApi();
 
-                    if (ActivityCompat.checkSelfPermission(myself, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(myself, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // error check for GPS (mostly permissions)
+                    if (ActivityCompat.checkSelfPermission(yelpStub.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                            && ActivityCompat.checkSelfPermission(yelpStub.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         GPS_Enabled();
                     }
+                    // get location
                     Location location = locationManager.getLastKnownLocation(provider);
+
                     // build params
                     HashMap<String, String> params = new HashMap<>();
                     params.put("latitude", String.valueOf(location.getLatitude()));
