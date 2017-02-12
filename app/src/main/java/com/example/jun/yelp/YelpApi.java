@@ -15,6 +15,8 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class YelpApi {
 
+    private static YelpApi instance = new YelpApi();
+
     private final String clientId = "iVbg1d0JfvVIpusNJA0SDg";
     private final String clientSecret = "3EkwKuUuSP90d2fdiQ8Fx6TCK7dzHJTx3ZLlg9fEdHoekXEYQr5Oynvxmb9LzwOP";
 
@@ -30,7 +32,7 @@ public class YelpApi {
     /**
      * Constructor. Connects to yelp api to get access token to be used in later queries
      */
-    public YelpApi() {
+    private YelpApi() {
         // get access token
         try {
             // Connect to the acess token url
@@ -131,5 +133,9 @@ public class YelpApi {
             System.out.println(e.getStackTrace());
         }
         return result;
+    }
+
+    public static YelpApi getInstance() {
+        return instance;
     }
 }

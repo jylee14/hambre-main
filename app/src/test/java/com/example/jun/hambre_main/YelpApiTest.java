@@ -3,7 +3,6 @@ package com.example.jun.hambre_main;
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.YelpApi;
-import com.example.jun.yelp.YelpUtilities;
 
 import org.junit.Test;
 
@@ -18,13 +17,13 @@ public class YelpApiTest {
 
     @Test
     public void yelpUtilities_test() {
-        YelpUtilities yelp = YelpUtilities.getInstance();
+        YelpApi api = YelpApi.getInstance();
         HashMap<String, String> params = new HashMap<>();
         params.put("term", "food");
         params.put("latitude", "37.7670169511878");
         params.put("longitude", "-122.42184275");
         params.put("radius_filter", "40000");
-        BusinessResponseModel businessResponse = yelp.getYelpApi().businessSearch(params);
+        BusinessResponseModel businessResponse = api.businessSearch(params);
 
         for (BusinessModel business : businessResponse.businesses()) {
             System.out.println(business.name());
@@ -33,7 +32,7 @@ public class YelpApiTest {
 
     @Test
     public void categorySearch_test() {
-        YelpApi api = YelpUtilities.getInstance().getYelpApi();
+        YelpApi api = YelpApi.getInstance();
 
         // build params
         HashMap<String, String> params = new HashMap<>();

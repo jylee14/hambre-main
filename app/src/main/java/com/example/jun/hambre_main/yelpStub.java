@@ -1,7 +1,5 @@
 package com.example.jun.hambre_main;
 
-import com.google.gson.Gson;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.YelpApi;
-import com.example.jun.yelp.YelpUtilities;
 
 import java.util.HashMap;
 
@@ -58,7 +55,7 @@ public class yelpStub extends AppCompatActivity{
                 if(culture == "")
                     Toast.makeText(yelpStub.this, "enter cuisine culture", Toast.LENGTH_SHORT).show();
                 else {
-                    YelpApi api = new YelpApi();
+                    YelpApi api = YelpApi.getInstance();
 
 
                     // build params
