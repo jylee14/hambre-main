@@ -1,23 +1,23 @@
 package com.example.jun.hambre_main;
 
+import com.example.jun.yelp.SortType;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ * RestaurantDataController class tests
  */
 public class RestaurantDataControllerTest {
 
     @Test
     public void getRestaurants_test() {
         RestaurantDataController dataController = new RestaurantDataController();
-        RestaurantModel[] restaurants = dataController.getRestaurants("mexican", 20);
+        RestaurantModel[] restaurants = dataController.getRestaurants("food", 20, SortType.best_match, true);
 
         for (RestaurantModel restaurant : restaurants) {
-            System.out.println(restaurant.getName());
+            System.out.println(restaurant != null ? restaurant.getName() : "Restaurant Not Found");
         }
     }
 }

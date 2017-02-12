@@ -25,7 +25,7 @@ public class RestaurantDataController {
     /**
      * Method to retrieve a list of restaurants based on a search query
      * @param searchQuery query to enter into yelp API
-     * @param count number of restaurants to retrieve
+     * @param count number of restaurants to retrieve (max 50)
      * @param sortType how to sort the response
      * @param openNow retrieve only open restaurants
      * @return list of restaurants
@@ -38,21 +38,29 @@ public class RestaurantDataController {
         HashMap<String, String> params = new HashMap<>();
         params.put("term", searchQuery);
         params.put("categories", "food");
+        params.put("latitude", "37.7670169511878");
+        params.put("longitude", "-122.42184275");
+        //params.put("location", "1536 E Washington Blvd, Pasadena, CA");
         params.put("limit", count + "");
-        params.put("param", sortType.name());
+        params.put("sort_by", sortType.name());
         params.put("open_now", openNow ? "true" : "false");
 
+        System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
         BusinessResponseModel response = api.businessSearch(params);
 
         // loop through converting to Restaurant objects
         int index = 0;
         for (BusinessModel business : response.businesses()) {
+            if (business.name() == null) {
+                System.err.println("Problem");
+            }
             restaurants[index] = new RestaurantModel(
                                         business.name(),
                                         business.url(),
                                         business.image_url(),
-                                        business.price().length());
+                                        business.price() == null ? 0 : business.price().length());
+            index++;
         }
 
         return restaurants;
