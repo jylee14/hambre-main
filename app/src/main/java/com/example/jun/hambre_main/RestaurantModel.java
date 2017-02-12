@@ -12,8 +12,16 @@ public class RestaurantModel implements Parcelable{
     private final String imageLink;
     private final int dollarSigns;
 
-    //Any restaurant object MUST have the following attributes
-    //The RestaurantModel object CANNOT change its fields once created.
+
+
+    /**
+     * Any restaurant object MUST have the following attributes
+     * The RestaurantModel object CANNOT change its fields once created.
+     * @param name name of restaurant
+     * @param yelpLink link to restaurant's yelp page
+     * @param imageLink link to picture representing restaurant
+     * @param dollarSigns number of dollar signs restaurant has
+     */
     public RestaurantModel(String name, String yelpLink, String imageLink, int dollarSigns) {
         this.name = name;
         this.yelpLink = yelpLink;
@@ -21,6 +29,10 @@ public class RestaurantModel implements Parcelable{
         this.dollarSigns = dollarSigns;
     }
 
+    /**
+     * Construct using a parcel
+     * @param in Parcel to create restaurant from
+     */
     protected RestaurantModel(Parcel in) {
         name = in.readString();
         yelpLink = in.readString();
