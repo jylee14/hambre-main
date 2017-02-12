@@ -12,8 +12,6 @@ public class RestaurantModel implements Parcelable{
     private final String imageLink;
     private final int dollarSigns;
 
-
-
     /**
      * Any restaurant object MUST have the following attributes
      * The RestaurantModel object CANNOT change its fields once created.
