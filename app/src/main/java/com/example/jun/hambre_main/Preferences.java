@@ -21,9 +21,11 @@ public class Preferences extends AppCompatActivity {
     private Button cont;
 
 
-    protected static boolean byRating = true;  //for ordering later. Rating by default
-    protected int radius = 1;   //minimum radius is 1 mile, propagated throughout project
-    private int maxTaps = 5;    //we're not going to let the user tap on any button more than 5 times
+    //1=Distance, 2=Highest Rated
+    protected static int byRating = 2;  //for ordering later. Rating by default
+    protected int radius = 1;   //minimum radius is 1 mile
+    protected int meters = 1600;   //yelpAPI wants meters
+    private final int meterToMile = 1600;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,13 +63,13 @@ public class Preferences extends AppCompatActivity {
         rate.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                byRating = true;
+                byRating = 2;
             }
         });
         dist.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                byRating = false;
+                byRating = 1;
             }
         });
 
@@ -86,8 +88,9 @@ public class Preferences extends AppCompatActivity {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                radius = seekBar.getProgress();
+                radius = seekBar.getProgress() ;
                 maxRad.setText(radius + " mi");
+                meters = radius * meterToMile;
             }
         });
 
@@ -100,11 +103,13 @@ public class Preferences extends AppCompatActivity {
                 if(radius == 0){
                     Toast.makeText(Preferences.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
-                    //Bundle bundle = new Bundle();
-                    //bundle.putBoolean("byRating", byRating);
-                    //bundle.putInt("radius", radius);
+                    Intent i = new Intent(Preferences.this, yelpStub.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("sort", byRating);
+                    bundle.putInt("radius", meters);
                     //bundle.putString("diet", "None");
-                    startActivity(new Intent(Preferences.this, yelpStub.class));
+                    i.putExtras(bundle);
+                    startActivity(i);
                 }
             }
         });
