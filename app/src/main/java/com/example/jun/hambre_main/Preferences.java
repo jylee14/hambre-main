@@ -105,7 +105,9 @@ public class Preferences extends AppCompatActivity {
                 }else {
 
                     //TODO change this to the new food finder UI
-                    Intent i = new Intent(Preferences.this, yelpStub.class);
+                    //Intent i = new Intent(Preferences.this, yelpStub.class);
+                    Intent i = new Intent(Preferences.this, FoodFinderController.class);
+
                     Bundle bundle = new Bundle();
                     bundle.putInt("sort", byRating);
                     bundle.putInt("radius", meters);

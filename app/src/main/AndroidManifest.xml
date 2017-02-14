@@ -20,5 +20,6 @@
         <activity android:name=".DietRestriction" android:label="@string/app_name"/>
         <activity android:name=".Preferences" android:label="@string/app_name"/>
         <activity android:name=".yelpStub" android:label="@string/app_name"/>
+        <activity android:name=".FoodFinderController" android:label="Hambre"/>
     </application>
 </manifest>

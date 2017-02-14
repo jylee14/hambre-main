@@ -50,7 +50,8 @@ public class yelpStub extends AppCompatActivity{
         setContentView(R.layout.yelpstub);
 
         //TODO change this to get the ImageView's tag
-        cuisine = (EditText)findViewById(R.id.culture);
+        //cuisine = (EditText)findViewById(R.id.culture);
+
 
         show = (Button)findViewById(R.id.show);
         first = (TextView)findViewById(R.id.first);
