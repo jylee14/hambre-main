@@ -36,7 +36,7 @@ public class FoodFinderController extends AppCompatActivity {
 
         //dummy content until db is hooked up
         gallery = new FoodModel[4];
-        gallery[0] = new FoodModel("tacos", "mexican", R.drawable.mex);
+        gallery[0] = new FoodModel("tacos", "mexican", R.drawable.mexican);
         gallery[1] = new FoodModel("curry", "indian", R.drawable.indian);
         gallery[2] = new FoodModel("pad thai", "thai", R.drawable.thai);
         gallery[3] = new FoodModel("chow mein", "chinese", R.drawable.chinese);
