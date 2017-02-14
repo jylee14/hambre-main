@@ -16,7 +16,7 @@
         android:id="@+id/image"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/mex"
+
         android:layout_weight="1"
         android:adjustViewBounds="false"
         android:cropToPadding="false" />

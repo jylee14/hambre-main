@@ -57,6 +57,14 @@ public class FoodModel implements Parcelable{
         return culture;
     }
 
+    /**
+     * Temporary getter for tempLink to drawable id until db is finished
+     * @return the id of the drawable (the pic of food)
+     */
+    public int getTempLink(){
+        return tempLink;
+    }
+
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Parcelable.Creator<FoodModel> CREATOR = new Parcelable.Creator<FoodModel>() {
         public FoodModel createFromParcel(Parcel in) {
