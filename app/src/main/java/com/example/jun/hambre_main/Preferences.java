@@ -103,6 +103,8 @@ public class Preferences extends AppCompatActivity {
                 if(radius == 0){
                     Toast.makeText(Preferences.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
+
+                    //TODO change this to the new food finder UI
                     Intent i = new Intent(Preferences.this, yelpStub.class);
                     Bundle bundle = new Bundle();
                     bundle.putInt("sort", byRating);
