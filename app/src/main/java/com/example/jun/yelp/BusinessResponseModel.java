@@ -1,9 +1,11 @@
 package com.example.jun.yelp;
 
+import java.io.Serializable;
+
 /**
  * Model representing Yelp response to a business search request
  */
-public class BusinessResponseModel {
+public class BusinessResponseModel implements Serializable{
     private String total;
     private BusinessModel[] businesses;
     private RegionModel region;
