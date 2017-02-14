@@ -1,5 +1,6 @@
 package com.example.jun.yelp;
 
+import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.io.Serializable;
@@ -27,6 +28,11 @@ public class BusinessResponseModel implements Parcelable{
     @Override
     public int describeContents(){
         return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags){
+        //dest.writeTypedArray(businesses, 0);
     }
 }
 
