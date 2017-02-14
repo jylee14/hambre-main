@@ -1,5 +1,6 @@
 package com.example.jun.hambre_main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -77,6 +78,10 @@ public class FoodFinderController extends AppCompatActivity {
                 BusinessResponseModel businessResponse = api.businessSearch(params);
                 //TODO have this open SelectRestaurantController.java and display a list
                 //TODO of the restaurants returned
+
+                Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
+                i.putExtra("businessResponseObject", businessResponse);
+                startActivity(i);
             }
         });
     }
