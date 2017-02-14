@@ -104,7 +104,7 @@ public class Preferences extends AppCompatActivity {
                     Toast.makeText(Preferences.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
 
-                    //TODO change this to the new food finder UI
+
                     //Intent i = new Intent(Preferences.this, yelpStub.class);
                     Intent i = new Intent(Preferences.this, FoodFinderController.class);
 

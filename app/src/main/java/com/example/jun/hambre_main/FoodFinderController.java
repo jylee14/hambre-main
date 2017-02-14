@@ -43,7 +43,14 @@ public class FoodFinderController extends AppCompatActivity {
                 else
                     Toast.makeText(getApplication().getBaseContext(),
                             "out of pics", Toast.LENGTH_SHORT).show();
-
+            }
+        });
+        selectButton = (Button)findViewById(R.id.btn_select);
+        selectButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                //String culture = mainView.getDrawable().getCurrent().toString();
+                //System.err.println("Culture: " + culture);
             }
         });
     }
