@@ -19,13 +19,12 @@ import java.util.HashMap;
 
 public class FoodFinderController extends AppCompatActivity {
     private Button nextButton, infoButton, selectButton;
-    ImageView mainView;
-    //int gallery [];
+    private ImageView mainView;
     int index;
-    FoodModel [] gallery;
+    private FoodModel [] gallery;
     private Bundle bundle;
     private int rad = 1600; //min is 1 mile
-    private final String LOG_TAG = getClass().getSimpleName();
+    private final String LOG_TAG = getClass().getSimpleName(); //for log
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,27 +33,26 @@ public class FoodFinderController extends AppCompatActivity {
 
         bundle = getIntent().getExtras();
         rad = bundle.getInt("radius");
+
         //dummy content until db is hooked up
         gallery = new FoodModel[4];
         gallery[0] = new FoodModel("tacos", "mexican", R.drawable.mex);
         gallery[1] = new FoodModel("curry", "indian", R.drawable.indian);
         gallery[2] = new FoodModel("pad thai", "thai", R.drawable.thai);
         gallery[3] = new FoodModel("chow mein", "chinese", R.drawable.chinese);
-        
+
         index = 1;
         mainView = (ImageView)findViewById(R.id.image);
         mainView.setImageResource(gallery[0].getTempLink());
         nextButton = (Button) findViewById(R.id.btn_next);
         nextButton.setOnClickListener(new Button.OnClickListener(){
-
             @Override
             public void onClick(View v){
-
                 if(index < 4) {
                     mainView.setImageResource(gallery[index].getTempLink());
                     index++;
                 }
-                else
+                else //TODO change this eventually
                     Toast.makeText(getApplication().getBaseContext(),
                             "out of pics", Toast.LENGTH_SHORT).show();
             }
@@ -65,7 +63,6 @@ public class FoodFinderController extends AppCompatActivity {
             public void onClick(View v){
 
                 String culture = gallery[index-1].getCulture();
-                //System.err.println("culture: " + culture);
                 Log.v(LOG_TAG, "culture: " + culture);
                 YelpApi api = YelpApi.getInstance();
 
@@ -78,6 +75,8 @@ public class FoodFinderController extends AppCompatActivity {
                 params.put("radius_filter", "" + rad);
 
                 BusinessResponseModel businessResponse = api.businessSearch(params);
+                //TODO have this open SelectRestaurantController.java and display a list
+                //TODO of the restaurants returned
             }
         });
     }
