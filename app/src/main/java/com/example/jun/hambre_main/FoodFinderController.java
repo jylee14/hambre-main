@@ -20,7 +20,7 @@ import java.util.HashMap;
 public class FoodFinderController extends AppCompatActivity {
     private Button nextButton, infoButton, selectButton;
     private ImageView mainView;
-    int index;
+    private int index;
     private FoodModel [] gallery;
     private Bundle bundle;
     private int rad = 1600; //min is 1 mile
