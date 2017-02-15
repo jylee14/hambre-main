@@ -2,6 +2,7 @@ package com.example.jun.hambre_main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -15,11 +16,9 @@ import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.YelpApi;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class FoodFinderController extends AppCompatActivity {
-    private Button nextButton, infoButton, selectButton;
+    private Button infoButton;
     private ImageView mainView;
     private int index;
     private FoodModel [] gallery;
@@ -32,6 +31,10 @@ public class FoodFinderController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_food_finder);
 
         bundle = getIntent().getExtras();
@@ -65,16 +68,12 @@ public class FoodFinderController extends AppCompatActivity {
 
                 //building params to pass as individual strings
                 ArrayList<String> param = new ArrayList<>();
-                param.add("location");
-                param.add("9450 Gilman Dr. La Jolla CA, 92092");
-                param.add("categories");
-                param.add("food");
-                param.add("term");
-                param.add(culture);
-                param.add("sort");
-                param.add("" + Preferences.byRating);
-                param.add("radius");
-                param.add("" + rad);
+
+                param.add("location");      param.add("La Jolla");
+                param.add("categories");    param.add("food");
+                param.add("term");          param.add(culture);
+                param.add("sort");          param.add("" + Preferences.byRating);
+                param.add("radius");        param.add("" + rad);
 
                 Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
                 i.putStringArrayListExtra("param", param);

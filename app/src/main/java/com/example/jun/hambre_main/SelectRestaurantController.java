@@ -1,9 +1,12 @@
 package com.example.jun.hambre_main;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.jun.yelp.BusinessModel;
@@ -32,9 +35,7 @@ public class SelectRestaurantController extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-
         setContentView(R.layout.activity_select_restaurant);
-
 
         first = (TextView)findViewById(R.id.first);
         second = (TextView)findViewById(R.id.second);
@@ -43,6 +44,7 @@ public class SelectRestaurantController extends AppCompatActivity {
 
         HashMap<String, String> params = new HashMap<>();
         ArrayList<String> param = getIntent().getStringArrayListExtra("param");
+
         try {
             YelpApi api = YelpApi.getInstance();
 
@@ -73,5 +75,52 @@ public class SelectRestaurantController extends AppCompatActivity {
             e.printStackTrace();
             first.setText("He's dead Jim");
         }
+
+
+        first.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String coordinates = business1.coordinates().toString();
+                String label = business1.name();
+                openMaps(coordinates, label);
+            }
+        });
+
+        second.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String coordinates = business2.coordinates().toString();
+                String label = business2.name();
+                openMaps(coordinates, label);
+            }
+        });
+
+        third.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String coordinates = business3.coordinates().toString();
+                String label = business3.name();
+                openMaps(coordinates, label);
+            }
+        });
+
+        fourth.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String coordinates = business4.coordinates().toString();
+                String label = business4.name();
+                openMaps(coordinates, label);
+            }
+        });
+    }
+
+    private void openMaps(String coordinates, String label){
+        String uriBegin = "geo:" + coordinates;
+        String query = coordinates + "(" + label + ")";
+        String encodedQuery = Uri.encode(query);
+        String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
+        Uri uri = Uri.parse(uriString);
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
+        startActivity(intent);
     }
 }
