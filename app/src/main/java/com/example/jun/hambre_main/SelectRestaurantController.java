@@ -7,25 +7,17 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.YelpApi;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- * This class is a stub class to test the integration of Yelp API into the system
- * allow the user to input a cuisine type/city name to see the responses of yelp api
- */
+public class SelectRestaurantController extends AppCompatActivity {
 
-public class yelpStub extends AppCompatActivity{
-    private EditText cuisine;
-    private Button show;
     private TextView first;
     private TextView second;
     private TextView third;
@@ -35,71 +27,55 @@ public class yelpStub extends AppCompatActivity{
     private BusinessModel business2;
     private BusinessModel business3;
     private BusinessModel business4;
+    //TODO implement and display listView of restaurants
 
-    private Bundle bundle;  //from preferences page
-    private int sort = 2;   //default is rating
-    private int rad = 1600; //min is 1 mile
-
-    @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        setContentView(R.layout.yelpstub);
+        setContentView(R.layout.activity_select_restaurant);
 
-        //TODO change this to get the ImageView's tag
-        //cuisine = (EditText)findViewById(R.id.culture);
-
-
-        show = (Button)findViewById(R.id.show);
         first = (TextView)findViewById(R.id.first);
         second = (TextView)findViewById(R.id.second);
         third = (TextView)findViewById(R.id.third);
         fourth = (TextView)findViewById(R.id.fourth);
 
-        bundle = getIntent().getExtras();
-        sort = bundle.getInt("sort");
-        rad = bundle.getInt("radius");
+        HashMap<String, String> params = new HashMap<>();
+        ArrayList<String> param = getIntent().getStringArrayListExtra("param");
 
-        show.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                String culture = cuisine.getText().toString();
-                if(culture == "")
-                    Toast.makeText(yelpStub.this, "enter cuisine culture", Toast.LENGTH_SHORT).show();
-                else {
-                    YelpApi api = YelpApi.getInstance();
+        try {
+            YelpApi api = YelpApi.getInstance();
 
-                    // build params
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("location", "9450 Gilman Dr. La Jolla CA, 92092");
-                    params.put("categories", "food");
-                    params.put("term", culture);
-                    params.put("sort", "" + Preferences.byRating);
-                    params.put("radius_filter", "" + rad);
+            params.put(param.get(0), param.get(1));
+            params.put(params.get(2), params.get(3));
+            params.put(param.get(4), param.get(5));
+            params.put(params.get(6), params.get(7));
+            params.put(param.get(8), param.get(9));
+            BusinessResponseModel businessResponse = api.businessSearch(params);
 
-                    BusinessResponseModel businessResponse = api.businessSearch(params);
-                    try{
-                        business1 = (businessResponse.businesses())[0];
-                        first.setText(business1.name() + "\t" + business1.price() + "\t" + business1.rating());
+            if(businessResponse != null) {
 
-                        business2 = (businessResponse.businesses())[1];
-                        second.setText(business2.name() + "\t" + business2.price() + "\t" + business2.rating());
+                business1 = ((businessResponse.businesses())[0]);
+                first.setText(business1.name() + "\t" + business1.price() + "\t" + business1.rating());
 
-                        business3 = (businessResponse.businesses())[2];
-                        third.setText(business3.name() + "\t" + business3.price() + "\t" + business3.rating());
+                business2 = ((businessResponse.businesses())[1]);
+                second.setText(business2.name() + "\t" + business2.price() + "\t" + business2.rating());
 
-                        business4 = (businessResponse.businesses())[3];
-                        fourth.setText(business4.name() + "\t" + business4.price() + "\t" + business4.rating());
-                    }catch(Exception e){
-                        first.setText("something went wrong");
-                        e.printStackTrace();
-                    }
-                }
+                business3 = ((businessResponse.businesses())[2]);
+                third.setText(business3.name() + "\t" + business3.price() + "\t" + business3.rating());
+
+                business4 = ((businessResponse.businesses())[3]);
+                fourth.setText(business4.name() + "\t" + business4.price() + "\t" + business4.rating());
+            }else{
+                first.setText("MY LEGS");
             }
-        });
+        }catch (Exception e){
+            e.printStackTrace();
+            first.setText("He's dead Jim");
+        }
+
 
         first.setOnClickListener(new View.OnClickListener(){
             @Override

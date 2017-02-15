@@ -10,6 +10,9 @@ public class FoodModel implements Parcelable{
     private String name; // name of food
     private String culture; // culture of the food
     private String link; // link to the picture
+
+    private int tempLink; //link to drawable for now, until db is implemented
+
     protected final static String[] tags = {"spicy", "cold"};
 
     /**
@@ -32,6 +35,34 @@ public class FoodModel implements Parcelable{
         this.name = in.readString();
         this.culture= in.readString();
         this.link = in.readString();
+    }
+
+    /**
+     * Overloaded temporary constructor for use until db is implemented
+     * @param name name of the food
+     * @param culture name of the culture of the food
+     * @param tempLink drawable id of pic of food
+     */
+    public FoodModel(String name, String culture, int tempLink){
+        this.name = name;
+        this.culture = culture;
+        this.tempLink = tempLink;
+    }
+
+    /**
+     * Temporary getter for culture until db is finished
+     * @return the culture of the FoodModel
+     */
+    public String getCulture(){
+        return culture;
+    }
+
+    /**
+     * Temporary getter for tempLink to drawable id until db is finished
+     * @return the id of the drawable (the pic of food)
+     */
+    public int getTempLink(){
+        return tempLink;
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
