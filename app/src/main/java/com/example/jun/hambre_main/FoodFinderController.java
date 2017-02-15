@@ -81,47 +81,6 @@ public class FoodFinderController extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
-        nextButton = (Button) findViewById(R.id.btn_next);
-        nextButton.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                if(index < 4) {
-                    mainView.setImageResource(gallery[index].getTempLink());
-                    index++;
-                }
-                else //TODO change this eventually
-                    Toast.makeText(getApplication().getBaseContext(),
-                            "out of pics", Toast.LENGTH_SHORT).show();
-            }
-        });
-        selectButton = (Button)findViewById(R.id.btn_select);
-        selectButton.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v){
-
-                String culture = gallery[index-1].getCulture();
-                Log.v(LOG_TAG, "culture: " + culture);
-                YelpApi api = YelpApi.getInstance();
-
-                // build params
-                HashMap<String, String> params = new HashMap<>();
-                params.put("location", "9450 Gilman Dr. La Jolla CA, 92092");
-                params.put("categories", "food");
-                params.put("term", culture);
-                params.put("sort", "" + Preferences.byRating);
-                params.put("radius_filter", "" + rad);
-
-                BusinessResponseModel businessResponse = api.businessSearch(params);
-                //TODO have this open SelectRestaurantController.java and display a list
-                //TODO of the restaurants returned
-
-                ArrayList<BusinessModel> businesses = new ArrayList<>(Arrays.asList(businessResponse.businesses()));
-                Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
-                i.putExtra("businessResponseObject", businessResponse);
-                startActivity(i);
-            }
-        });
     }
 
 }
