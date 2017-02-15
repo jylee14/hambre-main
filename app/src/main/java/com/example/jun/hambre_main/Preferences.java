@@ -100,14 +100,11 @@ public class Preferences extends AppCompatActivity {
                 if(radius == 0){
                     Toast.makeText(Preferences.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("byRating", byRating);
-                    bundle.putInt("radius", radius);
-                    bundle.putString("diet", "None");
-                    if(maxTaps > 0) {
-                        Toast.makeText(Preferences.this, "Server is still dead; sorry", Toast.LENGTH_SHORT).show();
-                        maxTaps--;
-                    }
+                    //Bundle bundle = new Bundle();
+                    //bundle.putBoolean("byRating", byRating);
+                    //bundle.putInt("radius", radius);
+                    //bundle.putString("diet", "None");
+                    startActivity(new Intent(Preferences.this, yelpStub.class));
                 }
             }
         });

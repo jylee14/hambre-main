@@ -19,9 +19,8 @@ public class YelpApi {
     private final String clientSecret = "3EkwKuUuSP90d2fdiQ8Fx6TCK7dzHJTx3ZLlg9fEdHoekXEYQr5Oynvxmb9LzwOP";
 
     private final String accessTokenUrl =
-            "https://api.yelp.com/oauth2/token?grant_type=client_credentials" +
-            "&client_id=" + clientId +
-            "&client_secret=" + clientSecret;
+            "https://api.yelp.com/oauth2/token?grant_type=client_credentials&client_id=" + clientId
+                    + "&client_secret=" + clientSecret;
 
     private final String SEARCH_ENDPOINT  = "https://api.yelp.com/v3/businesses/search";
 
@@ -45,8 +44,7 @@ public class YelpApi {
             // response code for request
             int responseCode = con.getResponseCode();
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
 
@@ -63,9 +61,8 @@ public class YelpApi {
             System.out.println(accessToken.access_token());
 
         } catch (Exception e) {
-
-            // TODO: add some actual exception processing. Maybe rethrow the exception
-            System.out.println("Dang");
+            e.printStackTrace();
+            System.out.println("IM A LITTLE TEAPOT SHORT AND STOUT");
         }
     }
 
@@ -79,7 +76,6 @@ public class YelpApi {
         BusinessResponseModel result = null;
 
         try {
-
             // form the query string
             // e.g. ?key1=value1&key2=value2&key3=value3...
 
@@ -127,15 +123,13 @@ public class YelpApi {
             Gson gson = new Gson();
             result = gson.fromJson(response.toString(), BusinessResponseModel.class);
 
-            System.out.println("API respons");
+            System.out.println("API response");
             System.out.println(response.toString());
         } catch (Exception e) {
+            System.out.println("BEAUTY AND THE BEAST");
             System.out.println(e.getMessage());
             System.out.println(e.getStackTrace());
         }
-
         return result;
-
     }
-
 }

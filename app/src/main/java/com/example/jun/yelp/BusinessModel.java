@@ -68,6 +68,6 @@ public class BusinessModel {
     }
 
     public String toString(){
-        return this.name + "\t" + this.phone + "\t" + this.rating + "\t" + this.price + "\t" + this.categories[0];
+        return this.name + "\t" + this.phone + "\t" + this.rating + "\t" + this.price + "\t" + this.categories[0] + "\t" + this.location;
     }
 }

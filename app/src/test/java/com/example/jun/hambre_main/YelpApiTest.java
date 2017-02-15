@@ -23,6 +23,7 @@ public class YelpApiTest {
         params.put("term", "food");
         params.put("latitude", "37.7670169511878");
         params.put("longitude", "-122.42184275");
+        params.put("radius_filter", "40000");
         BusinessResponseModel businessResponse = yelp.getYelpApi().businessSearch(params);
 
         for (BusinessModel business : businessResponse.businesses()) {
