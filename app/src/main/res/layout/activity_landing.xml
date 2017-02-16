@@ -28,13 +28,13 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="match_parent"
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/Facebook"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|bottom"
-            android:layout_weight=".15"
-            android:text="Log in with Facebook"
-            android:id="@+id/Facebook"/>
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"/>
 
         <Button
             android:layout_width="match_parent"

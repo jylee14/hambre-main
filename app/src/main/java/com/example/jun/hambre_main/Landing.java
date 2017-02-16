@@ -6,45 +6,74 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 public class Landing extends AppCompatActivity {
     private Button guest;       //continue as guest
     private Button goog;        //google login
-    private Button fb;          //FB login
+    CallbackManager cbmanager; //fb login
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_landing);
 
-        guest = (Button)findViewById(R.id.Guest);
-        goog = (Button)findViewById(R.id.Google);
-        fb = (Button)findViewById(R.id.Facebook);
+        facebookLogin();
+        guest = (Button) findViewById(R.id.Guest);
+        goog = (Button) findViewById(R.id.Google);
 
-        guest.setOnClickListener(new View.OnClickListener(){
+
+        guest.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 startActivity(new Intent(Landing.this, Preferences.class));
             }
         });
 
-
-        fb.setOnClickListener(new View.OnClickListener(){
+        goog.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                login(LoginType.FACEBOOK);
-            }
-        });
-
-        goog.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                login(LoginType.GOOGLE);
+            public void onClick(View view) { //TBD
             }
         });
     }
 
-    private void login(LoginType type){
-        Intent i = new Intent(Landing.this, Login.class);
-        startActivity(i);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        cbmanager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    /**
+     * Did stuff from https://developers.facebook.com/docs/facebook-login/android/
+     * This is the method that manages facebook login (obviously). Should connect
+     * with our server on "onSuccess" and download user data and fail "onCancel"
+     * or "onError".
+     */
+    private void facebookLogin() {
+        cbmanager = CallbackManager.Factory.create();
+        LoginButton fbButton = (LoginButton) findViewById(R.id.Facebook);
+        fbButton.registerCallback(cbmanager, new FacebookCallback<LoginResult>() {
+
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // TODO: interface with our own server
+                startActivity(new Intent(Landing.this, Preferences.class));
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
     }
 }
