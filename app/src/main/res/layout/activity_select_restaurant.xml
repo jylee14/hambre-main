@@ -7,24 +7,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_margin="12sp"
         android:id="@+id/first"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_margin="12sp"
         android:id="@+id/second"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_margin="12sp"
         android:id="@+id/third"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_margin="12sp"
         android:id="@+id/fourth"/>
 
 </LinearLayout>

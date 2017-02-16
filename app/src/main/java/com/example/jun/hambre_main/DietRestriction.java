@@ -14,7 +14,8 @@ public class DietRestriction extends AppCompatActivity {
     private Button cancel;
     String newPref = "";
 
-    protected static int preferenceID = 0;
+    protected static int index = -1; //default to no food preferences
+    protected static String[] categories = {"Vegetarian", "Vegan", "Kosher", "gluten_free"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,20 +28,20 @@ public class DietRestriction extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         //set the preference to the preference of the user on the server
-        switch(preferenceID){
-            case 0:
+        switch(index){
+            case -1:
                 prefs.check(R.id.none);
                 break;
-            case 1:
+            case 0:
                 prefs.check(R.id.veggie);
                 break;
-            case 2:
+            case 1:
                 prefs.check(R.id.vegan);
                 break;
-            case 3:
+            case 2:
                 prefs.check(R.id.kosher);
                 break;
-            case 4:
+            case 3:
                 prefs.check(R.id.noGlu);
                 break;
             default:
@@ -52,23 +53,23 @@ public class DietRestriction extends AppCompatActivity {
         prefs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
         {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch(checkedId){
-                    case R.id.none:
-                        preferenceID = 0;
-                        break;
-                    case R.id.veggie:
-                        preferenceID = 1;
-                        break;
-                    case R.id.vegan:
-                        preferenceID = 2;
-                        break;
-                    case R.id.kosher:
-                        preferenceID = 3;
-                        break;
-                    case R.id.noGlu:
-                        preferenceID = 4;
-                        break;
-                }
+            switch(checkedId){
+                case R.id.none:
+                    index = -1;
+                    break;
+                case R.id.veggie:
+                    index = 0;
+                    break;
+                case R.id.vegan:
+                    index = 1;
+                    break;
+                case R.id.kosher:
+                    index = 2;
+                    break;
+                case R.id.noGlu:
+                    index = 3;
+                    break;
+            }
             }
         });
 

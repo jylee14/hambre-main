@@ -25,7 +25,7 @@ public class FoodFinderController extends AppCompatActivity {
     private Bundle bundle;
     private int rad = 1600; //min is 1 mile
     private final String LOG_TAG = getClass().getSimpleName(); //for log
-
+    private final int limit = 20;   //term limit is set to 20 arbitrarily for now
     private YelpApi api;
 
     @Override
@@ -69,11 +69,12 @@ public class FoodFinderController extends AppCompatActivity {
                 //building params to pass as individual strings
                 ArrayList<String> param = new ArrayList<>();
 
-                param.add("location");      param.add("La Jolla");
+                param.add("location");      param.add("9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
                 param.add("categories");    param.add("food");
                 param.add("term");          param.add(culture);
                 param.add("sort");          param.add("" + Preferences.byRating);
                 param.add("radius");        param.add("" + rad);
+                param.add("limit");         param.add("" + limit);
 
                 Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
                 i.putStringArrayListExtra("param", param);
@@ -81,5 +82,4 @@ public class FoodFinderController extends AppCompatActivity {
             }
         });
     }
-
 }

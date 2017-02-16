@@ -53,21 +53,25 @@ public class SelectRestaurantController extends AppCompatActivity {
             params.put(param.get(4), param.get(5));
             params.put(params.get(6), params.get(7));
             params.put(param.get(8), param.get(9));
+            params.put(param.get(9), param.get(10));
+            if(DietRestriction.index >= 0)
+                params.put("category_filter", DietRestriction.categories[DietRestriction.index]);
+
             BusinessResponseModel businessResponse = api.businessSearch(params);
 
             if(businessResponse != null) {
 
                 business1 = ((businessResponse.businesses())[0]);
-                first.setText(business1.name() + "\t" + business1.price() + "\t" + business1.rating());
+                first.setText(business1.name() + "     " + business1.price() + "     " + business1.rating());
 
                 business2 = ((businessResponse.businesses())[1]);
-                second.setText(business2.name() + "\t" + business2.price() + "\t" + business2.rating());
+                second.setText(business2.name() + "     " + business2.price() + "     " + business2.rating());
 
                 business3 = ((businessResponse.businesses())[2]);
-                third.setText(business3.name() + "\t" + business3.price() + "\t" + business3.rating());
+                third.setText(business3.name() + "     "+ business3.price() + "     " + business3.rating());
 
                 business4 = ((businessResponse.businesses())[3]);
-                fourth.setText(business4.name() + "\t" + business4.price() + "\t" + business4.rating());
+                fourth.setText(business4.name() + "     " + business4.price() + "     " + business4.rating());
             }else{
                 first.setText("MY LEGS");
             }
