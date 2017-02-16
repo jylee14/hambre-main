@@ -24,21 +24,20 @@ public class Landing extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         facebookLogin();
-        guest = (Button)findViewById(R.id.Guest);
-        goog = (Button)findViewById(R.id.Google);
+        guest = (Button) findViewById(R.id.Guest);
+        goog = (Button) findViewById(R.id.Google);
 
 
-        guest.setOnClickListener(new View.OnClickListener(){
+        guest.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 startActivity(new Intent(Landing.this, Preferences.class));
             }
         });
 
-        goog.setOnClickListener(new View.OnClickListener(){
+        goog.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
-                login(LoginType.GOOGLE);
+            public void onClick(View view) { //TBD
             }
         });
     }
@@ -55,7 +54,7 @@ public class Landing extends AppCompatActivity {
      * with our server on "onSuccess" and download user data and fail "onCancel"
      * or "onError".
      */
-    private void facebookLogin(){
+    private void facebookLogin() {
         cbmanager = CallbackManager.Factory.create();
         LoginButton fbButton = (LoginButton) findViewById(R.id.Facebook);
         fbButton.registerCallback(cbmanager, new FacebookCallback<LoginResult>() {
@@ -76,10 +75,5 @@ public class Landing extends AppCompatActivity {
 
             }
         });
-    }
-
-    private void login(LoginType type){
-        Intent i = new Intent(Landing.this, Login.class);
-        startActivity(i);
     }
 }
