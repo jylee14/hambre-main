@@ -30,7 +30,6 @@ public class FoodFinderController extends AppCompatActivity {
     private final int limit = 20;   //term limit is set to 20 arbitrarily for now
     private YelpApi api;
     private Animation animEnter, animLeave;
-    //private int [] resID; //for looping through pics until db is set up
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,14 +69,7 @@ public class FoodFinderController extends AppCompatActivity {
                 mainView.startAnimation(animEnter);
             }
         });
-        animEnter.setAnimationListener(new Animation.AnimationListener(){
-            public void onAnimationStart(Animation animation) {}
-            public void onAnimationRepeat(Animation animation) {}
-            public void onAnimationEnd(Animation animation) {
-
-            }
-        });
-
+        
         index = 1;
         mainView = (ImageView)findViewById(R.id.image);
         mainView.setImageResource(gallery[0].getTempLink());

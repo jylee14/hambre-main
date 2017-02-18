@@ -34,8 +34,11 @@ public class SelectRestaurantController extends AppCompatActivity {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
+
+        //animate Activity transition
         overridePendingTransition(R.anim.animation_activity_enter,
                 R.anim.animation_activity_leave);
+
         setContentView(R.layout.activity_select_restaurant);
 
         first = (TextView)findViewById(R.id.first);
