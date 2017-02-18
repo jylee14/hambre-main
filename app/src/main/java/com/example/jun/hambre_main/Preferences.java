@@ -23,7 +23,7 @@ public class Preferences extends AppCompatActivity {
 
     //1=Distance, 2=Highest Rated
     protected static int byRating = 2;  //for ordering later. Rating by default
-    protected int radius = 1;   //minimum radius is 1 mile
+    protected static int radius = 1;   //minimum radius is 1 mile
     protected int meters = 1600;   //yelpAPI wants meters
     private final int meterToMile = 1600;   //conversion factor
 
@@ -42,6 +42,9 @@ public class Preferences extends AppCompatActivity {
         cont = (Button)findViewById(R.id.cont);
 
         pref.check(R.id.rate);  //rate by default
+
+        rad.setProgress(radius);
+        maxRad.setText("" + radius + " mi");
 
         /**
          * Diet Button will redirect the user to the dietary restrictions page
