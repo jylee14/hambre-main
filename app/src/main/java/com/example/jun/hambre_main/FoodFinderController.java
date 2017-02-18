@@ -6,6 +6,8 @@ import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,13 +22,15 @@ import java.util.ArrayList;
 public class FoodFinderController extends AppCompatActivity {
     private Button infoButton;
     private ImageView mainView;
-    private int index;
+    private static int index;
     private FoodModel [] gallery;
     private Bundle bundle;
     private int rad = 1600; //min is 1 mile
     private final String LOG_TAG = getClass().getSimpleName(); //for log
     private final int limit = 20;   //term limit is set to 20 arbitrarily for now
     private YelpApi api;
+    private Animation animEnter, animLeave;
+    //private int [] resID; //for looping through pics until db is set up
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,14 +53,40 @@ public class FoodFinderController extends AppCompatActivity {
         gallery[2] = new FoodModel("pad thai", "thai", R.drawable.thai);
         gallery[3] = new FoodModel("chow mein", "chinese", R.drawable.chinese);
 
+        animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
+        animLeave = AnimationUtils.loadAnimation(this, R.anim.animation_leave);
+
+        animLeave.setAnimationListener(new Animation.AnimationListener(){
+            public void onAnimationStart(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationEnd(Animation animation){
+                try{
+                    mainView.setImageResource(gallery[index].getTempLink());
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+                index++;
+                mainView.startAnimation(animEnter);
+            }
+        });
+        animEnter.setAnimationListener(new Animation.AnimationListener(){
+            public void onAnimationStart(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationEnd(Animation animation) {
+
+            }
+        });
+
         index = 1;
         mainView = (ImageView)findViewById(R.id.image);
         mainView.setImageResource(gallery[0].getTempLink());
         mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderController.this) {
             public void onSwipeLeft(){
                 if(index < 4) {
-                    mainView.setImageResource(gallery[index].getTempLink());
-                    index++;
+                    //mainView.setImageResource(gallery[index].getTempLink());
+                    //index++;
+                    mainView.startAnimation(animLeave);
                 }
                 else //TODO change this eventually
                     Toast.makeText(getApplication().getBaseContext(), "out of pics", Toast.LENGTH_SHORT).show();
