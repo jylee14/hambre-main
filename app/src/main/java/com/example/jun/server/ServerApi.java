@@ -1,15 +1,19 @@
 package com.example.jun.server;
 
-import android.accounts.NetworkErrorException;
+import android.net.Uri;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Singleton server api
@@ -20,6 +24,7 @@ public class ServerApi {
 
     private final String FOOD_ENDPOINT = "http://159.203.246.214/irs/getFood.php";
     private final int CONNECTION_TRIES = 3;
+    private final String LOGIN_ENDPOINT = "http://159.203.246.214/irs/googleLogin.php";
 
     // cache to store food models so we only retrieve them once
     private DBFoodModel[] foodModelsCache;
@@ -27,6 +32,55 @@ public class ServerApi {
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
     }
+
+    public void authServer(GoogleSignInAccount acct){
+        URL url = null;
+        HttpURLConnection client = null;
+
+        try {
+            url = new URL(LOGIN_ENDPOINT);
+            client = (HttpURLConnection)url.openConnection();
+            client.setRequestProperty("User-Agent", "Mozilla/5.0");
+            client.setReadTimeout(10000);
+            client.setConnectTimeout(15000);
+            client.setRequestMethod("POST");
+            client.setDoInput(true);
+            client.setDoOutput(true);
+
+            client.setRequestProperty("id_token", acct.getIdToken());
+
+
+            Uri.Builder builder = new Uri.Builder().appendQueryParameter("id_token", acct.getIdToken());
+            String query = builder.build().getEncodedQuery();
+
+            OutputStream os = client.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            writer.write(query);
+            writer.flush();
+            writer.close();
+            os.close();
+
+            client.connect();
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            System.out.println(response);
+            System.out.println("log in attempt");
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 
     public DBFoodModel[] getFood() {
 
