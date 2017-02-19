@@ -20,7 +20,6 @@ import com.example.jun.yelp.YelpApi;
 import java.util.ArrayList;
 
 public class FoodFinderController extends AppCompatActivity {
-    private Button infoButton;
     private ImageView mainView;
     private static int index;
     private FoodModel [] gallery;
