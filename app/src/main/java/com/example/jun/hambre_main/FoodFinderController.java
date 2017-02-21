@@ -8,13 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.jun.hambre_main.OnSwipeTouchListener;
-import com.example.jun.yelp.BusinessModel;
-import com.example.jun.yelp.BusinessResponseModel;
+import com.example.jun.server.DBFoodModel;
+import com.example.jun.server.ServerApi;
 import com.example.jun.yelp.YelpApi;
 
 import java.util.ArrayList;
@@ -50,6 +49,22 @@ public class FoodFinderController extends AppCompatActivity {
         gallery[1] = new FoodModel("curry", "indian", R.drawable.indian);
         gallery[2] = new FoodModel("pad thai", "thai", R.drawable.thai);
         gallery[3] = new FoodModel("chow mein", "chinese", R.drawable.chinese);
+
+        //connecting db to main
+
+        ServerApi api = ServerApi.getInstance();
+        DBFoodModel[] DBFoodModels = api.getFood();
+        FoodModel[] fromDB = new FoodModel[DBFoodModels.length];
+        for(int i = 0; i < DBFoodModels.length; i++){
+            try {
+                DBFoodModel tempDB = DBFoodModels[i];
+                FoodModel temp = new FoodModel(tempDB.name(), tempDB.description(), tempDB.path());
+            }catch(Exception e){
+                System.err.println("D'OH");
+                e.printStackTrace();
+            }
+        }
+
 
         animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
         animLeave = AnimationUtils.loadAnimation(this, R.anim.animation_leave);
