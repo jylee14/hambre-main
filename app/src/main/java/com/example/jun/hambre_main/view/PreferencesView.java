@@ -15,7 +15,7 @@ import com.example.jun.hambre_main.R;
 import com.example.jun.hambre_main.controller.FoodFinderController;
 import com.example.jun.hambre_main.model.FoodModel;
 
-public class PreferencesView extends AppCompatActivity {
+public class PreferencesView extends AppCompatActivity implements Runnable {
     private Button diet;
     private SeekBar rad;
     private TextView maxRad;
@@ -24,6 +24,8 @@ public class PreferencesView extends AppCompatActivity {
     private RadioButton dist;
     private Button cont;
 
+    private FoodModel[] dbfm;
+    FoodFinderController controller = new FoodFinderController();
 
     //1=Distance, 2=Highest Rated
     protected static int byRating = 2;  //for ordering later. Rating by default
@@ -111,8 +113,7 @@ public class PreferencesView extends AppCompatActivity {
                 if(radius == 0){
                     Toast.makeText(PreferencesView.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
-                    FoodFinderController controller = new FoodFinderController();
-                    FoodModel[] dbfm = controller.getFoodFromServer();
+                    run();
 
                     Intent i = new Intent(PreferencesView.this, FoodFinderView.class);
                     i.putExtra("model", dbfm);
@@ -120,5 +121,9 @@ public class PreferencesView extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void run(){
+        dbfm = controller.getFoodFromServer();
     }
 }
