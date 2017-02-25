@@ -69,9 +69,9 @@ public class YelpApi {
             accessToken = gson.fromJson(response.toString(), AccessTokenModel.class);
 
             // Debug output
-            System.err.println("Got Access Token");
-            System.err.println(response.toString());
-            System.err.println(accessToken.access_token());
+            //System.err.println("Got Access Token");
+            //System.err.println(response.toString());
+            //System.err.println(accessToken.access_token());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,7 +116,7 @@ public class YelpApi {
             }
 
             // Debug output
-            System.err.println("Accessing URL: " + SEARCH_ENDPOINT + queryString);
+            //System.err.println("Accessing URL: " + SEARCH_ENDPOINT + queryString);
 
             // create url of endpoint with the generated query string
             URL obj = new URL(SEARCH_ENDPOINT + queryString);
@@ -129,7 +129,7 @@ public class YelpApi {
 
             // TODO: error processing on response code
             int responseCode = con.getResponseCode();
-            System.err.println("Response Code: " + responseCode);
+            //System.err.println("Response Code: " + responseCode);
 
             // Read response stream into response
             BufferedReader in = new BufferedReader(
@@ -146,8 +146,8 @@ public class YelpApi {
             Gson gson = new Gson();
             result = gson.fromJson(response.toString(), BusinessResponseModel.class);
 
-            System.err.println("API response");
-            System.err.println(response.toString());
+            //System.err.println("API response");
+            //System.err.println(response.toString());
         } catch (Exception e) {
             System.err.println("BEAUTY AND THE BEAST");
             System.err.println(e.getMessage());

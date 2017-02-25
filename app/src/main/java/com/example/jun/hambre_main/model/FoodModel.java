@@ -70,6 +70,7 @@ public class FoodModel implements Parcelable{
         dest.writeString(culture);
         dest.writeString(link);
     }
+
     public static FoodModel[] toFoodModel(Parcelable[] parcelables) {
         FoodModel[] foods = new FoodModel[parcelables.length];
         System.arraycopy(parcelables, 0, foods, 0, parcelables.length);

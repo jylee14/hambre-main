@@ -12,13 +12,16 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.jun.hambre_main.controller.RestaurantFinderController;
 import com.example.jun.hambre_main.model.FoodModel;
 import com.example.jun.hambre_main.OnSwipeTouchListener;
 import com.example.jun.hambre_main.R;
+import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.YelpApi;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FoodFinderView extends AppCompatActivity {
     private ImageView mainView;
@@ -85,27 +88,21 @@ public class FoodFinderView extends AppCompatActivity {
                 }
 
                 public void onSwipeRight() {
-                    String culture = gallery[index - 1].getCulture();
+                    String culture = gallery[index-1].getCulture();
                     Log.v(LOG_TAG, "culture: " + culture);
 
-                    //building params to pass as individual strings
-                    ArrayList<String> param = new ArrayList<>();
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
+                    params.put("categories", "food");
+                    params.put("term", culture);
+                    params.put("sort", "" + PreferencesView.byRating);
+                    params.put("radius", "" + rad);
+                    params.put("limit", "" + limit);
 
-                    param.add("location");
-                    param.add("9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-                    param.add("categories");
-                    param.add("food");
-                    param.add("term");
-                    param.add(culture);
-                    param.add("sort");
-                    param.add("" + PreferencesView.byRating);
-                    param.add("radius");
-                    param.add("" + rad);
-                    param.add("limit");
-                    param.add("" + limit);
+                    BusinessModel[] response = RestaurantFinderController.findRestaurants(params);
 
                     Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
-                    i.putStringArrayListExtra("param", param);
+                    i.putExtra("model", response);
                     startActivity(i);
                 }
             });
