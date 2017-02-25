@@ -69,7 +69,7 @@ public class FoodFinderView extends AppCompatActivity {
             index = 1;
 
             mainView = (ImageView)findViewById(R.id.image);
-            URL url = new URL(server + gallery[index].getLink());
+            URL url = new URL(server + gallery[index++].getLink());
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             mainView.setImageBitmap(bmp);
 
