@@ -1,14 +1,10 @@
 package com.example.jun.hambre_main;
 
+import com.example.jun.hambre_main.model.FoodModel;
 import com.example.jun.server.DBFoodModel;
 import com.example.jun.server.ServerApi;
-import com.example.jun.yelp.BusinessModel;
-import com.example.jun.yelp.BusinessResponseModel;
-import com.example.jun.yelp.YelpApi;
 
 import org.junit.Test;
-
-import java.util.HashMap;
 
 /**
  * Example local unit test, which will execute on the development machine (host).

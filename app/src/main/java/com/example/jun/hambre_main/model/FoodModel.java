@@ -1,4 +1,4 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

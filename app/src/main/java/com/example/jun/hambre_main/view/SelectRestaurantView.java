@@ -1,4 +1,4 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.view;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.jun.hambre_main.R;
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.YelpApi;
@@ -58,8 +59,8 @@ public class SelectRestaurantView extends AppCompatActivity {
             params.put(params.get(6), params.get(7));
             params.put(param.get(8), param.get(9));
             params.put(param.get(9), param.get(10));
-            if(DietRestriction.index >= 0)
-                params.put("category_filter", DietRestriction.categories[DietRestriction.index]);
+            if(DietRestrictionView.index >= 0)
+                params.put("category_filter", DietRestrictionView.categories[DietRestrictionView.index]);
 
             BusinessResponseModel businessResponse = api.businessSearch(params);
 

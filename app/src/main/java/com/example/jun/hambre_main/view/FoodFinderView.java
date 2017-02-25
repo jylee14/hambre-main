@@ -1,4 +1,4 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.view;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +12,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.jun.hambre_main.model.FoodModel;
+import com.example.jun.hambre_main.OnSwipeTouchListener;
+import com.example.jun.hambre_main.R;
 import com.example.jun.yelp.YelpApi;
 
 import java.net.URL;
@@ -95,7 +98,7 @@ public class FoodFinderView extends AppCompatActivity {
                     param.add("term");
                     param.add(culture);
                     param.add("sort");
-                    param.add("" + Preferences.byRating);
+                    param.add("" + PreferencesView.byRating);
                     param.add("radius");
                     param.add("" + rad);
                     param.add("limit");

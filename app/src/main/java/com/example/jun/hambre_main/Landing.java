@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.jun.hambre_main.view.PreferencesView;
 import com.example.jun.server.ServerApi;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -66,7 +67,7 @@ public class Landing extends AppCompatActivity {
         guest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Landing.this, Preferences.class));
+                startActivity(new Intent(Landing.this, PreferencesView.class));
             }
         });
 
@@ -114,7 +115,7 @@ public class Landing extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // TODO: interface with our own server
-                startActivity(new Intent(Landing.this, Preferences.class));
+                startActivity(new Intent(Landing.this, PreferencesView.class));
             }
 
             @Override

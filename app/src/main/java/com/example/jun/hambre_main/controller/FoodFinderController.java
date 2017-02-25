@@ -1,5 +1,6 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.controller;
 
+import com.example.jun.hambre_main.model.FoodModel;
 import com.example.jun.server.*;
 
 public class FoodFinderController {
