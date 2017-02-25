@@ -21,10 +21,21 @@ public class ServerApiTest {
     public void getFood_test() {
         ServerApi api = ServerApi.getInstance();
 
-        DBFoodModel[] foodModels = api.getFood();
+        DBFoodModel[] DBFoodModels = api.getFood();
+        FoodModel[] fromDB = new FoodModel[DBFoodModels.length];
+        for(int i = 0; i < DBFoodModels.length; i++){
+            try {
+                DBFoodModel tempDB = DBFoodModels[i];
+                FoodModel temp = new FoodModel(tempDB.name(), tempDB.description(), tempDB.path());
+                fromDB[i] = temp;
+            }catch(Exception e){
+                System.err.println("D'OH");
+                e.printStackTrace();
+            }
+        }
 
-        for (DBFoodModel model: foodModels) {
-            System.out.println(model.name());
+        for(int i = 0 ; i < fromDB.length; i++){
+            System.out.println(fromDB[i]);
         }
     }
 }

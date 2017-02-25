@@ -11,8 +11,6 @@ public class FoodModel implements Parcelable{
     private String culture; // culture of the food
     private String link; // link to the picture
 
-    private int tempLink; //link to drawable for now, until db is implemented
-
     protected final static String[] tags = {"spicy", "cold"};
 
     /**
@@ -37,17 +35,7 @@ public class FoodModel implements Parcelable{
         this.link = in.readString();
     }
 
-    /**
-     * Overloaded temporary constructor for use until db is implemented
-     * @param name name of the food
-     * @param culture name of the culture of the food
-     * @param tempLink drawable id of pic of food
-     */
-    public FoodModel(String name, String culture, int tempLink){
-        this.name = name;
-        this.culture = culture;
-        this.tempLink = tempLink;
-    }
+    public String getLink(){ return link; }
 
     /**
      * Temporary getter for culture until db is finished
@@ -55,14 +43,6 @@ public class FoodModel implements Parcelable{
      */
     public String getCulture(){
         return culture;
-    }
-
-    /**
-     * Temporary getter for tempLink to drawable id until db is finished
-     * @return the id of the drawable (the pic of food)
-     */
-    public int getTempLink(){
-        return tempLink;
     }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
@@ -89,5 +69,19 @@ public class FoodModel implements Parcelable{
         dest.writeString(name);
         dest.writeString(culture);
         dest.writeString(link);
+    }
+    public static FoodModel[] toFoodModel(Parcelable[] parcelables) {
+        FoodModel[] foods = new FoodModel[parcelables.length];
+        System.arraycopy(parcelables, 0, foods, 0, parcelables.length);
+        return foods;
+    }
+
+    @Override
+    public String toString() {
+        return "FoodModel{" +
+                "name='" + name + '\'' +
+                ", culture='" + culture + '\'' +
+                ", link='" + link +
+                '}';
     }
 }

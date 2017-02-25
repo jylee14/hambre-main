@@ -11,6 +11,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jun.server.DBFoodModel;
+
 public class Preferences extends AppCompatActivity {
     private Button diet;
     private SeekBar rad;
@@ -107,14 +109,11 @@ public class Preferences extends AppCompatActivity {
                 if(radius == 0){
                     Toast.makeText(Preferences.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
-                    //Intent i = new Intent(Preferences.this, yelpStub.class);
-                    Intent i = new Intent(Preferences.this, FoodFinderController.class);
+                    FoodFinderController controller = new FoodFinderController();
+                    FoodModel[] dbfm = controller.getFoodFromServer();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("sort", byRating);
-                    bundle.putInt("radius", meters);
-                    //bundle.putString("diet", "None");
-                    i.putExtras(bundle);
+                    Intent i = new Intent(Preferences.this, FoodFinderView.class);
+                    i.putExtra("model", dbfm);
                     startActivity(i);
                 }
             }

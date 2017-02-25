@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textSize="48sp"
         android:textStyle="bold"
-        android:text="Project Hambre"
+        android:text="Platanos"
         android:textAlignment="center"
         android:id="@+id/Title" />
 
@@ -35,8 +35,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginRight="30dp"/>
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/Google"
@@ -46,7 +45,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp"
             />
 
 
@@ -57,7 +55,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginBottom="30dp"
             android:text="Continue as Guest"
             android:id="@+id/Guest"/>
     </LinearLayout>
