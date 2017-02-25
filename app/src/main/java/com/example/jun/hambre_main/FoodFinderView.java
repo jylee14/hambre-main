@@ -12,8 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.jun.server.DBFoodModel;
-import com.example.jun.server.ServerApi;
 import com.example.jun.yelp.YelpApi;
 
 import java.net.URL;
@@ -103,7 +101,7 @@ public class FoodFinderView extends AppCompatActivity {
                     param.add("limit");
                     param.add("" + limit);
 
-                    Intent i = new Intent(FoodFinderView.this, SelectRestaurantController.class);
+                    Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
                     i.putStringArrayListExtra("param", param);
                     startActivity(i);
                 }

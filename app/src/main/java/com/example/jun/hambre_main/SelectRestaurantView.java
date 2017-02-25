@@ -16,7 +16,7 @@ import com.example.jun.yelp.YelpApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SelectRestaurantController extends AppCompatActivity {
+public class SelectRestaurantView extends AppCompatActivity {
 
     private TextView first;
     private TextView second;
