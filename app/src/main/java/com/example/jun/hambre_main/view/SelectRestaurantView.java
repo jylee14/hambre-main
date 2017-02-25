@@ -19,7 +19,7 @@ import com.example.jun.yelp.YelpApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SelectRestaurantView extends AppCompatActivity {
+public class SelectRestaurantView extends AppCompatActivity implements Runnable{
     private Bundle bundle;
 
     private TextView first;
@@ -51,23 +51,7 @@ public class SelectRestaurantView extends AppCompatActivity {
         fourth = (TextView)findViewById(R.id.fourth);
 
         try {
-            BusinessModel[] businesses = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
-
-            if(businesses != null) {
-                business1 = (businesses[0]);
-                first.setText(business1.name() + "     " + business1.price() + "     " + business1.rating());
-
-                business2 = (businesses[1]);
-                second.setText(business2.name() + "     " + business2.price() + "     " + business2.rating());
-
-                business3 = (businesses[2]);
-                third.setText(business3.name() + "     "+ business3.price() + "     " + business3.rating());
-
-                business4 = (businesses[3]);
-                fourth.setText(business4.name() + "     " + business4.price() + "     " + business4.rating());
-            }else{
-                first.setText("MY LEGS");
-            }
+            run();
         }catch (Exception e){
             e.printStackTrace();
             first.setText("He's dead Jim");
@@ -119,5 +103,25 @@ public class SelectRestaurantView extends AppCompatActivity {
         Uri uri = Uri.parse(uriString);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
         startActivity(intent);
+    }
+
+    public void run(){
+        BusinessModel[] businesses = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
+
+        if(businesses != null) {
+            business1 = (businesses[0]);
+            first.setText(business1.name() + "     " + business1.price() + "     " + business1.rating());
+
+            business2 = (businesses[1]);
+            second.setText(business2.name() + "     " + business2.price() + "     " + business2.rating());
+
+            business3 = (businesses[2]);
+            third.setText(business3.name() + "     "+ business3.price() + "     " + business3.rating());
+
+            business4 = (businesses[3]);
+            fourth.setText(business4.name() + "     " + business4.price() + "     " + business4.rating());
+        }else{
+            first.setText("MY LEGS");
+        }
     }
 }

@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FoodFinderView extends AppCompatActivity {
+public class FoodFinderView extends AppCompatActivity implements Runnable{
     private ImageView mainView;
     private static int index;
     private int rad = 1600; //min is 1 mile
@@ -31,7 +31,9 @@ public class FoodFinderView extends AppCompatActivity {
 
     private YelpApi api;
     private Bundle bundle;
+    private String culture;
     private FoodModel[] gallery;
+    private BusinessModel[] response;
     private Animation animEnter, animLeave;
     private final String LOG_TAG = getClass().getSimpleName(); //for log
     private final String server = "http://159.203.246.214/irs/";
@@ -88,18 +90,9 @@ public class FoodFinderView extends AppCompatActivity {
                 }
 
                 public void onSwipeRight() {
-                    String culture = gallery[index-1].getCulture();
-                    Log.v(LOG_TAG, "culture: " + culture);
-
-                    HashMap<String, String> params = new HashMap<String, String>();
-                    params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-                    params.put("categories", "food");
-                    params.put("term", culture);
-                    params.put("sort", "" + PreferencesView.byRating);
-                    params.put("radius", "" + rad);
-                    params.put("limit", "" + limit);
-
-                    BusinessModel[] response = RestaurantFinderController.findRestaurants(params);
+                    culture = gallery[index-1].getCulture();
+                    //Log.v(LOG_TAG, "culture: " + culture);
+                    run();
 
                     Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
                     i.putExtra("model", response);
@@ -110,5 +103,18 @@ public class FoodFinderView extends AppCompatActivity {
             System.err.println("Ayy LMAO");
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run() {
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
+        params.put("categories", "food");
+        params.put("term", culture);
+        params.put("sort", "" + PreferencesView.byRating);
+        params.put("radius", "" + rad);
+        params.put("limit", "" + limit);
+
+        response = RestaurantFinderController.findRestaurants(params);
     }
 }
