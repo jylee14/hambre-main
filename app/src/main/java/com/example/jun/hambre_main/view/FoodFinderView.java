@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.jun.hambre_main.controller.FoodFinderController;
 import com.example.jun.hambre_main.controller.RestaurantFinderController;
 import com.example.jun.hambre_main.model.FoodModel;
 import com.example.jun.hambre_main.OnSwipeTouchListener;
@@ -37,6 +38,16 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
     private Animation animEnter, animLeave;
     private final String LOG_TAG = getClass().getSimpleName(); //for log
     private final String server = "http://159.203.246.214/irs/";
+
+    private FoodModel[] dbfm;
+    FoodFinderController controller = new FoodFinderController();
+
+    private Thread thread1 = new Thread() {
+        public void run() {
+            dbfm = controller.getFoodFromServer();
+            System.arraycopy(dbfm, 0, gallery, 0, gallery.length);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +96,11 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
                 public void onSwipeLeft() {
                     if (index < gallery.length) {
                         mainView.startAnimation(animLeave);
-                    } else //TODO change this eventually
-                        Toast.makeText(getApplication().getBaseContext(), "out of pics", Toast.LENGTH_SHORT).show();
+                    }else{  //replace stuff
+                        mainView.startAnimation(animLeave);
+                        thread1.run();
+                        index = 0;
+                    }
                 }
 
                 public void onSwipeRight() {
