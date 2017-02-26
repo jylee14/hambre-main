@@ -2,6 +2,4 @@
     <string name="app_name">Platanos</string>
     <string name="facebook_app_id">1131719993617566</string>
     <string name="server_img">http://159.203.246.214/irs/randomFood.php</string>
-    <string name="yelp_client_id">iVbg1d0JfvVIpusNJA0SDg</string>
-    <string name="yelp_client_secret">3EkwKuUuSP90d2fdiQ8Fx6TCK7dzHJTx3ZLlg9fEdHoekXEYQr5Oynvxmb9LzwOP</string>
 </resources>

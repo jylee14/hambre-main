@@ -2,8 +2,7 @@ package com.example.jun.yelp;
 
 import android.content.res.Resources;
 
-import com.example.jun.hambre_main.R;
-import com.google.gson.Gson;
+mport com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,8 +21,8 @@ public class YelpApi {
     private static YelpApi instance = new YelpApi();
 
     // info needed to call yelp
-    private final String clientId = Resources.getSystem().getString(R.string.yelp_client_id);
-    private final String clientSecret = Resources.getSystem().getString(R.string.yelp_client_secret);
+    private final String clientId = "iVbg1d0JfvVIpusNJA0SDg";
+    private final String clientSecret = "3EkwKuUuSP90d2fdiQ8Fx6TCK7dzHJTx3ZLlg9fEdHoekXEYQr5Oynvxmb9LzwOP";
 
     // url we can get access token at
     private final String ACCESS_TOKEN_ENDPOINT =
