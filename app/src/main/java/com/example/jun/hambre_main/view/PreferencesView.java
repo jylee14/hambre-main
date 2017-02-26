@@ -113,11 +113,15 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
                 if(radius == 0){
                     Toast.makeText(PreferencesView.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
-                    run();
+                    try {
+                        run();
 
-                    Intent i = new Intent(PreferencesView.this, FoodFinderView.class);
-                    i.putExtra("model", dbfm);
-                    startActivity(i);
+                        Intent i = new Intent(PreferencesView.this, FoodFinderView.class);
+                        i.putExtra("model", dbfm);
+                        startActivity(i);
+                    }catch(Exception e){
+                        startActivity(new Intent(PreferencesView.this, error.class));
+                    }
                 }
             }
         });

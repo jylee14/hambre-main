@@ -115,6 +115,7 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
             });
         }catch(Exception e){
             System.err.println("Ayy LMAO");
+            startActivity(new Intent(FoodFinderView.this, error.class));
             e.printStackTrace();
         }
     }
