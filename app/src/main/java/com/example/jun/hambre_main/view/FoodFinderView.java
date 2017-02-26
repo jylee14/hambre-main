@@ -6,11 +6,9 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.jun.hambre_main.controller.FoodFinderController;
 import com.example.jun.hambre_main.controller.RestaurantFinderController;
@@ -21,10 +19,9 @@ import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.YelpApi;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FoodFinderView extends AppCompatActivity implements Runnable{
+public class FoodFinderView extends AppCompatActivity{
     private ImageView mainView;
     private static int index;
     private int rad = 1600; //min is 1 mile
@@ -136,18 +133,5 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
             startActivity(new Intent(FoodFinderView.this, error.class));
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void run() {
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-        params.put("categories", "food");
-        params.put("term", culture);
-        params.put("sort", "" + PreferencesView.byRating);
-        params.put("radius", "" + rad);
-        params.put("limit", "" + limit);
-
-        response = RestaurantFinderController.findRestaurants(params);
     }
 }
