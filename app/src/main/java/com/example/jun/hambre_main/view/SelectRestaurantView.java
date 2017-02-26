@@ -122,6 +122,7 @@ public class SelectRestaurantView extends AppCompatActivity implements Runnable{
             fourth.setText(business4.name() + "     " + business4.price() + "     " + business4.rating());
         }else{
             first.setText("MY LEGS");
+            startActivity(new Intent(SelectRestaurantView.this, error.class));
         }
     }
 }

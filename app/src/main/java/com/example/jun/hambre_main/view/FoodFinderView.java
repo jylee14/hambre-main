@@ -80,6 +80,7 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
                         mainView.setImageBitmap(bmp);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        startActivity(new Intent(FoodFinderView.this, error.class));
                     }
                     index++;
                     mainView.startAnimation(animEnter);
@@ -115,6 +116,7 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
             });
         }catch(Exception e){
             System.err.println("Ayy LMAO");
+            startActivity(new Intent(FoodFinderView.this, error.class));
             e.printStackTrace();
         }
     }
