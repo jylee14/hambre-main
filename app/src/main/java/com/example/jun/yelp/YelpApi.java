@@ -1,5 +1,8 @@
 package com.example.jun.yelp;
 
+import android.content.res.Resources;
+
+import com.example.jun.hambre_main.R;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -18,9 +21,9 @@ public class YelpApi {
     // maintain single instance of this class
     private static YelpApi instance = new YelpApi();
 
-    // TODO: move to file for good security
-    private final String clientId = "iVbg1d0JfvVIpusNJA0SDg";
-    private final String clientSecret = "3EkwKuUuSP90d2fdiQ8Fx6TCK7dzHJTx3ZLlg9fEdHoekXEYQr5Oynvxmb9LzwOP";
+    // info needed to call yelp
+    private final String clientId = Resources.getSystem().getString(R.string.yelp_client_id);
+    private final String clientSecret = Resources.getSystem().getString(R.string.yelp_client_secret);
 
     // url we can get access token at
     private final String ACCESS_TOKEN_ENDPOINT =
@@ -30,6 +33,8 @@ public class YelpApi {
     // url we can search businesses at
     private final String SEARCH_ENDPOINT  = "https://api.yelp.com/v3/businesses/search";
 
+    private final int CONNECTION_TRIES = 3;
+    private final int CONNECTION_SUCCESS = 200;
     // access token for this session
     private AccessTokenModel accessToken;
 
@@ -39,43 +44,57 @@ public class YelpApi {
      * one access token)
      */
     private YelpApi() {
-        // get access token
-        try {
-            // Connect to the acess token url
-            URL obj = new URL(ACCESS_TOKEN_ENDPOINT);
-            HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
-            // Send a post request, mozilla user agent header
-            con.setRequestMethod("POST");
-            con.setRequestProperty("User-Agent", "Mozilla/5.0");
+        int tries = 0;
+        boolean connected = false;
 
-            // response code for request
-            int responseCode = con.getResponseCode();
+        while (tries < CONNECTION_TRIES) {
+            tries++;
 
-            // TODO: response code checking (success is only code 200)
+            // get access token
+            try {
+                // Connect to the acess token url
+                URL obj = new URL(ACCESS_TOKEN_ENDPOINT);
+                HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
 
-            // Read response into response buffer
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+                // Send a post request, mozilla user agent header
+                con.setRequestMethod("POST");
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+                // response code for request
+                int responseCode = con.getResponseCode();
+
+                if (responseCode != CONNECTION_SUCCESS) {
+                    continue;
+                }
+
+                // Read response into response buffer
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // parse accessToken object from json
+                Gson gson = new Gson();
+                accessToken = gson.fromJson(response.toString(), AccessTokenModel.class);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("IM A LITTLE TEAPOT SHORT AND STOUT");
             }
-            in.close();
+        }
 
-            // parse accessToken object from json
-            Gson gson = new Gson();
-            accessToken = gson.fromJson(response.toString(), AccessTokenModel.class);
+        if (!connected) {
+            //TODO: Fatal error, could not connect to internet/YELP
 
-            // Debug output
-            //System.err.println("Got Access Token");
-            //System.err.println(response.toString());
-            //System.err.println(accessToken.access_token());
+            // App should not continue if we did not connect here
+            // but maybe there should be a way to try again?
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("IM A LITTLE TEAPOT SHORT AND STOUT");
+            System.out.println("RUN YOU PIGEONS ITS ROBERT FROST");
         }
     }
 
@@ -84,12 +103,10 @@ public class YelpApi {
      * see the url for description of possible parameters and description of response object
      * www.yelp.com/developers/documentation/v3/business_search
      * @param params list of params that should be specified according to Yelp Business Search Docs
-     * @return response model containing the POJO corresponding to response
+     * @return response model containing the POJO corresponding to response or null if invalid call
      */
     public BusinessResponseModel businessSearch(HashMap<String, String> params) {
 
-        // initialize to null
-        // TODO: null check / error reporting at end
         BusinessResponseModel result = null;
 
         try {
@@ -129,7 +146,13 @@ public class YelpApi {
 
             // TODO: error processing on response code
             int responseCode = con.getResponseCode();
-            //System.err.println("Response Code: " + responseCode);
+            if (responseCode != 200) {
+                // the api call was invalid
+
+                // fail silently/return null
+                return null;
+            }
+            /// /System.err.println("Response Code: " + responseCode);
 
             // Read response stream into response
             BufferedReader in = new BufferedReader(
@@ -153,6 +176,8 @@ public class YelpApi {
             System.err.println(e.getMessage());
             System.err.println(e.getStackTrace());
         }
+
+        // return result or null on exception
         return result;
     }
 
