@@ -23,7 +23,7 @@ import java.util.HashMap;
 
 public class FoodFinderView extends AppCompatActivity{
     private ImageView mainView;
-    private static int index;
+    private int index = 0;
     private int rad = 1600; //min is 1 mile
     private final int limit = 20;   //term limit is set to 20 arbitrarily for now
 
@@ -83,7 +83,7 @@ public class FoodFinderView extends AppCompatActivity{
                     mainView.startAnimation(animEnter);
                 }
             });
-            index = 1;
+            index = 0;
 
             mainView = (ImageView)findViewById(R.id.image);
             URL url = new URL(server + gallery[index++].getLink());
@@ -104,7 +104,7 @@ public class FoodFinderView extends AppCompatActivity{
                 public void onSwipeRight() {
                     culture = gallery[index-1].getCulture();
                     //Log.v(LOG_TAG, "culture: " + culture);
-                    //run();
+
                     new Thread(new Runnable(){
                         public void run() {
                             try {
