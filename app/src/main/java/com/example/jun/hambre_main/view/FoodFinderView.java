@@ -107,7 +107,24 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
                 public void onSwipeRight() {
                     culture = gallery[index-1].getCulture();
                     //Log.v(LOG_TAG, "culture: " + culture);
-                    run();
+                    //run();
+                    new Thread(new Runnable(){
+                        public void run() {
+                            try {
+                                HashMap<String, String> params = new HashMap<String, String>();
+                                params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
+                                params.put("categories", "food");
+                                params.put("term", culture);
+                                params.put("sort", "" + PreferencesView.byRating);
+                                params.put("radius", "" + rad);
+                                params.put("limit", "" + limit);
+
+                                response = RestaurantFinderController.findRestaurants(params);
+                            }catch (Exception e){
+                                //.........?
+                            }
+                        }
+                    }).start();
 
                     Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
                     i.putExtra("model", response);
