@@ -44,8 +44,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            />
+            android:layout_marginRight="30dp"/>
 
 
         <Button
