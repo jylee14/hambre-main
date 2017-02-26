@@ -116,7 +116,7 @@ public class YelpApi {
             }
 
             // Debug output
-            //System.err.println("Accessing URL: " + SEARCH_ENDPOINT + queryString);
+            System.err.println("Accessing URL: " + SEARCH_ENDPOINT + queryString);
 
             // create url of endpoint with the generated query string
             URL obj = new URL(SEARCH_ENDPOINT + queryString);
