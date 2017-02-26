@@ -1,14 +1,17 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.view;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.jun.hambre_main.R;
+import com.example.jun.hambre_main.controller.RestaurantFinderController;
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.YelpApi;
@@ -16,7 +19,8 @@ import com.example.jun.yelp.YelpApi;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class SelectRestaurantController extends AppCompatActivity {
+public class SelectRestaurantView extends AppCompatActivity implements Runnable{
+    private Bundle bundle;
 
     private TextView first;
     private TextView second;
@@ -46,39 +50,8 @@ public class SelectRestaurantController extends AppCompatActivity {
         third = (TextView)findViewById(R.id.third);
         fourth = (TextView)findViewById(R.id.fourth);
 
-        HashMap<String, String> params = new HashMap<>();
-        ArrayList<String> param = getIntent().getStringArrayListExtra("param");
-
         try {
-            YelpApi api = YelpApi.getInstance();
-
-            params.put(param.get(0), param.get(1));
-            params.put(params.get(2), params.get(3));
-            params.put(param.get(4), param.get(5));
-            params.put(params.get(6), params.get(7));
-            params.put(param.get(8), param.get(9));
-            params.put(param.get(9), param.get(10));
-            if(DietRestriction.index >= 0)
-                params.put("category_filter", DietRestriction.categories[DietRestriction.index]);
-
-            BusinessResponseModel businessResponse = api.businessSearch(params);
-
-            if(businessResponse != null) {
-
-                business1 = ((businessResponse.businesses())[0]);
-                first.setText(business1.name() + "     " + business1.price() + "     " + business1.rating());
-
-                business2 = ((businessResponse.businesses())[1]);
-                second.setText(business2.name() + "     " + business2.price() + "     " + business2.rating());
-
-                business3 = ((businessResponse.businesses())[2]);
-                third.setText(business3.name() + "     "+ business3.price() + "     " + business3.rating());
-
-                business4 = ((businessResponse.businesses())[3]);
-                fourth.setText(business4.name() + "     " + business4.price() + "     " + business4.rating());
-            }else{
-                first.setText("MY LEGS");
-            }
+            run();
         }catch (Exception e){
             e.printStackTrace();
             first.setText("He's dead Jim");
@@ -130,5 +103,25 @@ public class SelectRestaurantController extends AppCompatActivity {
         Uri uri = Uri.parse(uriString);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
         startActivity(intent);
+    }
+
+    public void run(){
+        BusinessModel[] businesses = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
+
+        if(businesses != null) {
+            business1 = (businesses[0]);
+            first.setText(business1.name() + "     " + business1.price() + "     " + business1.rating());
+
+            business2 = (businesses[1]);
+            second.setText(business2.name() + "     " + business2.price() + "     " + business2.rating());
+
+            business3 = (businesses[2]);
+            third.setText(business3.name() + "     "+ business3.price() + "     " + business3.rating());
+
+            business4 = (businesses[3]);
+            fourth.setText(business4.name() + "     " + business4.price() + "     " + business4.rating());
+        }else{
+            first.setText("MY LEGS");
+        }
     }
 }

@@ -45,4 +45,16 @@ public class DBFoodModel {
     public boolean gluten_free() {
         return (gluten_free == 1);
     }
+
+    @Override
+    public String toString() {
+        return "DBFoodModel{" +
+                "name='" + name + '\'' +
+                ", path='" + path + '\'' +
+                ", vegetarian=" + vegetarian +
+                ", vegan=" + vegan +
+                ", kosher=" + kosher +
+                ", gluten_free=" + gluten_free +
+                '}';
+    }
 }

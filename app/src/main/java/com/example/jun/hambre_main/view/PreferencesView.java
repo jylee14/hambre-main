@@ -1,4 +1,4 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.view;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -11,7 +11,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Preferences extends AppCompatActivity {
+import com.example.jun.hambre_main.R;
+import com.example.jun.hambre_main.controller.FoodFinderController;
+import com.example.jun.hambre_main.model.FoodModel;
+
+public class PreferencesView extends AppCompatActivity implements Runnable {
     private Button diet;
     private SeekBar rad;
     private TextView maxRad;
@@ -20,6 +24,8 @@ public class Preferences extends AppCompatActivity {
     private RadioButton dist;
     private Button cont;
 
+    private FoodModel[] dbfm;
+    FoodFinderController controller = new FoodFinderController();
 
     //1=Distance, 2=Highest Rated
     protected static int byRating = 2;  //for ordering later. Rating by default
@@ -52,7 +58,7 @@ public class Preferences extends AppCompatActivity {
         diet.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent i = new Intent(Preferences.this, DietRestriction.class);
+                Intent i = new Intent(PreferencesView.this, DietRestrictionView.class);
                 Bundle bundle = getIntent().getExtras();
                 if(bundle != null)
                     i.putExtras(bundle);
@@ -105,19 +111,19 @@ public class Preferences extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 if(radius == 0){
-                    Toast.makeText(Preferences.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PreferencesView.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 }else {
-                    //Intent i = new Intent(Preferences.this, yelpStub.class);
-                    Intent i = new Intent(Preferences.this, FoodFinderController.class);
+                    run();
 
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("sort", byRating);
-                    bundle.putInt("radius", meters);
-                    //bundle.putString("diet", "None");
-                    i.putExtras(bundle);
+                    Intent i = new Intent(PreferencesView.this, FoodFinderView.class);
+                    i.putExtra("model", dbfm);
                     startActivity(i);
                 }
             }
         });
+    }
+
+    public void run(){
+        dbfm = controller.getFoodFromServer();
     }
 }

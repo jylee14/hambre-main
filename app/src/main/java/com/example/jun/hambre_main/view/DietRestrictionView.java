@@ -1,4 +1,4 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.view;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +8,9 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-public class DietRestriction extends AppCompatActivity {
+import com.example.jun.hambre_main.R;
+
+public class DietRestrictionView extends AppCompatActivity {
     private RadioGroup prefs;
     private Button save;
     private Button cancel;
@@ -80,7 +82,7 @@ public class DietRestriction extends AppCompatActivity {
                 //push update to server);
                 //database.getUser(username)
                 //username.updateDiet(newPref, prefIndex);
-                Toast.makeText(DietRestriction.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DietRestrictionView.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                 returnToPrev();
                 //else
                 //propagate the data throughout the app via preferenceID
@@ -91,14 +93,14 @@ public class DietRestriction extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DietRestriction.this, "Changes discarded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DietRestrictionView.this, "Changes discarded", Toast.LENGTH_SHORT).show();
                 returnToPrev();
             }
         });
     }
 
     private void returnToPrev(){
-        Intent i = new Intent(DietRestriction.this, Preferences.class);
+        Intent i = new Intent(DietRestrictionView.this, PreferencesView.class);
         startActivity(i);
     }
 }

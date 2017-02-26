@@ -1,5 +1,6 @@
-package com.example.jun.hambre_main;
+package com.example.jun.hambre_main.controller;
 
+import com.example.jun.hambre_main.model.RestaurantModel;
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.BusinessResponseModel;
 import com.example.jun.yelp.SortType;

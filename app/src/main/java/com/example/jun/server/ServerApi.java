@@ -22,7 +22,7 @@ import java.net.URL;
 public class ServerApi {
     private static ServerApi instance = new ServerApi();
 
-    private final String FOOD_ENDPOINT = "http://159.203.246.214/irs/getFood.php";
+    private final String FOOD_ENDPOINT = "http://159.203.246.214/irs/randomFood.php";
     private final int CONNECTION_TRIES = 3;
     private final String LOGIN_ENDPOINT = "http://159.203.246.214/irs/googleLogin.php";
 

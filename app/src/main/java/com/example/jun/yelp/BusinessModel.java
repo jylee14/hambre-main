@@ -139,4 +139,11 @@ public class BusinessModel implements Parcelable {
         dest.writeString(image_url);
         dest.writeString(location.toString());
     }
+
+
+    public static BusinessModel[] toBusinessModel(Parcelable[] parcelables) {
+        BusinessModel[] businesses = new BusinessModel[parcelables.length];
+        System.arraycopy(parcelables, 0, businesses, 0, parcelables.length);
+        return businesses;
+    }
 }

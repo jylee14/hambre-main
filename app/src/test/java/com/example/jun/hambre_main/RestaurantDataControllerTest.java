@@ -1,5 +1,7 @@
 package com.example.jun.hambre_main;
 
+import com.example.jun.hambre_main.controller.RestaurantDataController;
+import com.example.jun.hambre_main.model.RestaurantModel;
 import com.example.jun.yelp.SortType;
 
 import org.junit.Test;

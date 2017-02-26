@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Platanos</string>
     <string name="facebook_app_id">1131719993617566</string>
+    <string name="server_img">http://159.203.246.214/irs/randomFood.php</string>
 </resources>
