@@ -75,28 +75,9 @@ public class FoodFinderView extends AppCompatActivity implements Runnable{
 
                 public void onAnimationEnd(Animation animation) {
                     try {
-                        new Thread(new Runnable() {
-                            public void run() {
-                                try {
-                                    // a potentially  time consuming task
-                                    URL url = new URL(server + gallery[index].getLink());
-                                    final Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                    mainView.post(new Runnable() {
-                                        public void run() {
-                                            mainView.setImageBitmap(bmp);
-                                        }
-                                    });
-                                }catch(Exception e){
-                                    System.out.println("lol");
-                                }
-                            }
-                        }).start();
-
-                        /**
                         URL url = new URL(server + gallery[index].getLink());
                         Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                         mainView.setImageBitmap(bmp);
-                         **/
                     } catch (Exception e) {
                         e.printStackTrace();
                         startActivity(new Intent(FoodFinderView.this, error.class));
