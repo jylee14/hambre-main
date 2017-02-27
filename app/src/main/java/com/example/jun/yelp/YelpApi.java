@@ -2,7 +2,7 @@ package com.example.jun.yelp;
 
 import android.content.res.Resources;
 
-mport com.google.gson.Gson;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
