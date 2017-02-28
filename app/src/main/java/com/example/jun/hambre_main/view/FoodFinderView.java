@@ -60,58 +60,6 @@ public class FoodFinderView extends AppCompatActivity{
     private boolean reloadImages = true;
     private Bitmap[] galleryImages;
 
-    private Thread picturesThread = new Thread() {
-        public void run() {
-            System.err.println("Running bg thread: " + android.os.Process.myTid());
-                try {
-                    System.err.println("downloading gallery");
-                    galleryImages = new Bitmap[gallery.length];
-                    for (int i = 0; i < gallery.length; i++) {
-
-                        // loop through gallery getting images for each image
-                        URL url = new URL(server + gallery[i].getLink());
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        galleryImages[i] = bmp;
-                        mainView.setImageBitmap(bmp);
-                    }
-                    System.err.println("FINISHED");
-                    reloadImages = false;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("I don't want to mess up my blade");
-                }
-        }
-    };
-
-    private class DownloadPicturesTask extends AsyncTask<URL, Integer, Bitmap[]> {
-        @Override
-        protected Bitmap[] doInBackground(URL... params) {
-            System.out.println("Running bg thread: " + android.os.Process.myTid());
-            Bitmap[] images = new Bitmap[params.length];
-            for (int i = 0; i < params.length; i++) {
-                Bitmap bmp;
-                try {
-                    bmp = BitmapFactory.decodeStream(params[i].openConnection().getInputStream());
-                } catch (IOException e) {
-                    bmp = null;
-                    e.printStackTrace();
-                }
-
-                images[i] = bmp;
-            }
-            return images;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap[] result) {
-            System.out.println("post execute running");
-            galleryImages = result;
-            mainView.setImageBitmap(result[index]);
-            reloadImages = false;
-        }
-
-    }
-
     private class LoadRestaurantsTask extends AsyncTask<HashMap<String, String>, Integer, BusinessModel[]> {
         @Override
         protected BusinessModel[] doInBackground(HashMap<String, String>... params) {
@@ -144,32 +92,6 @@ public class FoodFinderView extends AppCompatActivity{
         }
     }
 
-    private void updateImage() {
-        System.err.println("updating image");
-        System.err.println("Running ui thread: " + android.os.Process.myTid());
-        if (reloadImages) {
-            int w = 500;
-            int h = 500; // or whatever sizes you need
-            Bitmap.Config config = Bitmap.Config.ARGB_8888;
-            mainView.setImageBitmap(Bitmap.createBitmap(w, h, config));
-
-            URL[] urls = new URL[gallery.length];
-            for (int i = 0; i < gallery.length; i++) {
-                // loop through gallery getting images for each image
-                try {
-                    URL url = new URL(server + gallery[i].getLink());
-                    urls[i] = url;
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                }
-            }
-            new DownloadPicturesTask().execute(urls);
-        } else {
-            mainView.setImageBitmap(galleryImages[index]);
-        }
-        System.err.println("finished updating image");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -185,12 +107,7 @@ public class FoodFinderView extends AppCompatActivity{
             api = YelpApi.getInstance();
             mainView = (ImageView)findViewById(R.id.image);
 
-            updateImage();
-            //time consuming
-            URL url = new URL(server + gallery[index].getLink());
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            mainView.setImageBitmap(bmp);
-
+            Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
 
             mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderView.this) {
                 public void onSwipeLeft() {
