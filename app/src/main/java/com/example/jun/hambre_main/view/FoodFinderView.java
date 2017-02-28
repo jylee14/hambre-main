@@ -3,10 +3,8 @@ package com.example.jun.hambre_main.view;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.http.SslCertificate;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,7 +32,6 @@ public class FoodFinderView extends AppCompatActivity{
     private Bundle bundle;
     private String culture;
     private FoodModel[] gallery;
-    private BusinessModel[] response;
     private Animation animEnter, animLeave;
     private final String LOG_TAG = getClass().getSimpleName(); //for log
     private final String server = "http://159.203.246.214/irs/";
@@ -109,6 +106,30 @@ public class FoodFinderView extends AppCompatActivity{
 
     }
 
+    private class LoadRestaurantsTask extends AsyncTask<HashMap<String, String>, Integer, BusinessModel[]> {
+        @Override
+        protected BusinessModel[] doInBackground(HashMap<String, String>... params) {
+            System.out.println("LOADING RESTAURANTS IN BACKGROUND");
+            BusinessModel[] response = null;
+            try {
+                System.out.println(culture);
+                response = RestaurantFinderController.findRestaurants(params[0]);
+            }catch (Exception e){
+                //.........?
+            }
+
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(BusinessModel[] result) {
+            System.out.println("FINISHED LOADING RESTAURANTS IN BACKGROUND");
+            Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
+            i.putExtra("model", result);
+            startActivity(i);
+        }
+    }
+
     private void updateImage() {
         System.err.println("updating image");
         System.err.println("Running ui thread: " + android.os.Process.myTid());
@@ -171,32 +192,16 @@ public class FoodFinderView extends AppCompatActivity{
                     culture = gallery[index].getCulture();
                     //Log.v(LOG_TAG, "culture: " + culture);
 
-                    new Thread(new Runnable(){
-                        public void run() {
-                            try {
-                                HashMap<String, String> params = new HashMap<String, String>();
-                                params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-                                params.put("categories", "food");
-                                params.put("term", culture);
-                                params.put("sort", "" + PreferencesView.byRating);
-                                params.put("radius", "" + PreferencesView.radius * 1600);
-                                params.put("limit", "" + limit);
+                    HashMap<String, String> params = new HashMap<String, String>();
+                    params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
+                    params.put("categories", "food");
+                    params.put("term", culture);
+                    params.put("sort", "" + PreferencesView.byRating);
+                    params.put("radius", "" + PreferencesView.radius * 1600);
+                    params.put("limit", "" + limit);
 
-                                System.out.println(culture);
-                                response = RestaurantFinderController.findRestaurants(params);
-                            }catch (Exception e){
-                                //.........?
-                            }
-                        }
-                    }).start();
+                    new LoadRestaurantsTask().execute(params);
 
-                    Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
-
-                    // Bad idea: response is loaded in slow network operation on separate thread
-                    // this is a race condition, except the thread will almost always lose and this will almost
-                    // always fail.
-                    i.putExtra("model", response);
-                    startActivity(i);
                 }
             });
 
