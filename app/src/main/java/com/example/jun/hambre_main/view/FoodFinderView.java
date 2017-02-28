@@ -1,10 +1,12 @@
 package com.example.jun.hambre_main.view;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -17,6 +19,7 @@ import com.example.jun.hambre_main.OnSwipeTouchListener;
 import com.example.jun.hambre_main.R;
 import com.example.jun.yelp.BusinessModel;
 import com.example.jun.yelp.YelpApi;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,6 +27,9 @@ import java.net.URL;
 import java.util.HashMap;
 
 public class FoodFinderView extends AppCompatActivity{
+
+    Context context = this;
+
     private ImageView mainView;
     private int index = 0;
     private final int limit = 20;   //term limit is set to 20 arbitrarily for now
@@ -109,6 +115,7 @@ public class FoodFinderView extends AppCompatActivity{
     private class LoadRestaurantsTask extends AsyncTask<HashMap<String, String>, Integer, BusinessModel[]> {
         @Override
         protected BusinessModel[] doInBackground(HashMap<String, String>... params) {
+            publishProgress(0);
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessModel[] response = null;
             try {
@@ -119,6 +126,13 @@ public class FoodFinderView extends AppCompatActivity{
             }
 
             return response;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress){
+            System.out.println("PROGRESS UPDATE");
+            Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
+            i.putExtra("model", (Parcelable[]) null);
         }
 
         @Override
@@ -216,15 +230,7 @@ public class FoodFinderView extends AppCompatActivity{
 
                 public void onAnimationEnd(Animation animation) {
                     try {
-                        //URL url = new URL(server + gallery[index++].getLink());
-                        //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
-                        // TODO: possible error here
-                        //while (galleryImages == null) {
-                           // mainView.setImageBitmap(galleryImages[index]);
-                        //}
-                        // index++;
-                        updateImage();
+                        Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
                     } catch (Exception e) {
                         e.printStackTrace();
                         startActivity(new Intent(FoodFinderView.this, error.class));
