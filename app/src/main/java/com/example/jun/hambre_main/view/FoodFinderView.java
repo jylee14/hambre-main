@@ -24,7 +24,6 @@ import java.util.HashMap;
 public class FoodFinderView extends AppCompatActivity{
     private ImageView mainView;
     private int index = 0;
-    private int rad = 1600; //min is 1 mile
     private final int limit = 20;   //term limit is set to 20 arbitrarily for now
 
     private YelpApi api;
@@ -59,50 +58,24 @@ public class FoodFinderView extends AppCompatActivity{
         try {
             gallery = FoodModel.toFoodModel(bundle.getParcelableArray("model"));
             api = YelpApi.getInstance();
-
-            animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
-            animLeave = AnimationUtils.loadAnimation(this, R.anim.animation_leave);
-
-            animLeave.setAnimationListener(new Animation.AnimationListener() {
-                public void onAnimationStart(Animation animation) {
-                }
-
-                public void onAnimationRepeat(Animation animation) {
-                }
-
-                public void onAnimationEnd(Animation animation) {
-                    try {
-                        URL url = new URL(server + gallery[index].getLink());
-                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                        mainView.setImageBitmap(bmp);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        startActivity(new Intent(FoodFinderView.this, error.class));
-                    }
-                    index++;
-                    mainView.startAnimation(animEnter);
-                }
-            });
-            index = 0;
-
             mainView = (ImageView)findViewById(R.id.image);
+
+            //time consuming
             URL url = new URL(server + gallery[index++].getLink());
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             mainView.setImageBitmap(bmp);
 
             mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderView.this) {
                 public void onSwipeLeft() {
-                    if (index < gallery.length) {
-                        mainView.startAnimation(animLeave);
-                    }else{  //replace stuff
-                        mainView.startAnimation(animLeave);
+                    mainView.startAnimation(animLeave);
+                    if(index == gallery.length){
                         thread1.run();
-                        index = 0;
+                        index = (index + 1);
                     }
                 }
 
                 public void onSwipeRight() {
-                    culture = gallery[index-1].getCulture();
+                    culture = gallery[index].getCulture();
                     //Log.v(LOG_TAG, "culture: " + culture);
 
                     new Thread(new Runnable(){
@@ -113,9 +86,10 @@ public class FoodFinderView extends AppCompatActivity{
                                 params.put("categories", "food");
                                 params.put("term", culture);
                                 params.put("sort", "" + PreferencesView.byRating);
-                                params.put("radius", "" + rad);
+                                params.put("radius", "" + PreferencesView.radius * 1600);
                                 params.put("limit", "" + limit);
 
+                                System.out.println(culture);
                                 response = RestaurantFinderController.findRestaurants(params);
                             }catch (Exception e){
                                 //.........?
@@ -126,6 +100,28 @@ public class FoodFinderView extends AppCompatActivity{
                     Intent i = new Intent(FoodFinderView.this, SelectRestaurantView.class);
                     i.putExtra("model", response);
                     startActivity(i);
+                }
+            });
+
+            animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
+            animLeave = AnimationUtils.loadAnimation(this, R.anim.animation_leave);
+            animLeave.setAnimationListener(new Animation.AnimationListener() {
+                public void onAnimationStart(Animation animation) {
+                }
+
+                public void onAnimationRepeat(Animation animation) {
+                }
+
+                public void onAnimationEnd(Animation animation) {
+                    try {
+                        URL url = new URL(server + gallery[index++].getLink());
+                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        mainView.setImageBitmap(bmp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        startActivity(new Intent(FoodFinderView.this, error.class));
+                    }
+                    mainView.startAnimation(animEnter);
                 }
             });
         }catch(Exception e){
