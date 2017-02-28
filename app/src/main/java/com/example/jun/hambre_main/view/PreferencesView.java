@@ -30,9 +30,6 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
     //1=Distance, 2=Highest Rated
     protected static int byRating = 2;  //for ordering later. Rating by default
     protected static int radius = 1;   //minimum radius is 1 mile
-    protected int meters = 1600;   //yelpAPI wants meters
-    private final int meterToMile = 1600;   //conversion factor
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +97,6 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 radius = seekBar.getProgress() ;
                 maxRad.setText(radius + " mi");
-                meters = radius * meterToMile;
             }
         });
 
