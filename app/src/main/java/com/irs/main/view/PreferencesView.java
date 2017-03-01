@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.irs.main.R;
-import com.irs.main.controller.FoodFinderController;
+import com.irs.main.presenter.FoodFinder;
 import com.irs.main.model.FoodModel;
 import com.irs.main.presenter.DietRestriction;
 import com.irs.main.presenter.Error;
@@ -27,7 +27,7 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
     private Button cont;
 
     private FoodModel[] dbfm;
-    FoodFinderController controller = new FoodFinderController();
+    FoodFinder controller = new FoodFinder();
 
     //1=Distance, 2=Highest Rated
     public static int byRating = 2;  //for ordering later. Rating by default
@@ -114,7 +114,7 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
                     try {
                         run();
 
-                        Intent i = new Intent(PreferencesView.this, FoodFinderController.class);
+                        Intent i = new Intent(PreferencesView.this, FoodFinder.class);
                         i.putExtra("model", dbfm);
                         startActivity(i);
                     }catch(Exception e){
