@@ -1,23 +1,17 @@
 package com.irs.main.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * This class represents the user preferences and has methods that modify and get the different preferences.
  */
-public class UserModel implements Parcelable {
+public class UserModel{
 
-    public static final int NO_DIST = -1;
-
+    private static final int MAX_DIST = 25;
+    private static boolean initialized = false;
     // the name of the user
     private final String name;
 
     // whether the user is vegan, vegetarian, kosher, gluten free
-    private boolean vegan;
-    private boolean vegetarian;
-    private boolean kosher;
-    private boolean noGlu;
+    private int prefIndex = -1;
 
     // maximum distance the user is willing to go to go to a restauraunt
     private int maxDist;
@@ -26,18 +20,12 @@ public class UserModel implements Parcelable {
      * Constructor for the UserModel with all custom fields
      *
      * @param name         the name of the user
-     * @param isVegan      whether the user is vegan
-     * @param isVegetarian whether the user is vegetarian
-     * @param isKosher     whether the user is kosher
-     * @param isNoGlu      whether the user is gluten free
+     * @param pref         the user's dietary preference, -1 for no pref
      * @param mDist        max distance the user is willing to travel
      */
-    public UserModel(String name, boolean isVegan, boolean isVegetarian, boolean isKosher, boolean isNoGlu, int mDist) {
+    public UserModel(String name, int pref, int mDist) {
         this.name = name;
-        vegan = isVegan;
-        vegetarian = isVegetarian;
-        kosher = isKosher;
-        noGlu = isNoGlu;
+        prefIndex = (pref > 4 || pref < -1 ? -1 : pref);
         maxDist = mDist;
     }
 
@@ -47,60 +35,57 @@ public class UserModel implements Parcelable {
      * @param name the name of the user
      */
     public UserModel(String name) {
-        this(name, false, false, false, false, NO_DIST);
+        this(name, -1, MAX_DIST);
+    }
+
+
+    /**
+     * code called to initiate database connection, needs to be called before
+     * other method calls are made
+     */
+    public void connect() {
+        initialized = true;
+        // logon here
     }
 
     /**
-     * Constructor for the UserModel to pass between activities
+     * Add UserModel item to database
      *
-     * @param in the parcelable to create the user
+     * @param user UserModel to add into the database
      */
-    public UserModel(Parcel in) {
-        this.name = in.readString();
-        boolean[] diet = new boolean[4];
-        in.readBooleanArray(diet);
-
-        vegan = diet[0];
-        vegetarian = diet[1];
-        kosher = diet[2];
-        noGlu = diet[3];
-        maxDist = in.readInt();
+    public void create(UserModel user) {
+        // add food to database
     }
 
     /**
-     * Checks whether the user is vegan
+     * Read item from database
      *
-     * @return whether the user is vegan
+     * @param id item to read
+     * @return
      */
-    public boolean isVegan() {
-        return vegan;
+    public UserModel read(int id) {
+        return new UserModel("", -1, MAX_DIST);
     }
 
     /**
-     * Checks whether the user is vegetarian
+     * Update item in the database
      *
-     * @return whether the user is vegetarian
+     * @param id      id of entry to update
+     * @param newData UserModel containing the desired changes
+     * @return same UserModel if successful, null otherwise
      */
-    public boolean isVegetarian() {
-        return vegetarian;
+    public UserModel update(int id, UserModel newData) {
+        return null;
     }
 
     /**
-     * Checks whether the user is kosher
+     * Delete item in the database
      *
-     * @return whether the user is kosher
+     * @param id id of item to delete
+     * @return true if successfully deleted, false if failed/user doesnt exist
      */
-    public boolean isKosher() {
-        return kosher;
-    }
-
-    /**
-     * Checks whether the user is gluten free
-     *
-     * @return whether the user is gluten free
-     */
-    public boolean isNoGlu() {
-        return noGlu;
+    public boolean destroy(int id) {
+        return true;
     }
 
     /**
@@ -114,56 +99,49 @@ public class UserModel implements Parcelable {
 
     /**
      * Changes the preferences of the user
-     *
-     * @param none       whether all are any preferences that are true
-     * @param vegan      whether the user is a vegan
-     * @param vegetarian whether the user is a vegetarian
-     * @param kosher     whether the user is kosher
-     * @param noGlu      whether the user is gluten free
      */
-    public void newPrefs(boolean none, boolean vegan, boolean vegetarian, boolean kosher, boolean noGlu, int mDist) {
-        if (none) {
-            this.vegan = false;
-            this.vegetarian = false;
-            this.kosher = false;
-            this.noGlu = false;
-            this.maxDist = NO_DIST;
-        } else {
-            this.vegan = vegan;
-            this.vegetarian = vegetarian;
-            this.kosher = kosher;
-            this.noGlu = noGlu;
-        }
+    public void newPrefs(int pref, int mDist) {
+        prefIndex = (pref > 4 || pref < -1 ? -1 : pref);
     }
-
-    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-    public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
-        public UserModel createFromParcel(Parcel in) {
-            return new UserModel(in);
-        }
-
-        public UserModel[] newArray(int size) {
-            return new UserModel[size];
-        }
-    };
-
-
-    @Override
-    /**
-     * Function for parcelable override. Don't worry about it.
-     */
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    /**
-     * Function for parcelable override. Don't worry about it.
-     */
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.name);
-        boolean[] dietaryPreferences = {vegan, vegetarian, kosher, noGlu};
-        dest.writeBooleanArray(dietaryPreferences);
-        dest.writeInt(maxDist);
-    }
+//
+//    /**
+//     * Constructor for the UserModel to pass between activities
+//     *
+//     * @param in the parcelable to create the user
+//     */
+//    public UserModel(Parcel in) {
+//        this.name = in.readString();
+//        prefIndex = in.readInt();
+//        maxDist = in.readInt();
+//    }
+//
+//    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+//    public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
+//        public UserModel createFromParcel(Parcel in) {
+//            return new UserModel(in);
+//        }
+//
+//        public UserModel[] newArray(int size) {
+//            return new UserModel[size];
+//        }
+//    };
+//
+//
+//    @Override
+//    /**
+//     * Function for parcelable override. Don't worry about it.
+//     */
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    /**
+//     * Function for parcelable override. Don't worry about it.
+//     */
+//    public void writeToParcel(Parcel dest, int flags) {
+//        dest.writeString(this.name);
+//        dest.writeInt(prefIndex);
+//        dest.writeInt(maxDist);
+//    }
 }
