@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import com.irs.main.controller.FoodFinderController;
 import com.irs.main.controller.RestaurantFinderController;
 import com.irs.main.model.FoodModel;
-import com.irs.main.OnSwipeTouchListener;
+import com.irs.main.model.OnSwipeTouchListener;
 import com.irs.main.R;
 import com.irs.main.presenter.Error;
 import com.irs.yelp.BusinessModel;

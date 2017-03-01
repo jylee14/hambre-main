@@ -1,4 +1,4 @@
-package com.irs.main;
+package com.irs.main.model;
 
 import android.content.Context;
 import android.view.View;
