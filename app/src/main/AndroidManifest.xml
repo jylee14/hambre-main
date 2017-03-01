@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.jun.hambre_main">
+    package="com.irs.main">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,17 +13,17 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".Landing">
+        <activity android:name=".controller.LandingController">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
              <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.DietRestrictionView" android:label="@string/app_name"/>
-        <activity android:name=".view.PreferencesView" android:label="@string/app_name"/>
+        <activity android:name=".controller.DietRestriction" android:label="@string/app_name"/>
+        <activity android:name=".controller.PreferencesController" android:label="@string/app_name"/>
         <activity android:name=".controller.FoodFinderController" android:label="@string/app_name"/>
-        <activity android:name=".view.SelectRestaurantView" android:label="@string/app_name"/>
-        <activity android:name=".view.error" android:label="@string/app_name" />
+        <activity android:name=".controller.SelectRestaurantController" android:label="@string/app_name"/>
+        <activity android:name=".controller.Error" android:label="@string/app_name" />
     </application>
 </manifest>
