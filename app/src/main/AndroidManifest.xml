@@ -22,7 +22,7 @@
 
         <activity android:name=".presenter.DietRestriction" android:label="@string/app_name"/>
         <activity android:name=".view.PreferencesView" android:label="@string/app_name"/>
-        <activity android:name=".view.FoodFinderView" android:label="@string/app_name"/>
+        <activity android:name=".controller.FoodFinderController" android:label="@string/app_name"/>
         <activity android:name=".view.SelectRestaurantView" android:label="@string/app_name"/>
         <activity android:name=".presenter.Error" android:label="@string/app_name" />
     </application>

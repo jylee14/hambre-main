@@ -30,8 +30,8 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
     FoodFinderController controller = new FoodFinderController();
 
     //1=Distance, 2=Highest Rated
-    protected static int byRating = 2;  //for ordering later. Rating by default
-    protected static int radius = 1;   //minimum radius is 1 mile
+    public static int byRating = 2;  //for ordering later. Rating by default
+    public static int radius = 1;   //minimum radius is 1 mile
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,7 +114,7 @@ public class PreferencesView extends AppCompatActivity implements Runnable {
                     try {
                         run();
 
-                        Intent i = new Intent(PreferencesView.this, FoodFinderView.class);
+                        Intent i = new Intent(PreferencesView.this, FoodFinderController.class);
                         i.putExtra("model", dbfm);
                         startActivity(i);
                     }catch(Exception e){
