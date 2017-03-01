@@ -33,13 +33,13 @@ public class ServerApi {
         // TODO: get user api key here (design not finalized)
     }
 
-    public void authServer(GoogleSignInAccount acct){
+    public void authServer(GoogleSignInAccount acct) {
         URL url = null;
         HttpURLConnection client = null;
 
         try {
             url = new URL(LOGIN_ENDPOINT);
-            client = (HttpURLConnection)url.openConnection();
+            client = (HttpURLConnection) url.openConnection();
             client.setRequestProperty("User-Agent", "Mozilla/5.0");
             client.setReadTimeout(10000);
             client.setConnectTimeout(15000);
@@ -76,7 +76,7 @@ public class ServerApi {
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

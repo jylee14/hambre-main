@@ -1,22 +1,23 @@
 package com.irs.main.model;
 
 import android.content.Context;
-import android.view.View;
-
-/**
- * Created by jun on 2/14/17.
- */
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
+/**
+ *  OnSwipeTouchListener
+ *  The brains of the FoodFinderController Functionality
+ *  will interpret the swiping motion of the user so that the controllers can use this
+ */
+
 public class OnSwipeTouchListener implements OnTouchListener {
 
     private final GestureDetector gestureDetector;
 
-    public OnSwipeTouchListener (Context ctx){
+    public OnSwipeTouchListener(Context ctx) {
         gestureDetector = new GestureDetector(ctx, new GestureListener());
     }
 
@@ -50,8 +51,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
                         }
                     }
                     result = true;
-                }
-                else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                } else if (Math.abs(diffY) > SWIPE_THRESHOLD && Math.abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffY > 0) {
                         onSwipeBottom();
                     } else {
@@ -67,6 +67,7 @@ public class OnSwipeTouchListener implements OnTouchListener {
         }
     }
 
+    //override in implementing classes
     public void onSwipeRight() {
     }
 

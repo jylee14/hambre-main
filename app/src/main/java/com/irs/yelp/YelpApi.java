@@ -1,7 +1,5 @@
 package com.irs.yelp;
 
-import android.content.res.Resources;
-
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
@@ -30,7 +28,7 @@ public class YelpApi {
                     + "&client_secret=" + clientSecret;
 
     // url we can search businesses at
-    private final String SEARCH_ENDPOINT  = "https://api.yelp.com/v3/businesses/search";
+    private final String SEARCH_ENDPOINT = "https://api.yelp.com/v3/businesses/search";
 
     private final int CONNECTION_TRIES = 3;
     private final int CONNECTION_SUCCESS = 200;
@@ -101,6 +99,7 @@ public class YelpApi {
      * Business Search Method
      * see the url for description of possible parameters and description of response object
      * www.yelp.com/developers/documentation/v3/business_search
+     *
      * @param params list of params that should be specified according to Yelp Business Search Docs
      * @return response model containing the POJO corresponding to response or null if invalid call
      */
@@ -182,6 +181,7 @@ public class YelpApi {
 
     /**
      * get the current instance of the YelpAPI object
+     *
      * @return instance of api object
      */
     public static YelpApi getInstance() {

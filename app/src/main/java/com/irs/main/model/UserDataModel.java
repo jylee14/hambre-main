@@ -1,7 +1,5 @@
 package com.irs.main.model;
 
-import com.irs.main.model.UserModel;
-
 ////// TODO: 3/1/17 Maybe combine with Usermodel?
 
 /**
@@ -19,6 +17,7 @@ public class UserDataModel {
 
     /**
      * Add UserModel item to database
+     *
      * @param user UserModel to add into the database
      */
     public void create(UserModel user) {
@@ -27,6 +26,7 @@ public class UserDataModel {
 
     /**
      * Read item from database
+     *
      * @param id item to read
      * @return
      */
@@ -36,7 +36,8 @@ public class UserDataModel {
 
     /**
      * Update item in the database
-     * @param id id of entry to update
+     *
+     * @param id      id of entry to update
      * @param newData UserModel containing the desired changes
      * @return same UserModel if successful, null otherwise
      */
@@ -46,6 +47,7 @@ public class UserDataModel {
 
     /**
      * Delete item in the database
+     *
      * @param id id of item to delete
      * @return UserModel representing data which was destroyed
      */

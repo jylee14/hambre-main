@@ -46,7 +46,9 @@ public class UserModel implements Parcelable {
      *
      * @param name the name of the user
      */
-    public UserModel(String name) { this(name, false, false, false, false, NO_DIST); }
+    public UserModel(String name) {
+        this(name, false, false, false, false, NO_DIST);
+    }
 
     /**
      * Constructor for the UserModel to pass between activities
@@ -97,7 +99,9 @@ public class UserModel implements Parcelable {
      *
      * @return whether the user is gluten free
      */
-    public boolean isNoGlu() { return noGlu; }
+    public boolean isNoGlu() {
+        return noGlu;
+    }
 
     /**
      * Gets the maximum distance that the user is willing to go
@@ -111,11 +115,11 @@ public class UserModel implements Parcelable {
     /**
      * Changes the preferences of the user
      *
-     * @param none whether all are any preferences that are true
-     * @param vegan whether the user is a vegan
+     * @param none       whether all are any preferences that are true
+     * @param vegan      whether the user is a vegan
      * @param vegetarian whether the user is a vegetarian
-     * @param kosher whether the user is kosher
-     * @param noGlu whether the user is gluten free
+     * @param kosher     whether the user is kosher
+     * @param noGlu      whether the user is gluten free
      */
     public void newPrefs(boolean none, boolean vegan, boolean vegetarian, boolean kosher, boolean noGlu, int mDist) {
         if (none) {
@@ -126,7 +130,7 @@ public class UserModel implements Parcelable {
             this.maxDist = NO_DIST;
         } else {
             this.vegan = vegan;
-            this.vegetarian = vegetarian ;
+            this.vegetarian = vegetarian;
             this.kosher = kosher;
             this.noGlu = noGlu;
         }

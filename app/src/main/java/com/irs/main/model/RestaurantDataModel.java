@@ -1,6 +1,5 @@
 package com.irs.main.model;
 
-import com.irs.main.model.RestaurantModel;
 import com.irs.yelp.BusinessModel;
 import com.irs.yelp.BusinessResponseModel;
 import com.irs.yelp.SortType;
@@ -26,10 +25,11 @@ public class RestaurantDataModel {
 
     /**
      * Method to retrieve a list of restaurants based on a search query
+     *
      * @param searchQuery query to enter into yelp API
-     * @param count number of restaurants to retrieve (max 50)
-     * @param sortType how to sort the response
-     * @param openNow retrieve only open restaurants
+     * @param count       number of restaurants to retrieve (max 50)
+     * @param sortType    how to sort the response
+     * @param openNow     retrieve only open restaurants
      * @return list of restaurants
      */
     public RestaurantModel[] getRestaurants(String searchQuery, int count, SortType sortType, boolean openNow) {
@@ -58,10 +58,10 @@ public class RestaurantDataModel {
                 System.err.println("Problem");
             }
             restaurants[index] = new RestaurantModel(
-                                        business.name(),
-                                        business.url(),
-                                        business.image_url(),
-                                        business.price() == null ? 0 : business.price().length());
+                    business.name(),
+                    business.url(),
+                    business.image_url(),
+                    business.price() == null ? 0 : business.price().length());
             index++;
         }
 

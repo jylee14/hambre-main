@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.irs.main.presenter.DietRestriction">
+    tools:context="com.irs.main.controller.DietRestriction">
 
     <TextView
         android:layout_width="match_parent"

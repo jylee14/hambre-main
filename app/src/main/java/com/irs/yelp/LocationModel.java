@@ -3,7 +3,7 @@ package com.irs.yelp;
 /**
  * Model representing location object in JSON response from Yelp API
  */
-public class LocationModel{
+public class LocationModel {
     private String city;
     private String country;
     private String address2;
@@ -12,7 +12,7 @@ public class LocationModel{
     private String address1;
     private String zip_code;
 
-    public String getCity(){
+    public String getCity() {
         return city;
     }
 
@@ -40,13 +40,13 @@ public class LocationModel{
         return zip_code;
     }
 
-    public String getAddress(){
+    public String getAddress() {
         String mainAddress = address1 + " ";
         mainAddress += (address2 == null ? "" : address2) + " ";
         return mainAddress + city + " " + state + " " + zip_code;
     }
 
-    public String toString(){
+    public String toString() {
         return getAddress();
     }
 }

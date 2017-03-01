@@ -1,32 +1,31 @@
-package com.irs.main.presenter;
+package com.irs.main.controller;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.irs.main.R;
-import com.irs.main.view.PreferencesView;
 
 public class DietRestriction extends AppCompatActivity {
     private RadioGroup prefs;
     private Button save;
     private Button cancel;
 
-    protected static int index = -1; //default to no food preferences
-    protected static String[] categories = {"Vegetarian", "Vegan", "Kosher", "gluten_free"};
+    static int index = -1; //default to no food preferences
+    static final String[] categories = {"Vegetarian", "Vegan", "Kosher", "gluten_free"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_diet_restriction);
 
-        prefs = (RadioGroup)findViewById(R.id.choices);
-        save = (Button)findViewById(R.id.save);
-        cancel = (Button)findViewById(R.id.cancel);
+        prefs = (RadioGroup) findViewById(R.id.choices);
+        save = (Button) findViewById(R.id.save);
+        cancel = (Button) findViewById(R.id.cancel);
 
         //set the preference to the preference of the user on the server
         setPreferences();
@@ -63,32 +62,31 @@ public class DietRestriction extends AppCompatActivity {
     }
 
     private void setOnCheckedChangeListener() {
-        prefs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
-        {
+        prefs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-            switch(checkedId){
-                case R.id.none:
-                    index = -1;
-                    break;
-                case R.id.veggie:
-                    index = 0;
-                    break;
-                case R.id.vegan:
-                    index = 1;
-                    break;
-                case R.id.kosher:
-                    index = 2;
-                    break;
-                case R.id.noGlu:
-                    index = 3;
-                    break;
-            }
+                switch (checkedId) {
+                    case R.id.none:
+                        index = -1;
+                        break;
+                    case R.id.veggie:
+                        index = 0;
+                        break;
+                    case R.id.vegan:
+                        index = 1;
+                        break;
+                    case R.id.kosher:
+                        index = 2;
+                        break;
+                    case R.id.noGlu:
+                        index = 3;
+                        break;
+                }
             }
         });
     }
 
     private void setPreferences() {
-        switch(index){
+        switch (index) {
             case -1:
                 prefs.check(R.id.none);
                 break;
@@ -111,8 +109,8 @@ public class DietRestriction extends AppCompatActivity {
         }
     }
 
-    private void returnToPrev(){
-        Intent i = new Intent(DietRestriction.this, PreferencesView.class);
+    private void returnToPrev() {
+        Intent i = new Intent(DietRestriction.this, PreferencesController.class);
         startActivity(i);
     }
 }

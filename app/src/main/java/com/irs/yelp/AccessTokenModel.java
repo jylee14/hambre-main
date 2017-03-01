@@ -10,6 +10,7 @@ public class AccessTokenModel {
 
     /**
      * Access token we need to authorize any API call
+     *
      * @return
      */
     public String access_token() {
@@ -18,6 +19,7 @@ public class AccessTokenModel {
 
     /**
      * Token type (always Bearer)
+     *
      * @return
      */
     public String token_type() {
@@ -26,12 +28,12 @@ public class AccessTokenModel {
 
     /**
      * Expiration time of token
+     *
      * @return
      */
     public int expires_in() {
         return expires_in;
     }
-
 
 
 }

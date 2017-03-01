@@ -1,16 +1,14 @@
-package com.irs.main.presenter;
+package com.irs.main.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.irs.main.R;
-import com.irs.main.view.PreferencesView;
-import com.irs.server.ServerApi;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -23,11 +21,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.irs.main.R;
+import com.irs.server.ServerApi;
 
-public class Landing extends AppCompatActivity {
-    private Button guest;       //continue as guest
+public class LandingController extends AppCompatActivity {
     private SignInButton goog;        //google login
-    CallbackManager cbmanager; //fb login
+    private CallbackManager cbmanager; //fb login
     private GoogleApiClient mGoogleApiClient;
     private static final String TAG = "LoginActivity";
 
@@ -44,7 +43,7 @@ public class Landing extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         facebookLogin();
-        guest = (Button) findViewById(R.id.Guest);
+        Button guest = (Button) findViewById(R.id.Guest);
         goog = (SignInButton) findViewById(R.id.Google);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -56,7 +55,7 @@ public class Landing extends AppCompatActivity {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
-                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
                         // An unresolvable Error has occurred and Google APIs (including Sign-In) will not
                         // be available.
                         Log.d(TAG, "onConnectionFailed:" + connectionResult);
@@ -66,11 +65,10 @@ public class Landing extends AppCompatActivity {
                 .build();
 
 
-
         guest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Landing.this, PreferencesView.class));
+                startActivity(new Intent(LandingController.this, PreferencesController.class));
             }
         });
 
@@ -89,19 +87,16 @@ public class Landing extends AppCompatActivity {
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 9001) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if(result.isSuccess()){
+            if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
                 ServerApi.getInstance().authServer(acct);
-            }
-            else{
+            } else {
                 Log.d(TAG, "Google signin failed." + result.getStatus().getStatusCode());
             }
-        }
-        else {
+        } else {
             cbmanager.onActivityResult(requestCode, resultCode, data);
         }
     }
-
 
 
     /**
@@ -118,7 +113,7 @@ public class Landing extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // TODO: interface with our own server
-                startActivity(new Intent(Landing.this, PreferencesView.class));
+                startActivity(new Intent(LandingController.this, PreferencesController.class));
             }
 
             @Override

@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * The model the represents the different restaurants.
  */
-public class RestaurantModel implements Parcelable{
+public class RestaurantModel implements Parcelable {
     private final String name;
     private final String yelpLink;
     private final String imageLink;
@@ -15,9 +15,10 @@ public class RestaurantModel implements Parcelable{
     /**
      * Any restaurant object MUST have the following attributes
      * The RestaurantModel object CANNOT change its fields once created.
-     * @param name name of restaurant
-     * @param yelpLink link to restaurant's yelp page
-     * @param imageLink link to picture representing restaurant
+     *
+     * @param name        name of restaurant
+     * @param yelpLink    link to restaurant's yelp page
+     * @param imageLink   link to picture representing restaurant
      * @param dollarSigns number of dollar signs restaurant has
      */
     public RestaurantModel(String name, String yelpLink, String imageLink, int dollarSigns) {
@@ -29,6 +30,7 @@ public class RestaurantModel implements Parcelable{
 
     /**
      * Construct using a parcel
+     *
      * @param in Parcel to create restaurant from
      */
     protected RestaurantModel(Parcel in) {

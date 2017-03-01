@@ -3,8 +3,6 @@ package com.irs.yelp;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.math.BigDecimal;
-
 /**
  * Model defining structure of businesses in Yelp JSON response
  */
@@ -98,7 +96,7 @@ public class BusinessModel implements Parcelable {
         return location;
     }
 
-    public String toString(){
+    public String toString() {
         return this.name + "\t" + this.phone + "\t" + this.rating + "\t" + this.price + "\t" + this.categories[0] + "\t" + this.location;
     }
 

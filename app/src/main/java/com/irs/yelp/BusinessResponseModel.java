@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * Model representing Yelp response to a business search request
  */
-public class BusinessResponseModel implements Parcelable{
+public class BusinessResponseModel implements Parcelable {
     private String total;
     private BusinessModel[] businesses;
     private RegionModel region;
@@ -41,12 +41,12 @@ public class BusinessResponseModel implements Parcelable{
     }
 
     @Override
-    public int describeContents(){
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags){
+    public void writeToParcel(Parcel dest, int flags) {
         //dest.writeTypedArray(businesses, 0);
         dest.writeString(total);
         dest.writeTypedArray(businesses, flags);
