@@ -132,6 +132,7 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
         list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
 
+
         /*
         if (businesses != null) {
             business1 = (businesses[0]);

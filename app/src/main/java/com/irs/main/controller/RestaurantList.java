@@ -20,7 +20,7 @@ import java.net.URL;
  * Created by jeff on 3/2/17.
  */
 
-public class RestaurantList extends ArrayAdapter<BusinessModel> {
+public class RestaurantList extends ArrayAdapter<String> {
     private final Activity context;
     private final String []name;
     private final String []url;
@@ -29,7 +29,7 @@ public class RestaurantList extends ArrayAdapter<BusinessModel> {
     private final String []price;
     RestaurantList(Activity context, String [] name, String[] url,
                    String[] imageUrl, double[] rating, String[] price){
-        super(context, R.layout.list_single);
+        super(context, R.layout.list_single, name);
         this.context = context;
         this.name = name;
         this.url = url;
