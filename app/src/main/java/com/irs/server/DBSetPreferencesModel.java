@@ -1,9 +1,5 @@
 package com.irs.server;
 
-/**
- * Created by bryle on 3/1/2017.
- */
-
 public class DBSetPreferencesModel {
     private String error;
     private String uid;
@@ -17,6 +13,7 @@ public class DBSetPreferencesModel {
     public String error(){return error;}
     public String uid(){return uid;}
     public String user(){return user;}
+    
     public boolean vegetarian() {
         return (vegetarian == 1);
     }
