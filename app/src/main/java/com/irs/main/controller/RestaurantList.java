@@ -48,7 +48,7 @@ public class RestaurantList extends ArrayAdapter<String> {
         TextView txtPrice = (TextView)rowView.findViewById(R.id.price);
         txtPrice.setText(price[position]);
         TextView txtRating = (TextView)rowView.findViewById(R.id.rating);
-        txtRating.setText("" +rating[position]);
+        txtRating.setText("rating: " +rating[position]);
         ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
 
         //TODO this might block the UI thread.
