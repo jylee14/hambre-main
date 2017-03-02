@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -131,7 +132,15 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
                 names, url, imageUrl, ratings, prices);
         list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
-
+        list.setOnItemClickListener( new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id){
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(url[position]));
+                startActivity(browserIntent);
+            }
+        });
 
         /*
         if (businesses != null) {
