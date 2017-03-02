@@ -33,14 +33,15 @@ public class ServerApi {
     private final String SET_TAG_FOOD_ENDPOINT = SERVER_BASE + "tagFood.php";
     private final String GET_TAGS_FOOD_ENDPOINT = SERVER_BASE + "getTagsOfFood.php";
     private final String LIKE_FOOD_ENDPOINT = SERVER_BASE + "createFood.php";
-    private final String TAG_ENDPOINT = "SERVER_BASE" + "/getTags.php";
-
+    private final String TAG_ENDPOINT = SERVER_BASE + "getTags.php";
+    private final String USER_TO_FOOD_ENDPOINT = SERVER_BASE + "userToFood.php";
+    private final String USERS_FOOD_ENDPOINT = SERVER_BASE + "getUserFoods.php";
 
     private final int CONNECTION_TRIES = 3;
 
     // cache to store food models so we only retrieve them once
-    private DBFoodModel[] foodModelsCache;
     private DBTagModel[] tagModelsCache;
+    private DBUsersFood[] usersFoodsCache;
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
     }
@@ -92,7 +93,7 @@ public class ServerApi {
             e.printStackTrace();
         }
     }
-
+    
     public PreferencesModel getPreferences(String api_key) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
@@ -161,6 +162,22 @@ public class ServerApi {
             // TODO: throw exception because we could not connect to the network
         }
         return tagModelsCache;
+
+
+    }
+
+    public DBSetPreferencesModel[] getSetPreferences(String api_key){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("api_key", api_key + "");
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBSetPreferencesModel[] result = gson.fromJson(response.toString(), DBSetPreferencesModel[].class);
+
+        return result;
     }
 
     public DBFoodModel[] getFood() {
@@ -171,9 +188,24 @@ public class ServerApi {
         // query FOOD_ENDPOINT for a GET request with params
         String response = getJSONResponse(FOOD_ENDPOINT, "GET", params, false);
 
+
         // return parsed object
         Gson gson = new Gson();
         DBFoodModel[] result = gson.fromJson(response.toString(), DBFoodModel[].class);
+        return result;
+    }
+
+    public DBLinkTagToFoodModel getLinkTagToFood(int tag_id,int food_id){
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("food_id", food_id + "");
+        params.put("tag_id", tag_id + "");
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBLinkTagToFoodModel result = gson.fromJson(response.toString(), DBLinkTagToFoodModel.class);
         return result;
     }
 
@@ -191,11 +223,67 @@ public class ServerApi {
         return result;
     }
 
+    /*Not for version 1.0
+    * Returns a null pointer exception
+    * */
+    public DBUsersFood[] getUsersFood(String api_key){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("api_key", api_key + "");
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBUsersFood[] result = gson.fromJson(response.toString(), DBUsersFood[].class);
+
+        return result;
+    }
+
+
+    /*Not for version 1.0
+    * Error: java.lang.IllegalStateException: Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path
+    * */
+
+    /*NOT TESTABLE*/
+    public DBUserToFoodModel[] getUserToFood(String api_key,int food_id,int liked, int disliked){
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<>();
+        params.put("food_id", food_id + "");
+        params.put("api_key", api_key + "");
+        params.put("liked", liked +"");
+        params.put("disliked", disliked +"");
+
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBUserToFoodModel[] result = gson.fromJson(response.toString(), DBUserToFoodModel[].class);
+        return result;
+    }
+
+    public DBCreateTagModel createTag(String tag_name) {
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<>();
+        params.put("tag_name", tag_name + "");
+
+        // query CREATE_TAG_ENDPOINT for a GET request with params
+        String response = getJSONResponse(CREATE_TAG_ENDPOINT, "POST", params, true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBCreateTagModel result = gson.fromJson(response.toString(), DBCreateTagModel.class);
+        return result;
+    }
+
     /**
      * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
-     * @param url url to call
+     * @param urlBase url to call
      * @param method String value either "GET" or "POST"
      * @param params params to append to request
+     * @param writeToBody should write to body of request or head?
      * @return
      */
     private String getJSONResponse(
@@ -215,65 +303,6 @@ public class ServerApi {
 
             // get access token
             try {
-/*
-                // construct a url with the params provided
-                String urlConstructed = url;
-
-                // initialize query string
-                String queryString = "?";
-
-                // iterate through key value pairs appending to querystring
-                Iterator<String> keys = params.keySet().iterator();
-                for (int i = 0; i < params.size(); i++) {
-                    String key = keys.next();
-                    String value = params.get(key);
-
-                    queryString += key + "=" + value;
-
-                    if (i != params.size() - 1) {
-                        queryString += "&";
-                    }
-                }
-
-                // but only add query string if it has content
-                if (!queryString.equals("?")) {
-                    urlConstructed += queryString;
-                }
-
-                System.out.println("urlConstructed: " + urlConstructed);
-                URL obj = new URL(urlConstructed);
-                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                // Send a post request, mozilla user agent header
-                con.setRequestMethod(method);
-                con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-                // response code for request
-                int responseCode = con.getResponseCode();
-
-                System.out.println(responseCode + "");
-                // if we did not connect correctly, we should throw an exception and try again
-                if (responseCode != 200) {
-                    continue;
-                }
-
-                connected = true;
-
-                // Read response into response buffer
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                result = response.toString();
-
-                System.out.println(result);
-  */
-                // Form query string
                 String queryString = "";
 
                 Iterator<String> keys = params.keySet().iterator();
