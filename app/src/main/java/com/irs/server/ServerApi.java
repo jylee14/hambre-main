@@ -257,6 +257,20 @@ public class ServerApi {
         return result;
     }
 
+    public DBCreateTagModel createTag(String tag_name) {
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<>();
+        params.put("tag_name", tag_name + "");
+
+        // query CREATE_TAG_ENDPOINT for a GET request with params
+        String response = getJSONResponse(CREATE_TAG_ENDPOINT, "POST", params, true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBCreateTagModel result = gson.fromJson(response.toString(), DBCreateTagModel.class);
+        return result;
+    }
+
     /**
      * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
      * @param urlBase url to call

@@ -1,6 +1,7 @@
 package com.irs.main;
 
 import com.irs.main.model.FoodModel;
+import com.irs.server.DBCreateTagModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.DBFoodTagModel;
 import com.irs.server.DBTagModel;
@@ -82,11 +83,22 @@ public class ServerApiTest {
             System.out.println(DBUserToFoodModels[i]);
         }
     }
+
+    @Test
     public void getPreferences_test() {
         ServerApi api = ServerApi.getInstance();
 
         PreferencesModel preferencesModel = api.getPreferences("b0aab7dfbca43fc13dc5fdb8529fe7a0");
         System.out.println(preferencesModel.user().api_key());
 
+    }
+
+    // need a delete tag to test properly
+    @Test
+    public void createTag_test() {
+        ServerApi api = ServerApi.getInstance();
+
+        // change tag name per test so there are no duplicates
+        DBCreateTagModel model = api.createTag("peruvian");
     }
 }
