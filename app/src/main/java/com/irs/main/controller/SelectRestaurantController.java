@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.irs.main.R;
@@ -23,6 +24,10 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
     private BusinessModel business2;
     private BusinessModel business3;
     private BusinessModel business4;
+
+    ListView list;
+    //BusinessModel[] restaurants;
+
     //TODO implement and display listView of restaurants
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,10 +42,13 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
 
         setContentView(R.layout.activity_select_restaurant);
 
+        //RestaurantList adapter = new
+          //      RestaurantList(SelectRestaurantController.this, )
+        /*
         first = (TextView) findViewById(R.id.first);
         second = (TextView) findViewById(R.id.second);
         third = (TextView) findViewById(R.id.third);
-        fourth = (TextView) findViewById(R.id.fourth);
+        fourth = (TextView) findViewById(R.id.fourth); */
 
         try {
             run();
@@ -49,7 +57,7 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
             first.setText("He's dead Jim");
         }
 
-
+        /*
         first.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,6 +93,8 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
                 openMaps(coordinates, label);
             }
         });
+
+        */
     }
 
     private void openMaps(String coordinates, String label) {
@@ -99,7 +109,25 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
 
     public void run() {
         BusinessModel[] businesses = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
-
+        String [] names = new String[businesses.length];
+        String [] url = new String[businesses.length];
+        String [] imageUrl = new String[businesses.length];
+        double [] ratings = new double[businesses.length];
+        String [] prices = new String[businesses.length];
+        for(int i = 0; i < businesses.length; i++){
+            names[i] = businesses[i].name();
+            url[i] = businesses[i].url();
+            imageUrl[i] = businesses[i].image_url();
+            ratings[i] = businesses[i].rating();
+            prices[i] = businesses[i].price();
+        }
+        RestaurantList adapter = new
+                RestaurantList(SelectRestaurantController.this,
+                names, url, imageUrl, ratings, prices);
+        list = (ListView)findViewById(R.id.list);
+        list.setAdapter(adapter);
+        
+        /*
         if (businesses != null) {
             business1 = (businesses[0]);
             first.setText(business1.name() + "     " + business1.price() + "     " + business1.rating());
@@ -116,5 +144,7 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
             first.setText("MY LEGS");
             startActivity(new Intent(SelectRestaurantController.this, Error.class));
         }
+
+        */
     }
 }

@@ -21,11 +21,11 @@ import java.net.URL;
 
 public class RestaurantList extends ArrayAdapter<BusinessModel> {
     private final Activity context;
-    private final String[] name;
-    private final String[] url;
-    private final String[] imageUrl;
-    private final double[] rating;
-    private final String[] price;
+    private final String []name;
+    private final String []url;
+    private final String []imageUrl;
+    private final double []rating;
+    private final String []price;
     RestaurantList(Activity context, String [] name, String[] url,
                    String[] imageUrl, double[] rating, String[] price){
         super(context, R.layout.list_single);
@@ -36,6 +36,11 @@ public class RestaurantList extends ArrayAdapter<BusinessModel> {
         this.rating = rating;
         this.price = price;
     }
+   /* RestaurantList(Activity context, BusinessModel [] bm){
+        super(context, R.layout.list_single);
+        this.context = context;
+        this.name = bm.name();
+    } */
     public View getView(int position, View view, ViewGroup parent){
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_single, null, true);
@@ -47,6 +52,8 @@ public class RestaurantList extends ArrayAdapter<BusinessModel> {
         TextView txtRating = (TextView)rowView.findViewById(R.id.rating);
         txtRating.setText("" +rating[position]);
         ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
+
+        //TODO this might block the UI thread.
         try {
             URL url = new URL(imageUrl[position]);
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
