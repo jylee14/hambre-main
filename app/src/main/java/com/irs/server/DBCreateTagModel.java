@@ -1,9 +1,5 @@
 package com.irs.server;
 
-/**
- * Created by bryle on 3/1/2017.
- */
-
 public class DBCreateTagModel {
     private boolean error;
     private int id;
@@ -20,5 +16,4 @@ public class DBCreateTagModel {
     public DBTagModel tag() {
         return tag;
     }
-
 }
