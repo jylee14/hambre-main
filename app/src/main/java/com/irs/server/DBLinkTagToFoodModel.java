@@ -1,9 +1,5 @@
 package com.irs.server;
 
-/**
- * Created by bryle on 3/1/2017.
- */
-
 public class DBLinkTagToFoodModel {
     private String error;
     private int food_id;
@@ -21,5 +17,4 @@ public class DBLinkTagToFoodModel {
                 ", food_id='" + food_id + '\'' +
                 '}';
     }
-
 }
