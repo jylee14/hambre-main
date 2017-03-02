@@ -22,9 +22,19 @@ import java.net.URL;
 public class ServerApi {
     private static ServerApi instance = new ServerApi();
 
-    private final String FOOD_ENDPOINT = "http://159.203.246.214/irs/randomFood.php";
+    private final String SERVER_BASE = "http://159.203.246.214/irs/";
+    private final String FOOD_ENDPOINT = SERVER_BASE + "randomFood.php";
+    private final String LOGIN_ENDPOINT = SERVER_BASE + "googleLogin.php";
+    private final String GET_PREFERENCES_ENDPOINT = SERVER_BASE + "preferences.php";
+    private final String SET_PREFERENCES_ENDPOINT = SERVER_BASE + "changePreferences.php";
+    private final String CREATE_TAG_ENDPOINT = SERVER_BASE + "createTag.php";
+    private final String SET_TAG_FOOD_ENDPOINT = SERVER_BASE + "tagFood.php";
+    private final String GET_TAGS_FOOD_ENDPOINT = SERVER_BASE + "getTagsOfFood.php";
+    private final String LIKE_FOOD_ENDPOINT = SERVER_BASE + "createFood.php";
+
+
     private final int CONNECTION_TRIES = 3;
-    private final String LOGIN_ENDPOINT = "http://159.203.246.214/irs/googleLogin.php";
+
 
     // cache to store food models so we only retrieve them once
     private DBFoodModel[] foodModelsCache;
@@ -83,6 +93,62 @@ public class ServerApi {
 
 
     public DBFoodModel[] getFood() {
+
+        // if cache is empty, make request to server
+        if (foodModelsCache == null) {
+
+            // variables to verify connection
+            int tries = 0;
+            boolean connected = false;
+
+            while (tries < CONNECTION_TRIES) {
+                tries++;
+
+                // get access token
+                try {
+                    // Connect to the acess token url
+                    URL obj = new URL(FOOD_ENDPOINT);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                    // Send a post request, mozilla user agent header
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                    // response code for request
+                    int responseCode = con.getResponseCode();
+
+                    // if we did not connect correctly, we should throw an exception and try again
+                    if (responseCode != 200) {
+                        continue;
+                    }
+
+                    connected = true;
+
+                    // Read response into response buffer
+                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    // parse accessToken object from json
+                    Gson gson = new Gson();
+                    foodModelsCache = gson.fromJson(response.toString(), DBFoodModel[].class);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("THAT'S NOT ON FIRE");
+                }
+            }
+            // TODO: throw exception because we could not connect to the network
+        }
+        return foodModelsCache;
+    }
+
+    public DBFoodTagModel[] getFoodTags(int food_id) {
 
         // if cache is empty, make request to server
         if (foodModelsCache == null) {
