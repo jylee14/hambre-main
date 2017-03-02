@@ -94,6 +94,20 @@ public class ServerApi {
         }
     }
 
+    public PreferencesModel getPreferences(String api_key) {
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("api_key", api_key + "");
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(GET_PREFERENCES_ENDPOINT, "POST", params, true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        PreferencesModel result = gson.fromJson(response.toString(), PreferencesModel.class);
+        return result;
+    }
+
     public DBTagModel[] getTag() {
 
         // if cache is empty, make request to server
@@ -157,7 +171,7 @@ public class ServerApi {
         params.put("api_key", api_key + "");
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params);
+        String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params,true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -172,7 +186,8 @@ public class ServerApi {
         HashMap<String, String> params = new HashMap<String, String>();
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(FOOD_ENDPOINT, "POST", params);
+        String response = getJSONResponse(FOOD_ENDPOINT, "GET", params, false);
+
 
         // return parsed object
         Gson gson = new Gson();
@@ -185,7 +200,7 @@ public class ServerApi {
         HashMap<String, String> params = new HashMap<String, String>();
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params);
+        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params,true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -199,7 +214,7 @@ public class ServerApi {
         params.put("food_id", food_id + "");
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(GET_TAGS_FOOD_ENDPOINT, "POST", params);
+        String response = getJSONResponse(GET_TAGS_FOOD_ENDPOINT, "POST", params, false);
 
         // return parsed object
         Gson gson = new Gson();
@@ -215,7 +230,7 @@ public class ServerApi {
         params.put("api_key", api_key + "");
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params);
+        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params,true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -234,7 +249,7 @@ public class ServerApi {
         params.put("api_key", api_key + "");
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params);
+        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params,true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -248,7 +263,12 @@ public class ServerApi {
      * @param params params to append to request
      * @return
      */
-    private String getJSONResponse(String url, String method, HashMap<String, String> params) {
+    private String getJSONResponse(
+            String urlBase,
+            String method,
+            HashMap<String, String> params,
+            boolean writeToBody) {
+
         String result = null;
 
         // variables to verify connection
@@ -260,7 +280,7 @@ public class ServerApi {
 
             // get access token
             try {
-
+/*
                 // construct a url with the params provided
                 String urlConstructed = url;
 
@@ -297,6 +317,7 @@ public class ServerApi {
                 // response code for request
                 int responseCode = con.getResponseCode();
 
+                System.out.println(responseCode + "");
                 // if we did not connect correctly, we should throw an exception and try again
                 if (responseCode != 200) {
                     continue;
@@ -315,6 +336,83 @@ public class ServerApi {
                 in.close();
 
                 result = response.toString();
+
+                System.out.println(result);
+  */
+                // Form query string
+                String queryString = "";
+
+                Iterator<String> keys = params.keySet().iterator();
+                for (int i = 0; i < params.size(); i++) {
+                    String key = keys.next();
+                    String value = params.get(key);
+
+                    queryString += key + "=" + value;
+
+                    if (i != params.size() - 1) {
+                        queryString += "&";
+                    }
+                }
+
+                URL url = null;
+                HttpURLConnection client = null;
+
+                if (writeToBody) {
+                    url = new URL(urlBase);
+                    client = null;
+                    client = (HttpURLConnection) url.openConnection();
+                    client.setRequestProperty("User-Agent", "Mozilla/5.0");
+                    client.setReadTimeout(10000);
+                    client.setConnectTimeout(15000);
+                    client.setRequestMethod(method);
+                    client.setDoInput(true);
+                    client.setDoOutput(true);
+
+
+                    if (!queryString.equals("")) {
+                            OutputStream os = client.getOutputStream();
+                            BufferedWriter writer = new BufferedWriter(
+                                    new OutputStreamWriter(os, "UTF-8"));
+                            writer.write(queryString);
+                            writer.flush();
+                            writer.close();
+                            os.close();
+
+                    }
+                } else {
+                    if (!queryString.equals("")) {
+                        urlBase += "?" + queryString;
+                    }
+
+                    url = new URL(urlBase);
+                    client = (HttpURLConnection) url.openConnection();
+                    client.setRequestProperty("User-Agent", "Mozilla/5.0");
+                    client.setReadTimeout(10000);
+                    client.setConnectTimeout(15000);
+                    client.setRequestMethod(method);
+                    client.setDoInput(true);
+                    client.setDoOutput(true);
+                }
+
+
+                client.connect();
+
+                // read response
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                result = response.toString();
+                System.out.println(response);
+                System.out.println("log in attempt");
+
+                break;
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("THAT'S NOT ON FIRE");
@@ -322,6 +420,7 @@ public class ServerApi {
         }
 
         if (tries == CONNECTION_TRIES) {
+            System.out.println("fatal error");
             // TODO: fatal exception here
             // NO WIFI
         }

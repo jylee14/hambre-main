@@ -6,6 +6,7 @@ import com.irs.server.DBFoodTagModel;
 import com.irs.server.DBTagModel;
 import com.irs.server.DBUserToFoodModel;
 import com.irs.server.DBUsersFood;
+import com.irs.server.PreferencesModel;
 import com.irs.server.ServerApi;
 
 import org.junit.Test;
@@ -77,8 +78,15 @@ public class ServerApiTest {
         ServerApi api = ServerApi.getInstance();
         String ap = "b0aab7dfbca43fc13dc5fdb8529fe7a0";
         DBUserToFoodModel[] DBUserToFoodModels = api.getUserToFood(ap);
-        for(int i = 0 ; i < DBUserToFoodModels.length; i++){
+        for (int i = 0; i < DBUserToFoodModels.length; i++) {
             System.out.println(DBUserToFoodModels[i]);
         }
+    }
+    public void getPreferences_test() {
+        ServerApi api = ServerApi.getInstance();
+
+        PreferencesModel preferencesModel = api.getPreferences("b0aab7dfbca43fc13dc5fdb8529fe7a0");
+        System.out.println(preferencesModel.user().api_key());
+
     }
 }
