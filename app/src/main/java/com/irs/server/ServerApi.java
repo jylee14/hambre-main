@@ -219,6 +219,13 @@ public class ServerApi {
         return null;
     }
 
+    /**
+     * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
+     * @param url url to call
+     * @param method String value either "GET" or "POST"
+     * @param params params to append to request
+     * @return
+     */
     private String getJSONResponse(String url, String method, HashMap<String, String> params) {
 
         String result = null;
