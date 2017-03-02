@@ -93,7 +93,7 @@ public class ServerApi {
             e.printStackTrace();
         }
     }
-
+    
     public PreferencesModel getPreferences(String api_key) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
@@ -195,16 +195,17 @@ public class ServerApi {
         return result;
     }
 
-    public DBLinkTagToFoodModel[] getLinkTagToFood(){
+    public DBLinkTagToFoodModel getLinkTagToFood(int tag_id,int food_id){
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
-
+        params.put("food_id", food_id + "");
+        params.put("tag_id", tag_id + "");
         // query FOOD_ENDPOINT for a GET request with params
         String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params,true);
 
         // return parsed object
         Gson gson = new Gson();
-        DBLinkTagToFoodModel[] result = gson.fromJson(response.toString(), DBLinkTagToFoodModel[].class);
+        DBLinkTagToFoodModel result = gson.fromJson(response.toString(), DBLinkTagToFoodModel.class);
         return result;
     }
 
@@ -243,10 +244,16 @@ public class ServerApi {
     /*Not for version 1.0
     * Error: java.lang.IllegalStateException: Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path
     * */
-    public DBUserToFoodModel[] getUserToFood(String api_key){
+
+    /*NOT TESTABLE*/
+    public DBUserToFoodModel[] getUserToFood(String api_key,int food_id,int liked, int disliked){
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<>();
+        params.put("food_id", food_id + "");
         params.put("api_key", api_key + "");
+        params.put("liked", liked +"");
+        params.put("disliked", disliked +"");
+
 
         // query FOOD_ENDPOINT for a GET request with params
         String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params,true);
@@ -296,66 +303,6 @@ public class ServerApi {
 
             // get access token
             try {
-/*
-                // construct a url with the params provided
-                String urlConstructed = url;
-
-                // initialize query string
-                String queryString = "?";
-
-                // iterate through key value pairs appending to querystring
-                Iterator<String> keys = params.keySet().iterator();
-                for (int i = 0; i < params.size(); i++) {
-                    String key = keys.next();
-                    String value = params.get(key);
-
-                    queryString += key + "=" + value;
-
-                    if (i != params.size() - 1) {
-                        queryString += "&";
-                    }
-                }
-
-                // but only add query string if it has content
-                if (!queryString.equals("?")) {
-                    urlConstructed += queryString;
-                }
-
-                System.out.println("urlConstructed: " + urlConstructed);
-                URL obj = new URL(urlConstructed);
-                System.out.println(obj);
-                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                // Send a post request, mozilla user agent header
-                con.setRequestMethod(method);
-                con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-                // response code for request
-                int responseCode = con.getResponseCode();
-
-                System.out.println(responseCode + "");
-                // if we did not connect correctly, we should throw an exception and try again
-                if (responseCode != 200) {
-                    continue;
-                }
-
-                connected = true;
-
-                // Read response into response buffer
-                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
-
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
-
-                result = response.toString();
-
-                System.out.println(result);
-  */
-                // Form query string
                 String queryString = "";
 
                 Iterator<String> keys = params.keySet().iterator();
