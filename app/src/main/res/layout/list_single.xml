@@ -45,12 +45,14 @@
                 android:layout_width="wrap_content"
                 android:id="@+id/yelp_btn"
                 android:text="Yelp"
-                android:paddingLeft="10dp"/>
+                android:paddingLeft="10dp"
+                android:focusable="false"/>
             <Button
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:id="@+id/map_button"
-                android:text="Map"/>
+                android:text="Map"
+                android:focusable="false"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
