@@ -6,17 +6,17 @@
         <ImageView
             android:id="@+id/img"
             android:layout_width="50dp"
-            android:layout_height="50dp"/>
+            android:layout_height="75dp"/>
 
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="75dp"
             android:padding="5dp"/>
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="75dp"
             android:padding="5dp"/>
         <TextView
             android:id="@+id/rating"
