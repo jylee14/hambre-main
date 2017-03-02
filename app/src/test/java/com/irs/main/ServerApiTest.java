@@ -2,6 +2,7 @@ package com.irs.main;
 
 import com.irs.main.model.FoodModel;
 import com.irs.server.DBFoodModel;
+import com.irs.server.DBTagModel;
 import com.irs.server.ServerApi;
 
 import org.junit.Test;
@@ -13,6 +14,16 @@ import org.junit.Test;
  */
 public class ServerApiTest {
 
+    @Test
+    public void getTag_test(){
+        ServerApi api = ServerApi.getInstance();
+
+        DBTagModel[] DBTagModels = api.getTag();
+
+        for(int i = 0 ; i < DBTagModels.length; i++){
+            System.out.println(DBTagModels[i]);
+        }
+    }
     @Test
     public void getFood_test() {
         ServerApi api = ServerApi.getInstance();
