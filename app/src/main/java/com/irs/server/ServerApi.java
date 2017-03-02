@@ -25,10 +25,11 @@ public class ServerApi {
     private final String FOOD_ENDPOINT = "http://159.203.246.214/irs/randomFood.php";
     private final int CONNECTION_TRIES = 3;
     private final String LOGIN_ENDPOINT = "http://159.203.246.214/irs/googleLogin.php";
+    private final String TAG_ENDPOINT = "http://159.203.246.214/irs/getTags.php";
 
     // cache to store food models so we only retrieve them once
     private DBFoodModel[] foodModelsCache;
-
+    private DBTagModel[] tagModelsCache;
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
     }
@@ -81,6 +82,61 @@ public class ServerApi {
         }
     }
 
+    public DBTagModel[] getTag() {
+
+        // if cache is empty, make request to server
+        if (tagModelsCache == null) {
+
+            // variables to verify connection
+            int tries = 0;
+            boolean connected = false;
+
+            while (tries < CONNECTION_TRIES) {
+                tries++;
+
+                // get access token
+                try {
+                    // Connect to the acess token url
+                    URL obj = new URL(TAG_ENDPOINT);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                    // Send a post request, mozilla user agent header
+                    con.setRequestMethod("GET");
+                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                    // response code for request
+                    int responseCode = con.getResponseCode();
+
+                    // if we did not connect correctly, we should throw an exception and try again
+                    if (responseCode != 200) {
+                        continue;
+                    }
+
+                    connected = true;
+
+                    // Read response into response buffer
+                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+                    in.close();
+
+                    // parse accessToken object from json
+                    Gson gson = new Gson();
+                    tagModelsCache = gson.fromJson(response.toString(), DBTagModel[].class);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("THAT'S NOT ON FIRE");
+                }
+            }
+            // TODO: throw exception because we could not connect to the network
+        }
+        return tagModelsCache;
+    }
 
     public DBFoodModel[] getFood() {
 
