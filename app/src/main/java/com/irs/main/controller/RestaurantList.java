@@ -1,6 +1,8 @@
 package com.irs.main.controller;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,8 @@ import android.widget.TextView;
 
 import com.irs.main.R;
 import com.irs.yelp.BusinessModel;
+
+import java.net.URL;
 
 /**
  * Created by jeff on 3/2/17.
@@ -42,8 +46,16 @@ public class RestaurantList extends ArrayAdapter<BusinessModel> {
         txtPrice.setText(price[position]);
         TextView txtRating = (TextView)rowView.findViewById(R.id.rating);
         txtRating.setText("" +rating[position]);
-        //ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
-        //imageView.setImageResource(imageUrl[position]);
+        ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
+        try {
+            URL url = new URL(imageUrl[position]);
+            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            imageView.setImageBitmap(bmp);
+        }
+        catch (Exception e){
+            System.out.println("KAAAAAAAAAAAAAAAAAAAAHHHHNNNN!!!");
+        }
+
 
         return rowView;
 
