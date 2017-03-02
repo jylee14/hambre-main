@@ -27,6 +27,14 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
 
     ListView list;
     //BusinessModel[] restaurants;
+    BusinessModel[] businesses; // = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
+    String [] names; //= new String[businesses.length];
+    String [] url; //= new String[businesses.length];
+    String [] imageUrl; //= new String[businesses.length];
+    double [] ratings; //= new double[businesses.length];
+    String [] prices;
+
+
 
     //TODO implement and display listView of restaurants
 
@@ -41,9 +49,6 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
                 R.anim.animation_activity_leave);
 
         setContentView(R.layout.activity_select_restaurant);
-
-        //RestaurantList adapter = new
-          //      RestaurantList(SelectRestaurantController.this, )
         /*
         first = (TextView) findViewById(R.id.first);
         second = (TextView) findViewById(R.id.second);
@@ -108,12 +113,12 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
     }
 
     public void run() {
-        BusinessModel[] businesses = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
-        String [] names = new String[businesses.length];
-        String [] url = new String[businesses.length];
-        String [] imageUrl = new String[businesses.length];
-        double [] ratings = new double[businesses.length];
-        String [] prices = new String[businesses.length];
+       businesses = BusinessModel.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
+        names = new String[businesses.length];
+        url = new String[businesses.length];
+        imageUrl = new String[businesses.length];
+        ratings = new double[businesses.length];
+        prices = new String[businesses.length];
         for(int i = 0; i < businesses.length; i++){
             names[i] = businesses[i].name();
             url[i] = businesses[i].url();
@@ -126,7 +131,7 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
                 names, url, imageUrl, ratings, prices);
         list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
-        
+
         /*
         if (businesses != null) {
             business1 = (businesses[0]);

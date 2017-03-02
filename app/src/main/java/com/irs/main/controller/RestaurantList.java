@@ -3,6 +3,7 @@ package com.irs.main.controller;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,13 +36,14 @@ public class RestaurantList extends ArrayAdapter<BusinessModel> {
         this.imageUrl = imageUrl;
         this.rating = rating;
         this.price = price;
+
+
+
     }
-   /* RestaurantList(Activity context, BusinessModel [] bm){
-        super(context, R.layout.list_single);
-        this.context = context;
-        this.name = bm.name();
-    } */
+
+    @Override
     public View getView(int position, View view, ViewGroup parent){
+        Log.v("inside", "getView()");
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_single, null, true);
 
