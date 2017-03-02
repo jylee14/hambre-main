@@ -3,6 +3,7 @@ package com.irs.main;
 import com.irs.main.model.FoodModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.DBFoodTagModel;
+import com.irs.server.DBLinkTagToFoodModel;
 import com.irs.server.DBTagModel;
 import com.irs.server.DBUserToFoodModel;
 import com.irs.server.DBUsersFood;
@@ -72,16 +73,31 @@ public class ServerApiTest {
         }
     }
 
+    @Test
+    public void getLinkTagToFood_test() {
+        ServerApi api = ServerApi.getInstance();
+        int food_id = 1;
+        int tag_id =10;
+        DBLinkTagToFoodModel DBLinkToTag = api.getLinkTagToFood(food_id,tag_id);
+        System.out.println(DBLinkToTag);
+    }
 
+    /* TODO: when getUserToFood is testable.
     @Test
     public void getUserToFood_test() {
         ServerApi api = ServerApi.getInstance();
         String ap = "b0aab7dfbca43fc13dc5fdb8529fe7a0";
-        DBUserToFoodModel[] DBUserToFoodModels = api.getUserToFood(ap);
+        int food_id = 1;
+        int liked = 1;
+        int disliked = 0;
+
+        DBUserToFoodModel[] DBUserToFoodModels = api.getUserToFood(ap,food_id,liked,disliked);
         for (int i = 0; i < DBUserToFoodModels.length; i++) {
             System.out.println(DBUserToFoodModels[i]);
         }
     }
+    */
+
     public void getPreferences_test() {
         ServerApi api = ServerApi.getInstance();
 
