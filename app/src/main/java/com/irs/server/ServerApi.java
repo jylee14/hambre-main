@@ -33,7 +33,7 @@ public class ServerApi {
     private final String SET_TAG_FOOD_ENDPOINT = SERVER_BASE + "tagFood.php";
     private final String GET_TAGS_FOOD_ENDPOINT = SERVER_BASE + "getTagsOfFood.php";
     private final String LIKE_FOOD_ENDPOINT = SERVER_BASE + "createFood.php";
-    private final String TAG_ENDPOINT = "SERVER_BASE" + "/getTags.php";
+    private final String TAG_ENDPOINT = SERVER_BASE + "getTags.php";
 
 
     private final int CONNECTION_TRIES = 3;
@@ -191,11 +191,14 @@ public class ServerApi {
         return result;
     }
 
+    public
+
     /**
      * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
-     * @param url url to call
+     * @param urlBase url to call
      * @param method String value either "GET" or "POST"
      * @param params params to append to request
+     * @param writeToBody should write to body of request or head?
      * @return
      */
     private String getJSONResponse(
