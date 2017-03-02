@@ -34,13 +34,14 @@ public class ServerApi {
     private final String GET_TAGS_FOOD_ENDPOINT = SERVER_BASE + "getTagsOfFood.php";
     private final String LIKE_FOOD_ENDPOINT = SERVER_BASE + "createFood.php";
     private final String TAG_ENDPOINT = SERVER_BASE + "getTags.php";
-
+    private final String USER_TO_FOOD_ENDPOINT = SERVER_BASE + "userToFood.php";
+    private final String USERS_FOOD_ENDPOINT = SERVER_BASE + "getUserFoods.php";
 
     private final int CONNECTION_TRIES = 3;
 
     // cache to store food models so we only retrieve them once
-    private DBFoodModel[] foodModelsCache;
     private DBTagModel[] tagModelsCache;
+    private DBUsersFood[] usersFoodsCache;
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
     }
@@ -161,6 +162,22 @@ public class ServerApi {
             // TODO: throw exception because we could not connect to the network
         }
         return tagModelsCache;
+
+
+    }
+
+    public DBSetPreferencesModel[] getSetPreferences(String api_key){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("api_key", api_key + "");
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBSetPreferencesModel[] result = gson.fromJson(response.toString(), DBSetPreferencesModel[].class);
+
+        return result;
     }
 
     public DBFoodModel[] getFood() {
@@ -171,9 +188,23 @@ public class ServerApi {
         // query FOOD_ENDPOINT for a GET request with params
         String response = getJSONResponse(FOOD_ENDPOINT, "GET", params, false);
 
+
         // return parsed object
         Gson gson = new Gson();
         DBFoodModel[] result = gson.fromJson(response.toString(), DBFoodModel[].class);
+        return result;
+    }
+
+    public DBLinkTagToFoodModel[] getLinkTagToFood(){
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<String, String>();
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBLinkTagToFoodModel[] result = gson.fromJson(response.toString(), DBLinkTagToFoodModel[].class);
         return result;
     }
 
@@ -191,7 +222,40 @@ public class ServerApi {
         return result;
     }
 
-    public
+    /*Not for version 1.0
+    * Returns a null pointer exception
+    * */
+    public DBUsersFood[] getUsersFood(String api_key){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("api_key", api_key + "");
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBUsersFood[] result = gson.fromJson(response.toString(), DBUsersFood[].class);
+
+        return result;
+    }
+
+
+    /*Not for version 1.0
+    * Error: java.lang.IllegalStateException: Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path
+    * */
+    public DBUserToFoodModel[] getUserToFood(String api_key){
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<>();
+        params.put("api_key", api_key + "");
+
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params,true);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBUserToFoodModel[] result = gson.fromJson(response.toString(), DBUserToFoodModel[].class);
+        return result;
+    }
 
     /**
      * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
@@ -245,6 +309,7 @@ public class ServerApi {
 
                 System.out.println("urlConstructed: " + urlConstructed);
                 URL obj = new URL(urlConstructed);
+                System.out.println(obj);
                 HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                 // Send a post request, mozilla user agent header

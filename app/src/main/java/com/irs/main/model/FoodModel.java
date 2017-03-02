@@ -9,6 +9,7 @@ import android.os.Parcelable;
 public class FoodModel implements Parcelable {
     private String name; // name of food
     private String culture; // culture of the food
+    private String tag;
     private String link; // link to the picture
 
     /**
@@ -18,9 +19,10 @@ public class FoodModel implements Parcelable {
      * @param culture name of the culture of the food
      * @param link    image link to the picture of the food
      */
-    public FoodModel(String name, String culture, String link) {
+    public FoodModel(String name, String culture, String tag, String link) {
         this.name = name;
         this.culture = culture;
+        this.tag = tag;
         this.link = link;
     }
 
@@ -32,6 +34,7 @@ public class FoodModel implements Parcelable {
     public FoodModel(Parcel in) {
         this.name = in.readString();
         this.culture = in.readString();
+        this.tag = in.readString();
         this.link = in.readString();
     }
 
@@ -47,6 +50,8 @@ public class FoodModel implements Parcelable {
     public String getCulture() {
         return culture;
     }
+
+    public String getTag() { return this.tag; }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Parcelable.Creator<FoodModel> CREATOR = new Parcelable.Creator<FoodModel>() {
@@ -71,6 +76,7 @@ public class FoodModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(culture);
+        dest.writeString(tag);
         dest.writeString(link);
     }
 

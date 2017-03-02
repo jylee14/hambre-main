@@ -117,11 +117,12 @@ public class FoodFinderController extends AppCompatActivity {
 
                 public void onSwipeRight() {
                     culture = gallery[index].getCulture();
+                    String tag = gallery[index].getTag();
                     //Log.v(LOG_TAG, "culture: " + culture);
 
                     HashMap<String, String> params = new HashMap<>();
                     params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-                    params.put("categories", "food");
+                    params.put("categories", (tag == null ? "food" : tag));
                     params.put("term", culture);
                     params.put("sort", "" + PreferencesController.byRating);
                     params.put("radius", "" + PreferencesController.radius * 1600);
@@ -168,7 +169,7 @@ public class FoodFinderController extends AppCompatActivity {
         for (int i = 0; i < DBFoodModels.length; i++) {
             try {
                 DBFoodModel tempDB = DBFoodModels[i];
-                FoodModel temp = new FoodModel(tempDB.name(), tempDB.name(), "" + tempDB.path());
+                FoodModel temp = new FoodModel(tempDB.name(), tempDB.name(), tempDB.getTag(), "" + tempDB.path());
                 fromDB[i] = temp;
             } catch (Exception e) {
                 System.err.println("D'OH");
