@@ -1,9 +1,5 @@
 package com.irs.server;
 
-/**
- * Created by bryle on 3/1/2017.
- */
-
 public class DBUsersFood {
     private int user_id;
     private int food_id;
