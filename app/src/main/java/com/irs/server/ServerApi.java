@@ -14,6 +14,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Singleton server api
@@ -149,58 +151,16 @@ public class ServerApi {
 
     public DBFoodModel[] getFood() {
 
-        // if cache is empty, make request to server
-        if (foodModelsCache == null) {
+        // params are empty (no params needed for get food)
+        HashMap<String, String> params = new HashMap<String, String>();
 
-            // variables to verify connection
-            int tries = 0;
-            boolean connected = false;
+        // query FOOD_ENDPOINT for a GET request with params
+        String response = getJSONResponse(FOOD_ENDPOINT, "GET", params);
 
-            while (tries < CONNECTION_TRIES) {
-                tries++;
-
-                // get access token
-                try {
-                    // Connect to the acess token url
-                    URL obj = new URL(FOOD_ENDPOINT);
-                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                    // Send a post request, mozilla user agent header
-                    con.setRequestMethod("GET");
-                    con.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-                    // response code for request
-                    int responseCode = con.getResponseCode();
-
-                    // if we did not connect correctly, we should throw an exception and try again
-                    if (responseCode != 200) {
-                        continue;
-                    }
-
-                    connected = true;
-
-                    // Read response into response buffer
-                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    String inputLine;
-                    StringBuffer response = new StringBuffer();
-
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                    in.close();
-
-                    // parse accessToken object from json
-                    Gson gson = new Gson();
-                    foodModelsCache = gson.fromJson(response.toString(), DBFoodModel[].class);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("THAT'S NOT ON FIRE");
-                }
-            }
-            // TODO: throw exception because we could not connect to the network
-        }
-        return foodModelsCache;
+        // return parsed object
+        Gson gson = new Gson();
+        DBFoodModel[] result = gson.fromJson(response.toString(), DBFoodModel[].class);
+        return result;
     }
 
     public DBFoodTagModel[] getFoodTags(int food_id) {
@@ -256,7 +216,87 @@ public class ServerApi {
             }
             // TODO: throw exception because we could not connect to the network
         }
-        return foodModelsCache;
+        return null;
+    }
+
+    private String getJSONResponse(String url, String method, HashMap<String, String> params) {
+
+        String result = null;
+
+        // variables to verify connection
+        int tries = 0;
+        boolean connected = false;
+
+        while (tries < CONNECTION_TRIES) {
+            tries++;
+
+            // get access token
+            try {
+
+                // construct a url with the params provided
+                String urlConstructed = url;
+
+                // initialize query string
+                String queryString = "?";
+
+                // iterate through key value pairs appending to querystring
+                Iterator<String> keys = params.keySet().iterator();
+                for (int i = 0; i < params.size(); i++) {
+                    String key = keys.next();
+                    String value = params.get(key);
+
+                    queryString += key + "=" + value;
+
+                    if (i != params.size() - 1) {
+                        queryString += "&";
+                    }
+                }
+
+                // but only add query string if it has content
+                if (!queryString.equals("?")) {
+                    urlConstructed = "?";
+                }
+
+                URL obj = new URL(urlConstructed);
+                HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                // Send a post request, mozilla user agent header
+                con.setRequestMethod(method);
+                con.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                // response code for request
+                int responseCode = con.getResponseCode();
+
+                // if we did not connect correctly, we should throw an exception and try again
+                if (responseCode != 200) {
+                    continue;
+                }
+
+                connected = true;
+
+                // Read response into response buffer
+                BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                result = response.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("THAT'S NOT ON FIRE");
+            }
+        }
+
+        if (tries == CONNECTION_TRIES) {
+            // TODO: fatal exception here
+            // NO WIFI
+        }
+
+        return result;
     }
 
     public static ServerApi getInstance() {
