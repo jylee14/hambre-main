@@ -1,16 +1,10 @@
 package com.irs.server;
 
-/**
- * Created by bryle on 3/1/2017.
- */
-
 public class DBUserToFoodModel {
     private int user_id;
     private int food_id;
     private int liked;
     private int disliked;
-
-
 
 
     public int food_id() {
@@ -32,5 +26,4 @@ public class DBUserToFoodModel {
                 ", disliked='" + disliked +
                 '}';
     }
-
 }
