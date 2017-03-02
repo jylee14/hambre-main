@@ -2,6 +2,7 @@ package com.irs.main;
 
 import com.irs.main.model.FoodModel;
 import com.irs.server.DBFoodModel;
+import com.irs.server.DBFoodTagModel;
 import com.irs.server.DBTagModel;
 import com.irs.server.ServerApi;
 
@@ -43,6 +44,16 @@ public class ServerApiTest {
 
         for(int i = 0 ; i < fromDB.length; i++){
             System.out.println(fromDB[i]);
+        }
+    }
+
+    @Test
+    public void getFoodTag_test() {
+        ServerApi api = ServerApi.getInstance();
+
+        DBFoodTagModel[] DBFoodTagModels = api.getFoodTags(1);
+        for (int i = 0; i < DBFoodTagModels.length; i++) {
+            System.out.println("food_id: " + DBFoodTagModels[i].food_id() + " tag_id: " + DBFoodTagModels[i].tag_id());
         }
     }
 }
