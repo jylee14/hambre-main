@@ -11,30 +11,44 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/selected_pic"/>
+        android:id="@+id/selected_pic"
+        android:src="@drawable/preview2"/>
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/catagory_editText"
         android:hint="Enter Catagory" />
-
-    <Spinner
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/culture_spinner"
-        android:spinnerMode="dropdown">
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Culture:  "/>
 
-    </Spinner>
-    <Button
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/culture_spinner"
+            android:spinnerMode="dropdown">
+        </Spinner>
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="save"
-        android:id="@+id/save_photo_buttton"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="cancel"
-        android:id="@+id/cancel_photo_button"/>
-
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:id="@+id/save_photo_buttton"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="cancel"
+            android:id="@+id/cancel_photo_button"/>
+    </LinearLayout>
 
 </LinearLayout>

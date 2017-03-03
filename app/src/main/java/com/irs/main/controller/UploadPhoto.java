@@ -62,7 +62,7 @@ public class UploadPhoto extends AppCompatActivity implements AdapterView.OnItem
             @Override
             public void onClick(View v){
                 catagory = catagoryInput.getText().toString();
-                culture = cultureInput.getText().toString();
+                //culture = cultureInput.getText().toString();
                 System.out.println("Catagory: " + catagory +
                 "\nCulture: " + culture);
                 Toast.makeText(UploadPhoto.this, "photo uploaded!", Toast.LENGTH_SHORT).show();
