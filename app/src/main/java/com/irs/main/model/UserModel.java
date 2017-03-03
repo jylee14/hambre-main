@@ -23,7 +23,7 @@ public class UserModel {
     // maximum distance the user is willing to go to go to a restauraunt
     private int maxDist;
 
-    // singleton instanc
+    // singleton instance
     private static UserModel instance = new UserModel();
 
     /**
@@ -86,6 +86,16 @@ public class UserModel {
 
     public DietType getDietType() {
         return dietType;
+    }
+
+    public String getDietString() {
+        String[] types = {"vegetarian", "vegan", "kosher", "gluten_free", "none"};
+        for (int i = 0; i < DietType.values().length; i++) {
+            if (DietType.values()[i] == dietType) {
+                return types[i];
+            }
+        }
+        return null;
     }
 
     public SortType getSortType() {

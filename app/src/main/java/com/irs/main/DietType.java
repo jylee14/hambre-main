@@ -1,9 +1,8 @@
 package com.irs.main;
 
 /**
- * Created by Krikor on 3/2/2017.
+ * keep track of diets in the UserModel
  */
-
 public enum DietType {
     Vegetarian, Vegan, Kosher, GlutenFree, None
 }

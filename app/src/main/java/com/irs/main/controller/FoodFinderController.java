@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.irs.main.R;
 import com.irs.main.model.FoodModel;
 import com.irs.main.model.OnSwipeTouchListener;
+import com.irs.main.model.UserModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.ServerApi;
 import com.irs.yelp.BusinessModel;
@@ -126,8 +127,7 @@ public class FoodFinderController extends AppCompatActivity {
                     params.put("sort", "" + PreferencesController.byRating);
                     params.put("radius", "" + PreferencesController.radius * 1600);
                     params.put("limit", "" + limit);
-                    if(DietRestriction.index >= 0)
-                        params.put("category_filter", DietRestriction.categories[DietRestriction.index]);
+                    params.put("category_filter", UserModel.getInstance().getDietString());
 
                     new LoadRestaurantsTask().execute(params);
 
