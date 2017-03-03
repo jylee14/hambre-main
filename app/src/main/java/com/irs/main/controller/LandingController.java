@@ -22,20 +22,22 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.irs.main.R;
+import com.irs.main.model.LoginModel;
 import com.irs.server.ServerApi;
 
 public class LandingController extends AppCompatActivity {
     private SignInButton goog;        //google login
-    private CallbackManager cbmanager; //fb login
     private GoogleApiClient mGoogleApiClient;
-    private static final String TAG = "LoginActivity";
+    private LoginModel loginModel;
 
+    private static final String TAG = "LoginActivity";
 
     //// TODO: 3/1/17 We need to move out the Google and Facebook login stuff
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loginModel = new LoginModel();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -46,12 +48,16 @@ public class LandingController extends AppCompatActivity {
         Button guest = (Button) findViewById(R.id.Guest);
         goog = (SignInButton) findViewById(R.id.Google);
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("58151517395-7u4o0o77s2ff8dtbvio1v2tab2snf116.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
+        googleLogin(guest);
+
+
+    }
+
+    private void googleLogin(Button guest) {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
+        GoogleSignInOptions gso = loginModel.getGoogleSignInOptions();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
@@ -94,7 +100,7 @@ public class LandingController extends AppCompatActivity {
                 Log.d(TAG, "Google signin failed." + result.getStatus().getStatusCode());
             }
         } else {
-            cbmanager.onActivityResult(requestCode, resultCode, data);
+            loginModel.getFBManager().onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -106,9 +112,8 @@ public class LandingController extends AppCompatActivity {
      * or "onError".
      */
     private void facebookLogin() {
-        cbmanager = CallbackManager.Factory.create();
         LoginButton fbButton = (LoginButton) findViewById(R.id.Facebook);
-        fbButton.registerCallback(cbmanager, new FacebookCallback<LoginResult>() {
+        fbButton.registerCallback(loginModel.getFBManager(), new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
