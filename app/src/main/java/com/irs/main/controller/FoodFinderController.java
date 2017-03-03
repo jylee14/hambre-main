@@ -69,15 +69,19 @@ public class FoodFinderController extends AppCompatActivity {
             try {
                 System.out.println(culture);
                 // TODO: set gps based location in first param
+                // then update the RestaurantDataModel.getRestaurants method
                 response = RestaurantDataModel.getRestaurants(
                         "", food.getTag(), food.getCulture(),
                         UserModel.getInstance().getSortType(),
-                        UserModel.getInstance().getMaxDist(),
+                        UserModel.getInstance().getMaxDist() * METERS_PER_MILE,
                         LIMIT, false);
+                System.out.println("Response: " + response[0].name());
             } catch (Exception e) {
+                System.out.println("MAYBE I WASN'T TRYING HARD ENOUGH");
+                e.printStackTrace();
                 //.........?
             }
-
+            System.out.println("finished loading restaurants");
             return response;
         }
 

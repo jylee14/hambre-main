@@ -48,8 +48,8 @@ public class RestaurantDataModel {
 
         System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
-        BusinessResponseModel response = api.businessSearch(params);
+        BusinessResponseModel response = YelpApi.getInstance().businessSearch(params);
 
-        return restaurants;
+        return response.businesses();
     }
 }
