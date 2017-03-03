@@ -1,20 +1,30 @@
 package com.irs.main.model;
 
+import com.irs.main.DietType;
+import com.irs.main.SortType;
+
 /**
  * This class represents the user preferences and has methods that modify and get the different preferences.
+ * follows singleton design pattern
  */
-public class UserModel{
+public class UserModel {
 
     private static final int MAX_DIST = 25;
-    private static boolean initialized = false;
+
     // the name of the user
     private final String name;
 
     // whether the user is vegan, vegetarian, kosher, gluten free
-    private int prefIndex = -1;
+    private DietType dietType;
+
+    // type of sorting
+    private SortType sortType;
 
     // maximum distance the user is willing to go to go to a restauraunt
     private int maxDist;
+
+
+    private UserModel instance = new UserModel();
 
     /**
      * Constructor for the UserModel with all custom fields
@@ -24,6 +34,7 @@ public class UserModel{
      * @param mDist        max distance the user is willing to travel
      */
     public UserModel(String name, int pref, int mDist) {
+
         this.name = name;
         prefIndex = (pref > 4 || pref < -1 ? -1 : pref);
         maxDist = mDist;
@@ -38,54 +49,8 @@ public class UserModel{
         this(name, -1, MAX_DIST);
     }
 
-
-    /**
-     * code called to initiate database connection, needs to be called before
-     * other method calls are made
-     */
-    public void connect() {
-        initialized = true;
-        // logon here
-    }
-
-    /**
-     * Add UserModel item to database
-     *
-     * @param user UserModel to add into the database
-     */
-    public void create(UserModel user) {
-        // add food to database
-    }
-
-    /**
-     * Read item from database
-     *
-     * @param id item to read
-     * @return
-     */
-    public UserModel read(int id) {
-        return new UserModel("", -1, MAX_DIST);
-    }
-
-    /**
-     * Update item in the database
-     *
-     * @param id      id of entry to update
-     * @param newData UserModel containing the desired changes
-     * @return same UserModel if successful, null otherwise
-     */
-    public UserModel update(int id, UserModel newData) {
-        return null;
-    }
-
-    /**
-     * Delete item in the database
-     *
-     * @param id id of item to delete
-     * @return true if successfully deleted, false if failed/user doesnt exist
-     */
-    public boolean destroy(int id) {
-        return true;
+    public UserModel() {
+        this("Guest");
     }
 
     /**
@@ -103,6 +68,11 @@ public class UserModel{
     public void newPrefs(int pref, int mDist) {
         prefIndex = (pref > 4 || pref < -1 ? -1 : pref);
     }
+
+    public static UserModel getInstance() {
+        return instance;
+    }
+
 //
 //    /**
 //     * Constructor for the UserModel to pass between activities

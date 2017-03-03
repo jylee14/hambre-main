@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.irs.main.DietType;
 import com.irs.main.R;
 
 public class DietRestriction extends AppCompatActivity {
@@ -15,8 +16,7 @@ public class DietRestriction extends AppCompatActivity {
     private Button save;
     private Button cancel;
 
-    static int index = -1; //default to no food preferences
-    static final String[] categories = {"Vegetarian", "Vegan", "Kosher", "gluten_free"};
+    private DietType diet = DietType.None;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,19 +66,19 @@ public class DietRestriction extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.none:
-                        index = -1;
+                        diet = DietType.None;
                         break;
                     case R.id.veggie:
-                        index = 0;
+                        diet = DietType.Vegetarian;
                         break;
                     case R.id.vegan:
-                        index = 1;
+                        diet = DietType.Vegan;
                         break;
                     case R.id.kosher:
-                        index = 2;
+                        diet = DietType.Kosher;
                         break;
                     case R.id.noGlu:
-                        index = 3;
+                        diet = DietType.GlutenFree;
                         break;
                 }
             }
@@ -86,20 +86,20 @@ public class DietRestriction extends AppCompatActivity {
     }
 
     private void setPreferences() {
-        switch (index) {
-            case -1:
+        switch (diet) {
+            case None:
                 prefs.check(R.id.none);
                 break;
-            case 0:
+            case Vegetarian:
                 prefs.check(R.id.veggie);
                 break;
-            case 1:
+            case Vegan:
                 prefs.check(R.id.vegan);
                 break;
-            case 2:
+            case Kosher:
                 prefs.check(R.id.kosher);
                 break;
-            case 3:
+            case GlutenFree:
                 prefs.check(R.id.noGlu);
                 break;
             default:

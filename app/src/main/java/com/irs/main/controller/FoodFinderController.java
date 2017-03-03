@@ -118,7 +118,6 @@ public class FoodFinderController extends AppCompatActivity {
                 public void onSwipeRight() {
                     culture = gallery[index].getCulture();
                     String tag = gallery[index].getTag();
-                    //Log.v(LOG_TAG, "culture: " + culture);
 
                     HashMap<String, String> params = new HashMap<>();
                     params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
