@@ -32,6 +32,8 @@ public class UserModel {
     // singleton instance
     private static UserModel instance = new UserModel();
 
+    private UserModel() {}
+
     /**
      * Convenience helper method to update all user fields
      *
