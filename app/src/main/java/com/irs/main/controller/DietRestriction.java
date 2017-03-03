@@ -10,13 +10,16 @@ import android.widget.Toast;
 
 import com.irs.main.DietType;
 import com.irs.main.R;
+import com.irs.main.model.UserModel;
 
 public class DietRestriction extends AppCompatActivity {
     private RadioGroup prefs;
     private Button save;
     private Button cancel;
 
-    private DietType diet = DietType.None;
+    //private DietType dietTemp = DietType.None;
+
+    private UserModel user = UserModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,29 +67,31 @@ public class DietRestriction extends AppCompatActivity {
     private void setOnCheckedChangeListener() {
         prefs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                DietType dietTemp = DietType.None;
                 switch (checkedId) {
                     case R.id.none:
-                        diet = DietType.None;
+                        dietTemp = DietType.None;
                         break;
                     case R.id.veggie:
-                        diet = DietType.Vegetarian;
+                        dietTemp = DietType.Vegetarian;
                         break;
                     case R.id.vegan:
-                        diet = DietType.Vegan;
+                        dietTemp = DietType.Vegan;
                         break;
                     case R.id.kosher:
-                        diet = DietType.Kosher;
+                        dietTemp = DietType.Kosher;
                         break;
                     case R.id.noGlu:
-                        diet = DietType.GlutenFree;
+                        dietTemp = DietType.GlutenFree;
                         break;
                 }
+                user.setDietType(dietTemp);
             }
         });
     }
 
     private void setPreferences() {
-        switch (diet) {
+        switch (user.getDietType()) {
             case None:
                 prefs.check(R.id.none);
                 break;
@@ -105,7 +110,6 @@ public class DietRestriction extends AppCompatActivity {
             default:
                 prefs.check(R.id.none);
                 break;
-
         }
     }
 

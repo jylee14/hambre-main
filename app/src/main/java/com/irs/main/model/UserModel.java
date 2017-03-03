@@ -1,7 +1,7 @@
 package com.irs.main.model;
 
 import com.irs.main.DietType;
-import com.irs.main.SortType;
+import com.irs.yelp.SortType;
 
 /**
  * This class represents the user preferences and has methods that modify and get the different preferences.
@@ -12,16 +12,16 @@ public class UserModel {
     private static final int MAX_DIST = 25;
 
     // the name of the user
-    private String name;
+    private String name = "Guest";
 
     // whether the user is vegan, vegetarian, kosher, gluten free
-    private DietType dietType;
+    private DietType dietType = DietType.None;
 
-    // type of sorting
-    private SortType sortType;
+    // type of sorting (rating by default)
+    private SortType sortType = SortType.rating;
 
     // maximum distance the user is willing to go to go to a restauraunt
-    private int maxDist;
+    private int maxDist = 1;
 
     // singleton instance
     private static UserModel instance = new UserModel();
@@ -45,7 +45,7 @@ public class UserModel {
      * @param name name of user
      */
     public void updateWithDefaults(String name) {
-        updateUser(name, DietType.GlutenFree.None, SortType.Rating, MAX_DIST);
+        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST);
     }
 
     /**

@@ -120,11 +120,13 @@ public class FoodFinderController extends AppCompatActivity {
                     culture = gallery[index].getCulture();
                     String tag = gallery[index].getTag();
 
+                    System.out.println("UserModel: " + UserModel.getInstance().getName());
+                    System.out.println("UserModel: " + UserModel.getInstance().getSortType());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
                     params.put("categories", (tag == null ? "food" : tag));
                     params.put("term", culture);
-                    params.put("sort", "" + PreferencesController.byRating);
+                    params.put("sort_by", "" + UserModel.getInstance().getSortType().name());
                     params.put("radius", "" + PreferencesController.radius * 1600);
                     params.put("limit", "" + limit);
                     params.put("category_filter", UserModel.getInstance().getDietString());
