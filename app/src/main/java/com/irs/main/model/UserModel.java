@@ -1,6 +1,8 @@
 package com.irs.main.model;
 
 import com.irs.main.DietType;
+import com.irs.server.PreferencesModel;
+import com.irs.server.ServerApi;
 import com.irs.yelp.SortType;
 
 /**
@@ -23,21 +25,29 @@ public class UserModel {
     // maximum distance the user is willing to go to go to a restauraunt
     private int maxDist = 1;
 
+    private String apiKey = "";
+
+    private boolean isGuest = true;
+
     // singleton instance
     private static UserModel instance = new UserModel();
 
+    private UserModel() {}
+
     /**
      * Convenience helper method to update all user fields
-     * @param name name of user
+     *
+     * @param name     name of user
      * @param dietType type of diet
      * @param sortType type of sort
-     * @param maxDist distance to limit
+     * @param maxDist  distance to limit
      */
-    public void updateUser(String name, DietType dietType, SortType sortType, int maxDist) {
+    public void updateUser(String name, DietType dietType, SortType sortType, int maxDist, String apiKey) {
         setName(name);
         setDietType(dietType);
         setSortType(sortType);
         setMaxDist(maxDist);
+        setApiKey(apiKey);
     }
 
     /**
@@ -45,14 +55,26 @@ public class UserModel {
      * @param name name of user
      */
     public void updateWithDefaults(String name) {
-        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST);
+        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST, "");
     }
 
     /**
      * Sets the user to all default values
      */
-    public void updateGuestDefaults() {
+    public void loginGuest() {
         updateWithDefaults("Guest");
+    }
+
+    public void loginAccount(String apiKey) {
+        ServerApi server = ServerApi.getInstance();
+        PreferencesModel preferences = server.getPreferences(apiKey);
+        updateUser(
+                preferences.user().email(),
+                preferences.user().getDietType(),
+                preferences.user().getSortType(),
+                preferences.user().distance(),
+                preferences.user().api_key());
+
     }
 
     public void setName(String name) {
@@ -106,45 +128,7 @@ public class UserModel {
         return instance;
     }
 
-//
-//    /**
-//     * Constructor for the UserModel to pass between activities
-//     *
-//     * @param in the parcelable to create the user
-//     */
-//    public UserModel(Parcel in) {
-//        this.name = in.readString();
-//        prefIndex = in.readInt();
-//        maxDist = in.readInt();
-//    }
-//
-//    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-//    public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
-//        public UserModel createFromParcel(Parcel in) {
-//            return new UserModel(in);
-//        }
-//
-//        public UserModel[] newArray(int size) {
-//            return new UserModel[size];
-//        }
-//    };
-//
-//
-//    @Override
-//    /**
-//     * Function for parcelable override. Don't worry about it.
-//     */
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    /**
-//     * Function for parcelable override. Don't worry about it.
-//     */
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(this.name);
-//        dest.writeInt(prefIndex);
-//        dest.writeInt(maxDist);
-//    }
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
+    }
 }

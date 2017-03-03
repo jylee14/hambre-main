@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.irs.main.R;
 import com.irs.main.model.FoodModel;
 import com.irs.main.model.OnSwipeTouchListener;
+import com.irs.main.model.RestaurantDataModel;
 import com.irs.main.model.UserModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.ServerApi;
@@ -29,7 +30,8 @@ public class FoodFinderController extends AppCompatActivity {
 
     private ImageView mainView;
     private int index = 0;
-    private final int limit = 20;   //term limit is set to 20 arbitrarily for now
+    private final int LIMIT = 20;   //term limit is set to 20 arbitrarily for now
+    private final int METERS_PER_MILE = 1600;
 
     private YelpApi api;
     private Bundle bundle;
@@ -40,6 +42,7 @@ public class FoodFinderController extends AppCompatActivity {
     private final String server = "http://159.203.246.214/irs/";
 
     private FoodModel[] dbfm;
+    private UserModel user = UserModel.getInstance();
 
     private final Thread getFoodThread = new Thread() {
         public void run() {
@@ -56,28 +59,30 @@ public class FoodFinderController extends AppCompatActivity {
     private boolean reloadImages = true;
     //private Bitmap[] galleryImages;
 
-    private class LoadRestaurantsTask extends AsyncTask<HashMap<String, String>, Integer, BusinessModel[]> {
+    private class LoadRestaurantsTask extends AsyncTask<FoodModel, Integer, BusinessModel[]> {
         @SafeVarargs
         @Override
-        protected final BusinessModel[] doInBackground(HashMap<String, String>... params) {
-            publishProgress(0);
+        protected final BusinessModel[] doInBackground(FoodModel...  params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessModel[] response = null;
+            FoodModel food = params[0];
             try {
                 System.out.println(culture);
-                response = RestaurantFinderController.findRestaurants(params[0]);
+                // TODO: set gps based location in first param
+                // then update the RestaurantDataModel.getRestaurants method
+                response = RestaurantDataModel.getRestaurants(
+                        "", food.getTag(), food.getCulture(),
+                        UserModel.getInstance().getSortType(),
+                        UserModel.getInstance().getMaxDist() * METERS_PER_MILE,
+                        LIMIT, false);
+                System.out.println("Response: " + response[0].name());
             } catch (Exception e) {
+                System.out.println("MAYBE I WASN'T TRYING HARD ENOUGH");
+                e.printStackTrace();
                 //.........?
             }
-
+            System.out.println("finished loading restaurants");
             return response;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            System.out.println("PROGRESS UPDATE");
-            Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
-            i.putExtra("model", (Parcelable[]) null);
         }
 
         @Override
@@ -92,9 +97,6 @@ public class FoodFinderController extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_food_finder);
         bundle = getIntent().getExtras();
@@ -120,18 +122,8 @@ public class FoodFinderController extends AppCompatActivity {
                     culture = gallery[index].getCulture();
                     String tag = gallery[index].getTag();
 
-                    System.out.println("UserModel: " + UserModel.getInstance().getName());
-                    System.out.println("UserModel: " + UserModel.getInstance().getSortType());
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-                    params.put("categories", (tag == null ? "food" : tag));
-                    params.put("term", culture);
-                    params.put("sort_by", "" + UserModel.getInstance().getSortType().name());
-                    params.put("radius", "" + PreferencesController.radius * 1600);
-                    params.put("limit", "" + limit);
-                    params.put("category_filter", UserModel.getInstance().getDietString());
-
-                    new LoadRestaurantsTask().execute(params);
+                    // Load Restaurants in the background
+                    new LoadRestaurantsTask().execute(gallery[index]);
 
                 }
             });
