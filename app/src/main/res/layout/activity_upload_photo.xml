@@ -14,11 +14,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/selected_pic"
         android:src="@drawable/preview2"/>
-    <EditText
+    <!--<EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/catagory_editText"
-        android:hint="Enter Catagory" />
+        android:hint="Enter Catagory" /> -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

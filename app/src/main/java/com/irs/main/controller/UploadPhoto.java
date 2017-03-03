@@ -25,12 +25,12 @@ public class UploadPhoto extends AppCompatActivity{
     private Button chosePhotoButton, saveButton, cancelButton;
     private Bitmap pic;
     private ImageView selectedPic;
-    private EditText catagoryInput, cultureInput;
-    private String catagory, culture, diet;
+    private String culture, diet;
     private Spinner cultureSpinner, dietSpinner;
 
     //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
+
     private static final String[] paths = {"American (new)","American (traditional)", "Chinese", "Cuban",
             "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
@@ -43,8 +43,6 @@ public class UploadPhoto extends AppCompatActivity{
         setContentView(R.layout.activity_upload_photo);
 
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
-        //TODO get rid of EditTexts, use drop down list or something
-        catagoryInput = (EditText)findViewById(R.id.catagory_editText );
         cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, paths);
@@ -108,16 +106,16 @@ public class UploadPhoto extends AppCompatActivity{
                         diet = "None";
                         break;
                     case 1://Vegetarian
-                        diet = "Vegetarian";
+                        diet = "vegetarian, All";
                         break;
                     case 2://Vegan
-                        diet = "Vegan";
+                        diet = "vegan, All";
                         break;
                     case 3://Kosher
-                        diet = "Kosher";
+                        diet = "kosher";
                         break;
                     case 4:
-                        diet = "Gluten Free";
+                        diet = "gluten_free, All";
                         break;
                     default:
                         diet = "none";
@@ -142,9 +140,7 @@ public class UploadPhoto extends AppCompatActivity{
         saveButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v){
-                catagory = catagoryInput.getText().toString();
-                System.out.println("Catagory: " + catagory +
-                "\nCulture: " + culture +"\nDiet: " + diet);
+                System.out.println("Culture: " + culture +"\nDiet: " + diet);
                 Toast.makeText(UploadPhoto.this, "photo uploaded!", Toast.LENGTH_SHORT).show();
                 finish();
             }
