@@ -11,7 +11,7 @@ git init
 
 git remote add -f -m master origin https://github.com/jylee14/hambre-main
 
-git checkout main
+git checkout master
 
 git pull 
 
