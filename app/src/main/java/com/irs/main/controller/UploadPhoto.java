@@ -20,18 +20,20 @@ import com.irs.main.R;
  * Created by jeff on 3/3/17.
  */
 
-public class UploadPhoto extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
-
+public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnItemSelectedListener{
+{
     private Button chosePhotoButton, saveButton, cancelButton;
     private Bitmap pic;
     private ImageView selectedPic;
     private EditText catagoryInput, cultureInput;
-    private String catagory, culture;
-    private Spinner cultureSpinner;
-    //TODO add all cultures available in yelp API found at:
+    private String catagory, culture, diet;
+    private Spinner cultureSpinner, dietSpinner;
+    //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
     private static final String[] paths = {"American (new)","American (traditional)", "Chinese", "Cuban",
             "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
+    private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
+        "Kosher", "Gluten Free"};
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -48,7 +50,86 @@ public class UploadPhoto extends AppCompatActivity implements AdapterView.OnItem
                 android.R.layout.simple_spinner_item, paths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cultureSpinner.setAdapter(adapter);
-        cultureSpinner.setOnItemSelectedListener(this);
+        dietSpinner = (Spinner)findViewById(R.id.dietary_spinner);
+        ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
+                android.R.layout.simple_spinner_item, dietPaths);
+        dietSpinner.setAdapter(dietAdapter);
+        cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0: //American (new)
+                        culture = "newamerican";
+                        break;
+                    case 1: //American (traditional)
+                        culture = "tradamerican";
+                        break;
+                    case 2: //chinese
+                        culture = "Chinese, All";
+                        break;
+                    case 3: //Cuban
+                        culture = "cuban";
+                        break;
+                    case 4: //Indian
+                        culture = "indpak";
+                        break;
+                    case 5: //Italian
+                        culture = "italian, All";
+                        break;
+                    case 6: //Japanese
+                        culture = "japanese, All";
+                        break;
+                    case 7: //Korean
+                        culture = "korean, All";
+                        break;
+                    case 8: //Mexican
+                        culture = "mexican, All";
+                        break;
+                    case 9: //Russian
+                        culture = "russian, All";
+                        break;
+                    case 10: //Thai
+                        culture = "thai, All";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        dietSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0://None
+                        diet = "None";
+                        break;
+                    case 1://Vegetarian
+                        diet = "Vegetarian";
+                        break;
+                    case 2://Vegan
+                        diet = "Vegan";
+                        break;
+                    case 3://Kosher
+                        diet = "Kosher";
+                        break;
+                    case 4:
+                        diet = "Gluten Free";
+                        break;
+                    default:
+                        diet = "none";
+                        break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         chosePhotoButton = (Button)findViewById(R.id.chose_photo_button);
         chosePhotoButton.setOnClickListener(new Button.OnClickListener(){
@@ -114,7 +195,7 @@ public class UploadPhoto extends AppCompatActivity implements AdapterView.OnItem
         }
     }
 
-    @Override
+    /*@Override
     public void onItemSelected(AdapterView<?> parent, View v, int position,
                                long id){
         //{"American (new)","American (traditional)", "Chinese", "Cuban",
@@ -162,5 +243,5 @@ public class UploadPhoto extends AppCompatActivity implements AdapterView.OnItem
     @Override
     public void onNothingSelected(AdapterView<?> a){
 
-    }
+    } */
 }

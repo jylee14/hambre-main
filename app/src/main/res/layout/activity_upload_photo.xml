@@ -33,6 +33,16 @@
             android:id="@+id/culture_spinner"
             android:spinnerMode="dropdown">
         </Spinner>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select Dietary Restriction"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dietary_spinner"
+            android:spinnerMode="dropdown">
+        </Spinner>
     </LinearLayout>
 
     <LinearLayout
