@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.irs.main.R;
 import com.irs.main.model.FoodModel;
+import com.irs.main.model.UserModel;
+import com.irs.yelp.SortType;
 
 public class PreferencesController extends AppCompatActivity implements Runnable {
     private TextView maxRad;
@@ -20,8 +22,10 @@ public class PreferencesController extends AppCompatActivity implements Runnable
     private FoodModel[] dbfm;
     private final FoodFinderController controller = new FoodFinderController();
 
+    private UserModel user = UserModel.getInstance();
+
     //1=Distance, 2=Highest Rated
-    public static int byRating = 2;  //for ordering later. Rating by default
+    //public static int byRating = 2;  //for ordering later. Rating by default
     public static int radius = 1;   //minimum radius is 1 mile
 
     @Override
@@ -63,13 +67,13 @@ public class PreferencesController extends AppCompatActivity implements Runnable
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                byRating = 2;
+                user.setSortType(SortType.rating);
             }
         });
         dist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                byRating = 1;
+            user.setSortType(SortType.distance);
             }
         });
 

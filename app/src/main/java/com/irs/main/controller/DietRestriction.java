@@ -8,15 +8,18 @@ import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.irs.main.DietType;
 import com.irs.main.R;
+import com.irs.main.model.UserModel;
 
 public class DietRestriction extends AppCompatActivity {
     private RadioGroup prefs;
     private Button save;
     private Button cancel;
 
-    static int index = -1; //default to no food preferences
-    static final String[] categories = {"Vegetarian", "Vegan", "Kosher", "gluten_free"};
+    //private DietType dietTemp = DietType.None;
+
+    private UserModel user = UserModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,48 +67,49 @@ public class DietRestriction extends AppCompatActivity {
     private void setOnCheckedChangeListener() {
         prefs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                DietType dietTemp = DietType.None;
                 switch (checkedId) {
                     case R.id.none:
-                        index = -1;
+                        dietTemp = DietType.None;
                         break;
                     case R.id.veggie:
-                        index = 0;
+                        dietTemp = DietType.Vegetarian;
                         break;
                     case R.id.vegan:
-                        index = 1;
+                        dietTemp = DietType.Vegan;
                         break;
                     case R.id.kosher:
-                        index = 2;
+                        dietTemp = DietType.Kosher;
                         break;
                     case R.id.noGlu:
-                        index = 3;
+                        dietTemp = DietType.GlutenFree;
                         break;
                 }
+                user.setDietType(dietTemp);
             }
         });
     }
 
     private void setPreferences() {
-        switch (index) {
-            case -1:
+        switch (user.getDietType()) {
+            case None:
                 prefs.check(R.id.none);
                 break;
-            case 0:
+            case Vegetarian:
                 prefs.check(R.id.veggie);
                 break;
-            case 1:
+            case Vegan:
                 prefs.check(R.id.vegan);
                 break;
-            case 2:
+            case Kosher:
                 prefs.check(R.id.kosher);
                 break;
-            case 3:
+            case GlutenFree:
                 prefs.check(R.id.noGlu);
                 break;
             default:
                 prefs.check(R.id.none);
                 break;
-
         }
     }
 

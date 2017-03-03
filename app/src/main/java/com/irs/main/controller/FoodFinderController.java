@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.irs.main.R;
 import com.irs.main.model.FoodModel;
 import com.irs.main.model.OnSwipeTouchListener;
+import com.irs.main.model.UserModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.ServerApi;
 import com.irs.yelp.BusinessModel;
@@ -118,17 +119,17 @@ public class FoodFinderController extends AppCompatActivity {
                 public void onSwipeRight() {
                     culture = gallery[index].getCulture();
                     String tag = gallery[index].getTag();
-                    //Log.v(LOG_TAG, "culture: " + culture);
 
+                    System.out.println("UserModel: " + UserModel.getInstance().getName());
+                    System.out.println("UserModel: " + UserModel.getInstance().getSortType());
                     HashMap<String, String> params = new HashMap<>();
                     params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
                     params.put("categories", (tag == null ? "food" : tag));
                     params.put("term", culture);
-                    params.put("sort", "" + PreferencesController.byRating);
+                    params.put("sort_by", "" + UserModel.getInstance().getSortType().name());
                     params.put("radius", "" + PreferencesController.radius * 1600);
                     params.put("limit", "" + limit);
-                    if(DietRestriction.index >= 0)
-                        params.put("category_filter", DietRestriction.categories[DietRestriction.index]);
+                    params.put("category_filter", UserModel.getInstance().getDietString());
 
                     new LoadRestaurantsTask().execute(params);
 
