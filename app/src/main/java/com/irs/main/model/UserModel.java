@@ -1,6 +1,8 @@
 package com.irs.main.model;
 
 import com.irs.main.DietType;
+import com.irs.server.PreferencesModel;
+import com.irs.server.ServerApi;
 import com.irs.yelp.SortType;
 
 /**
@@ -23,21 +25,27 @@ public class UserModel {
     // maximum distance the user is willing to go to go to a restauraunt
     private int maxDist = 1;
 
+    private String apiKey = "";
+
+    private boolean isGuest = true;
+
     // singleton instance
     private static UserModel instance = new UserModel();
 
     /**
      * Convenience helper method to update all user fields
-     * @param name name of user
+     *
+     * @param name     name of user
      * @param dietType type of diet
      * @param sortType type of sort
-     * @param maxDist distance to limit
+     * @param maxDist  distance to limit
      */
-    public void updateUser(String name, DietType dietType, SortType sortType, int maxDist) {
+    public void updateUser(String name, DietType dietType, SortType sortType, int maxDist, String apiKey) {
         setName(name);
         setDietType(dietType);
         setSortType(sortType);
         setMaxDist(maxDist);
+        setApiKey(apiKey);
     }
 
     /**
@@ -45,14 +53,26 @@ public class UserModel {
      * @param name name of user
      */
     public void updateWithDefaults(String name) {
-        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST);
+        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST, "");
     }
 
     /**
      * Sets the user to all default values
      */
-    public void updateGuestDefaults() {
+    public void loginGuest() {
         updateWithDefaults("Guest");
+    }
+
+    public void loginAccount(String apiKey) {
+        ServerApi server = ServerApi.getInstance();
+        PreferencesModel preferences = server.getPreferences(apiKey);
+        updateUser(
+                preferences.user().email(),
+                preferences.user().getDietType(),
+                preferences.user().getSortType(),
+                preferences.user().distance(),
+                preferences.user().api_key());
+
     }
 
     public void setName(String name) {
@@ -104,6 +124,10 @@ public class UserModel {
 
     public static UserModel getInstance() {
         return instance;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 
 //
