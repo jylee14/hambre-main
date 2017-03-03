@@ -145,7 +145,7 @@ public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnIt
                 catagory = catagoryInput.getText().toString();
                 //culture = cultureInput.getText().toString();
                 System.out.println("Catagory: " + catagory +
-                "\nCulture: " + culture);
+                "\nCulture: " + culture +"\nDiet: " + diet);
                 Toast.makeText(UploadPhoto.this, "photo uploaded!", Toast.LENGTH_SHORT).show();
                 finish();
             }
