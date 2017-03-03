@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.irs.main.R;
 
@@ -47,6 +48,10 @@ public class UploadPhoto extends AppCompatActivity {
             public void onClick(View v){
                 catagory = catagoryInput.getText().toString();
                 culture = cultureInput.getText().toString();
+                System.out.println("Catagory: " + catagory +
+                "\nCulture: " + culture);
+                Toast.makeText(UploadPhoto.this, "photo uploaded!", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
 
@@ -54,7 +59,7 @@ public class UploadPhoto extends AppCompatActivity {
         cancelButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                finish();
             }
 
         });
@@ -65,6 +70,7 @@ public class UploadPhoto extends AppCompatActivity {
     public void pickImage(){
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        //TODO change these to crop and save as vertical phone pic
         intent.setType("image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
