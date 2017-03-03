@@ -31,6 +31,8 @@ public class UploadPhoto extends AppCompatActivity{
     //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
 
+    //TODO also change switch statement below for cultureSpinner.OnItemSelected
+
     private static final String[] paths = {"American (new)","American (traditional)", "Chinese", "Cuban",
             "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
