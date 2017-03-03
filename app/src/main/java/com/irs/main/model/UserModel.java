@@ -12,7 +12,7 @@ public class UserModel {
     private static final int MAX_DIST = 25;
 
     // the name of the user
-    private final String name;
+    private String name;
 
     // whether the user is vegan, vegetarian, kosher, gluten free
     private DietType dietType;
@@ -23,34 +23,52 @@ public class UserModel {
     // maximum distance the user is willing to go to go to a restauraunt
     private int maxDist;
 
-
-    private UserModel instance = new UserModel();
+    // singleton instanc
+    private static UserModel instance = new UserModel();
 
     /**
-     * Constructor for the UserModel with all custom fields
-     *
-     * @param name         the name of the user
-     * @param pref         the user's dietary preference, -1 for no pref
-     * @param mDist        max distance the user is willing to travel
+     * Convenience helper method to update all user fields
+     * @param name name of user
+     * @param dietType type of diet
+     * @param sortType type of sort
+     * @param maxDist distance to limit
      */
-    public UserModel(String name, int pref, int mDist) {
+    public void updateUser(String name, DietType dietType, SortType sortType, int maxDist) {
+        setName(name);
+        setDietType(dietType);
+        setSortType(sortType);
+        setMaxDist(maxDist);
+    }
 
+    /**
+     * Sets up a user with a given name and default values
+     * @param name name of user
+     */
+    public void updateWithDefaults(String name) {
+        updateUser(name, DietType.GlutenFree.None, SortType.Rating, MAX_DIST);
+    }
+
+    /**
+     * Sets the user to all default values
+     */
+    public void updateGuestDefaults() {
+        updateWithDefaults("Guest");
+    }
+
+    public void setName(String name) {
         this.name = name;
-        prefIndex = (pref > 4 || pref < -1 ? -1 : pref);
-        maxDist = mDist;
     }
 
-    /**
-     * Constructor for the UserModel given the name. Sets all other preferences to false
-     *
-     * @param name the name of the user
-     */
-    public UserModel(String name) {
-        this(name, -1, MAX_DIST);
+    public void setMaxDist(int maxDist) {
+        this.maxDist = maxDist;
     }
 
-    public UserModel() {
-        this("Guest");
+    public void setDietType(DietType dietType) {
+        this.dietType = dietType;
+    }
+
+    public void setSortType(SortType sortType) {
+        this.sortType = sortType;
     }
 
     /**
@@ -62,11 +80,16 @@ public class UserModel {
         return maxDist;
     }
 
-    /**
-     * Changes the preferences of the user
-     */
-    public void newPrefs(int pref, int mDist) {
-        prefIndex = (pref > 4 || pref < -1 ? -1 : pref);
+    public String getName() {
+        return name;
+    }
+
+    public DietType getDietType() {
+        return dietType;
+    }
+
+    public SortType getSortType() {
+        return sortType;
     }
 
     public static UserModel getInstance() {
