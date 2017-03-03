@@ -3,12 +3,16 @@ package com.irs.main.controller;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.irs.main.R;
@@ -47,9 +51,13 @@ public class RestaurantList extends ArrayAdapter<String> {
         txtName.setText(name[position]);
         TextView txtPrice = (TextView)rowView.findViewById(R.id.price);
         txtPrice.setText(price[position]);
-        TextView txtRating = (TextView)rowView.findViewById(R.id.rating);
-        txtRating.setText("rating: " +rating[position]);
+        RatingBar ratingBar = (RatingBar)rowView.findViewById(R.id.rating);
+        ratingBar.setRating((float)rating[position]);
+        Drawable progress = ratingBar.getProgressDrawable();
+        DrawableCompat.setTint(progress, Color.BLACK);
+
         ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
+
 
         //TODO this might block the UI thread.
         try {
