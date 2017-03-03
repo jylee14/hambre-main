@@ -12,6 +12,7 @@ import android.widget.ListView;
 import com.irs.main.R;
 import com.irs.yelp.BusinessModel;
 
+//TODO check into adding a distance and if they are open or closed currently
 public class SelectRestaurantController extends AppCompatActivity implements Runnable {
 
     ListView list;
@@ -71,7 +72,6 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
                 RestaurantList(SelectRestaurantController.this,
                 names, url, imageUrl, ratings, prices);
         list = (ListView)findViewById(R.id.list);
-        //list.setBackgroundColor(0xFF4883e2);
         list.setAdapter(adapter);
 
         //open yelp page of selected restaurant in browser
