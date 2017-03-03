@@ -29,7 +29,8 @@ public class FoodFinderController extends AppCompatActivity {
 
     private ImageView mainView;
     private int index = 0;
-    private final int limit = 20;   //term limit is set to 20 arbitrarily for now
+    private final int LIMIT = 20;   //term limit is set to 20 arbitrarily for now
+    private final int METERS_PER_MILE = 1600;
 
     private YelpApi api;
     private Bundle bundle;
@@ -40,6 +41,7 @@ public class FoodFinderController extends AppCompatActivity {
     private final String server = "http://159.203.246.214/irs/";
 
     private FoodModel[] dbfm;
+    private UserModel user = UserModel.getInstance();
 
     private final Thread getFoodThread = new Thread() {
         public void run() {
@@ -127,8 +129,8 @@ public class FoodFinderController extends AppCompatActivity {
                     params.put("categories", (tag == null ? "food" : tag));
                     params.put("term", culture);
                     params.put("sort_by", "" + UserModel.getInstance().getSortType().name());
-                    params.put("radius", "" + PreferencesController.radius * 1600);
-                    params.put("limit", "" + limit);
+                    params.put("radius", "" + user.getMaxDist() * METERS_PER_MILE);
+                    params.put("limit", "" + LIMIT);
                     params.put("category_filter", UserModel.getInstance().getDietString());
 
                     new LoadRestaurantsTask().execute(params);
