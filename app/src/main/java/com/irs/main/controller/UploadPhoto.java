@@ -7,6 +7,7 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.irs.main.R;
@@ -17,9 +18,11 @@ import com.irs.main.R;
 
 public class UploadPhoto extends AppCompatActivity {
 
-    Button chosePhotoButton;
-    Bitmap pic;
-    ImageView selectedPic;
+    private Button chosePhotoButton, saveButton, cancelButton;
+    private Bitmap pic;
+    private ImageView selectedPic;
+    private EditText catagoryInput, cultureInput;
+    private String catagory, culture;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -28,6 +31,8 @@ public class UploadPhoto extends AppCompatActivity {
         setContentView(R.layout.activity_upload_photo);
 
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
+        catagoryInput = (EditText)findViewById(R.id.catagory_editText );
+        cultureInput = (EditText)findViewById(R.id.culture_editText);
 
         chosePhotoButton = (Button)findViewById(R.id.chose_photo_button);
         chosePhotoButton.setOnClickListener(new Button.OnClickListener(){
@@ -36,6 +41,25 @@ public class UploadPhoto extends AppCompatActivity {
                 pickImage();
            }
         });
+        saveButton = (Button)findViewById(R.id.save_photo_buttton);
+        saveButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                catagory = catagoryInput.getText().toString();
+                culture = cultureInput.getText().toString();
+            }
+        });
+
+        cancelButton = (Button)findViewById(R.id.cancel_photo_button);
+        cancelButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+
+            }
+
+        });
+
+
     }
 
     public void pickImage(){

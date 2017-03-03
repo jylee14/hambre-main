@@ -17,7 +17,21 @@
         android:layout_height="wrap_content"
         android:id="@+id/catagory_editText"
         android:text="Enter Catagory"/>
-    
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/culture_editText"
+        android:text="Enter Culture"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save"
+        android:id="@+id/save_photo_buttton"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cancel"
+        android:id="@+id/cancel_photo_button"/>
 
 
 </LinearLayout>
