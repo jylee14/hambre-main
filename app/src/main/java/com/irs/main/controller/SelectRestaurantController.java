@@ -1,7 +1,6 @@
 package com.irs.main.controller;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -10,8 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-
 import com.irs.main.R;
 import com.irs.yelp.BusinessModel;
 
