@@ -141,7 +141,7 @@ public class UploadPhoto extends AppCompatActivity{
             @Override
             public void onClick(View v){
                 System.out.println("Culture: " + culture +"\nDiet: " + diet);
-                Toast.makeText(UploadPhoto.this, "photo uploaded!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UploadPhoto.this, "photo submitted!", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -162,6 +162,7 @@ public class UploadPhoto extends AppCompatActivity{
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         //TODO change these to crop and save as vertical phone pic
+        //TODO figure out why cropping screen is so small
         intent.setType("image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);

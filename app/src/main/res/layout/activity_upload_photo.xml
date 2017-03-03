@@ -14,11 +14,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/selected_pic"
         android:src="@drawable/preview2"/>
-    <!--<EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/catagory_editText"
-        android:hint="Enter Catagory" /> -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +21,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Culture:  "/>
+            android:text="Select Culture:  "
+            android:textSize="8pt"/>
 
         <Spinner
             android:layout_width="wrap_content"
@@ -42,7 +38,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select Dietary Restriction"/>
+            android:text="Select Dietary Restriction"
+            android:textSize="8pt"/>
         <Spinner
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
