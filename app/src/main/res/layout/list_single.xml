@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
-    <!-- android:background="#dd2721" -->
 
     <ImageView
         android:id="@+id/img"
@@ -37,6 +36,7 @@
                  android:layout_width="wrap_content"
                  android:layout_height="35dp"
                  android:padding="5dp"
+                 android:paddingRight="8dp"
                  android:textColor="#259e1f"
                  android:textSize="9pt"
                  android:textStyle="bold"
@@ -45,8 +45,10 @@
                  style="?android:attr/ratingBarStyleSmall"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
-                 android:stepSize="0.5"
-                 android:id="@+id/rating"/>
+                 android:stepSize="0.1"
+                 android:id="@+id/rating"
+                 android:paddingTop="10dp"
+                 android:numStars="5"/>
 
          </LinearLayout>
 
