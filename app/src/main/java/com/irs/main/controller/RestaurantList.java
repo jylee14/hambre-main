@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.irs.main.R;
@@ -27,6 +28,7 @@ public class RestaurantList extends ArrayAdapter<String> {
     private final String []imageUrl;
     private final double []rating;
     private final String []price;
+    //private final RatingBar ratingBar;
     RestaurantList(Activity context, String [] name, String[] url,
                    String[] imageUrl, double[] rating, String[] price){
         super(context, R.layout.list_single, name);
@@ -47,9 +49,13 @@ public class RestaurantList extends ArrayAdapter<String> {
         txtName.setText(name[position]);
         TextView txtPrice = (TextView)rowView.findViewById(R.id.price);
         txtPrice.setText(price[position]);
-        TextView txtRating = (TextView)rowView.findViewById(R.id.rating);
-        txtRating.setText("rating: " +rating[position]);
+        //TextView txtRating = (TextView)rowView.findViewById(R.id.rating);
+        //txtRating.setText("rating: " +rating[position]);
+        RatingBar ratingBar = (RatingBar)rowView.findViewById(R.id.rating);
+        ratingBar.setRating((float)rating[position]);
+
         ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
+
 
         //TODO this might block the UI thread.
         try {
