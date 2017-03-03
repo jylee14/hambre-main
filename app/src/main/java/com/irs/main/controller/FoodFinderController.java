@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import com.irs.main.R;
 import com.irs.main.model.FoodModel;
 import com.irs.main.model.OnSwipeTouchListener;
+import com.irs.main.model.RestaurantDataModel;
 import com.irs.main.model.UserModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.ServerApi;
@@ -58,28 +59,26 @@ public class FoodFinderController extends AppCompatActivity {
     private boolean reloadImages = true;
     //private Bitmap[] galleryImages;
 
-    private class LoadRestaurantsTask extends AsyncTask<HashMap<String, String>, Integer, BusinessModel[]> {
+    private class LoadRestaurantsTask extends AsyncTask<FoodModel, Integer, BusinessModel[]> {
         @SafeVarargs
         @Override
-        protected final BusinessModel[] doInBackground(HashMap<String, String>... params) {
-            publishProgress(0);
+        protected final BusinessModel[] doInBackground(FoodModel...  params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessModel[] response = null;
+            FoodModel food = params[0];
             try {
                 System.out.println(culture);
-                response = RestaurantFinderController.findRestaurants(params[0]);
+                // TODO: set gps based location in first param
+                response = RestaurantDataModel.getRestaurants(
+                        "", food.getTag(), food.getCulture(),
+                        UserModel.getInstance().getSortType(),
+                        UserModel.getInstance().getMaxDist(),
+                        LIMIT, false);
             } catch (Exception e) {
                 //.........?
             }
 
             return response;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            System.out.println("PROGRESS UPDATE");
-            Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
-            i.putExtra("model", (Parcelable[]) null);
         }
 
         @Override
@@ -131,9 +130,10 @@ public class FoodFinderController extends AppCompatActivity {
                     params.put("sort_by", "" + UserModel.getInstance().getSortType().name());
                     params.put("radius", "" + user.getMaxDist() * METERS_PER_MILE);
                     params.put("limit", "" + LIMIT);
-                    params.put("category_filter", UserModel.getInstance().getDietString());
+                    // TODO: move category filter to filter food from db
+                    //params.put("category_filter", UserModel.getInstance().getDietString());
 
-                    new LoadRestaurantsTask().execute(params);
+                    new LoadRestaurantsTask().execute(gallery[index]);
 
                 }
             });
