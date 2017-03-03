@@ -129,46 +129,4 @@ public class UserModel {
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
     }
-
-//
-//    /**
-//     * Constructor for the UserModel to pass between activities
-//     *
-//     * @param in the parcelable to create the user
-//     */
-//    public UserModel(Parcel in) {
-//        this.name = in.readString();
-//        prefIndex = in.readInt();
-//        maxDist = in.readInt();
-//    }
-//
-//    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-//    public static final Parcelable.Creator<UserModel> CREATOR = new Parcelable.Creator<UserModel>() {
-//        public UserModel createFromParcel(Parcel in) {
-//            return new UserModel(in);
-//        }
-//
-//        public UserModel[] newArray(int size) {
-//            return new UserModel[size];
-//        }
-//    };
-//
-//
-//    @Override
-//    /**
-//     * Function for parcelable override. Don't worry about it.
-//     */
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    /**
-//     * Function for parcelable override. Don't worry about it.
-//     */
-//    public void writeToParcel(Parcel dest, int flags) {
-//        dest.writeString(this.name);
-//        dest.writeInt(prefIndex);
-//        dest.writeInt(maxDist);
-//    }
 }
