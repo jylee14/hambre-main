@@ -22,7 +22,7 @@ import com.irs.main.R;
 
 public class UploadPhoto extends AppCompatActivity{
 
-    private Button chosePhotoButton, saveButton, cancelButton;
+    private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;
     private ImageView selectedPic;
     private String culture, diet;
@@ -154,6 +154,14 @@ public class UploadPhoto extends AppCompatActivity{
             }
 
         });
+        cameraButton = (Button)findViewById(R.id.camera_button);
+        cameraButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent Intent3=new   Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
+                startActivity(Intent3);
+            }
+        });
 
 
     }
@@ -189,5 +197,16 @@ public class UploadPhoto extends AppCompatActivity{
                 selectedPic.setImageBitmap(pic);
             }
         }
+        /*
+        if (requestCode == CAMERA_PIC_REQUEST) {
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            ImageView imageview = (ImageView) findViewById(R.id.ImageView01);
+            imageview.setImageBitmap(image);
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            selectedPic.setImageBitmap(imageBitmap);
+        }*/
     }
 }
