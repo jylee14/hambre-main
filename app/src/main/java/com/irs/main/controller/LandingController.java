@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -27,12 +28,11 @@ import com.irs.server.ServerApi;
 
 public class LandingController extends AppCompatActivity {
     private SignInButton goog;        //google login
+    private Button guestButton;
     private GoogleApiClient mGoogleApiClient;
     private LoginModel loginModel;
 
     private static final String TAG = "LoginActivity";
-
-    //// TODO: 3/1/17 We need to move out the Google and Facebook login stuff
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +45,26 @@ public class LandingController extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         facebookLogin();
-        Button guest = (Button) findViewById(R.id.Guest);
-        goog = (SignInButton) findViewById(R.id.Google);
-
-        googleLogin(guest);
+        googleLogin();
+        guestLogin();
 
 
     }
 
-    private void googleLogin(Button guest) {
+    private void guestLogin() {
+        guestButton = (Button) findViewById(R.id.Guest);
+        guestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LandingController.this, PreferencesController.class));
+            }
+        });
+    }
+
+    private void googleLogin() {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
+        goog = (SignInButton) findViewById(R.id.Google);
         GoogleSignInOptions gso = loginModel.getGoogleSignInOptions();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -70,14 +79,6 @@ public class LandingController extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-
-        guest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LandingController.this, PreferencesController.class));
-            }
-        });
-
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -90,14 +91,16 @@ public class LandingController extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 9001) {
+            // TODO: 3/2/17 IT BREAKS HERE (result.isSuccess() returns false)
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
                 ServerApi.getInstance().authServer(acct);
             } else {
-                Log.d(TAG, "Google signin failed." + result.getStatus().getStatusCode());
+                Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
             }
         } else {
             loginModel.getFBManager().onActivityResult(requestCode, resultCode, data);
@@ -118,6 +121,7 @@ public class LandingController extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // TODO: interface with our own server
+                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
             }
 
@@ -128,7 +132,7 @@ public class LandingController extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-
+                Log.d(TAG, "Facebook sign in failed." + error.getMessage());
             }
         });
     }
