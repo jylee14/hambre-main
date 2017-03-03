@@ -1,6 +1,7 @@
 package com.irs.main.controller;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -73,6 +74,7 @@ public class SelectRestaurantController extends AppCompatActivity implements Run
                 RestaurantList(SelectRestaurantController.this,
                 names, url, imageUrl, ratings, prices);
         list = (ListView)findViewById(R.id.list);
+        //list.setBackgroundColor(0xFF4883e2);
         list.setAdapter(adapter);
 
         //open yelp page of selected restaurant in browser

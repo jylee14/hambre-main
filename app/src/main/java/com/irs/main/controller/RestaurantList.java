@@ -3,6 +3,9 @@ package com.irs.main.controller;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +56,8 @@ public class RestaurantList extends ArrayAdapter<String> {
         //txtRating.setText("rating: " +rating[position]);
         RatingBar ratingBar = (RatingBar)rowView.findViewById(R.id.rating);
         ratingBar.setRating((float)rating[position]);
+        Drawable progress = ratingBar.getProgressDrawable();
+        DrawableCompat.setTint(progress, Color.BLACK);
 
         ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
 

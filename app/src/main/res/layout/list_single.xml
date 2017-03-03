@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal" >
+    <!-- android:background="#dd2721" -->
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="75dp"
@@ -39,13 +41,8 @@
                  android:textSize="9pt"
                  android:textStyle="bold"
                  />
-             <!--<TextView
-                 android:id="@+id/rating"
-                 android:layout_width="wrap_content"
-                 android:layout_height="35dp"
-                 android:padding="5dp"
-                 /> -->
              <RatingBar
+                 style="?android:attr/ratingBarStyleSmall"
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:stepSize="0.5"
