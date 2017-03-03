@@ -20,14 +20,15 @@ import com.irs.main.R;
  * Created by jeff on 3/3/17.
  */
 
-public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnItemSelectedListener{
-{
+public class UploadPhoto extends AppCompatActivity{
+
     private Button chosePhotoButton, saveButton, cancelButton;
     private Bitmap pic;
     private ImageView selectedPic;
     private EditText catagoryInput, cultureInput;
     private String catagory, culture, diet;
     private Spinner cultureSpinner, dietSpinner;
+
     //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
     private static final String[] paths = {"American (new)","American (traditional)", "Chinese", "Cuban",
@@ -44,7 +45,6 @@ public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnIt
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
         //TODO get rid of EditTexts, use drop down list or something
         catagoryInput = (EditText)findViewById(R.id.catagory_editText );
-        //cultureInput = (EditText)findViewById(R.id//.culture_editText);
         cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, paths);
@@ -143,7 +143,6 @@ public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnIt
             @Override
             public void onClick(View v){
                 catagory = catagoryInput.getText().toString();
-                //culture = cultureInput.getText().toString();
                 System.out.println("Catagory: " + catagory +
                 "\nCulture: " + culture +"\nDiet: " + diet);
                 Toast.makeText(UploadPhoto.this, "photo uploaded!", Toast.LENGTH_SHORT).show();
@@ -171,9 +170,9 @@ public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnIt
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
         intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 256);
+        intent.putExtra("outputY", 512);
         intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
+        intent.putExtra("aspectY", 2);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, 1);
 
@@ -194,54 +193,4 @@ public class UploadPhoto extends AppCompatActivity //implements AdapterView.OnIt
             }
         }
     }
-
-    /*@Override
-    public void onItemSelected(AdapterView<?> parent, View v, int position,
-                               long id){
-        //{"American (new)","American (traditional)", "Chinese", "Cuban",
-        //"Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
-
-        //for correct culture parameters see;
-        //https://www.yelp.com/developers/documentation/v2/all_category_list
-        //scroll down to restuarants
-        switch(position){
-            case 0: //American (new)
-                culture = "newamerican";
-                break;
-            case 1: //American (traditional)
-                culture = "tradamerican";
-                break;
-            case 2: //chinese
-                culture = "Chinese, All";
-                break;
-            case 3: //Cuban
-                culture = "cuban";
-                break;
-            case 4: //Indian
-                culture = "indpak";
-                break;
-            case 5: //Italian
-                culture = "italian, All";
-                break;
-            case 6: //Japanese
-                culture = "japanese, All";
-                break;
-            case 7: //Korean
-                culture = "korean, All";
-                break;
-            case 8: //Mexican
-                culture = "mexican, All";
-                break;
-            case 9: //Russian
-                culture = "russian, All";
-                break;
-            case 10: //Thai
-                culture = "thai, All";
-                break;
-        }
-    }
-    @Override
-    public void onNothingSelected(AdapterView<?> a){
-
-    } */
 }
