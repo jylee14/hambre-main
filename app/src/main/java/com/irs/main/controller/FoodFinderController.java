@@ -98,9 +98,6 @@ public class FoodFinderController extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
-
         setContentView(R.layout.activity_food_finder);
         bundle = getIntent().getExtras();
 
@@ -125,18 +122,7 @@ public class FoodFinderController extends AppCompatActivity {
                     culture = gallery[index].getCulture();
                     String tag = gallery[index].getTag();
 
-                    System.out.println("UserModel: " + UserModel.getInstance().getName());
-                    System.out.println("UserModel: " + UserModel.getInstance().getSortType());
-                    HashMap<String, String> params = new HashMap<>();
-                    params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-                    params.put("categories", (tag == null ? "food" : tag));
-                    params.put("term", culture);
-                    params.put("sort_by", "" + UserModel.getInstance().getSortType().name());
-                    params.put("radius", "" + user.getMaxDist() * METERS_PER_MILE);
-                    params.put("limit", "" + LIMIT);
-                    // TODO: move category filter to filter food from db
-                    //params.put("category_filter", UserModel.getInstance().getDietString());
-
+                    // Load Restaurants in the background
                     new LoadRestaurantsTask().execute(gallery[index]);
 
                 }
