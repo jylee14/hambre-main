@@ -9,12 +9,12 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="chose from gallery"
+            android:text="Chose From Gallery"
             android:id="@+id/chose_photo_button"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Take Photo with Camera"
+            android:text="Photo From Camera"
             android:id="@+id/camera_button"/>
     </LinearLayout>
     <ImageView

@@ -20,6 +20,9 @@ import com.irs.main.R;
  * Created by jeff on 3/3/17.
  */
 
+//TODO add name field, add catagory (food, desert or fruit etc...) dropdown
+
+
 public class UploadPhoto extends AppCompatActivity{
 
     private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
