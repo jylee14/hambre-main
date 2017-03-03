@@ -1,5 +1,8 @@
 package com.irs.server;
 
+import com.irs.main.DietType;
+import com.irs.yelp.SortType;
+
 /**
  * Represent a User model
  */
@@ -37,32 +40,32 @@ public class DBUserModel {
         return oauth_provider;
     }
 
-    public int vegetarian() {
-        return vegetarian;
+    public boolean vegetarian() {
+        return (vegetarian == 1);
     }
 
-    public int vegan() {
-        return vegan;
+    public boolean vegan() {
+        return (vegan == 1);
     }
 
-    public int kosher() {
-        return kosher;
+    public boolean kosher() {
+        return (kosher == 1);
     }
 
-    public int gluten_free() {
-        return gluten_free;
+    public boolean gluten_free() {
+        return (gluten_free == 1);
     }
 
     public int distance() {
         return distance;
     }
 
-    public int by_rating() {
-        return by_rating;
+    public boolean by_rating() {
+        return (by_rating == 1);
     }
 
-    public int by_distance() {
-        return by_distance;
+    public boolean by_distance() {
+        return (by_distance == 1);
     }
 
     public int rating() {
@@ -75,5 +78,26 @@ public class DBUserModel {
 
     public int admin() {
         return admin;
+    }
+
+    public DietType getDietType() {
+        if (vegetarian()) {
+            return DietType.Vegetarian;
+        } else if (vegan()) {
+            return DietType.Vegan;
+        } else if (kosher()) {
+            return DietType.Kosher;
+        } else if (gluten_free()) {
+            return DietType.GlutenFree;
+        }
+        return DietType.None;
+    }
+
+    public SortType getSortType() {
+        if (by_distance()) {
+            return SortType.distance;
+        } else {
+            return SortType.rating;
+        }
     }
 }
