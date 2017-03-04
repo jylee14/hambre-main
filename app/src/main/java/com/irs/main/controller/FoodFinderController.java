@@ -6,8 +6,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.irs.main.R;
@@ -42,6 +44,7 @@ public class FoodFinderController extends AppCompatActivity {
     private final String server = "http://159.203.246.214/irs/";
 
     private FoodModel[] dbfm;
+    private Button uploadButton;
     private UserModel user = UserModel.getInstance();
 
     private final Thread getFoodThread = new Thread() {
@@ -99,6 +102,17 @@ public class FoodFinderController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_food_finder);
+
+        uploadButton = (Button)findViewById(R.id.btn_upload);
+        uploadButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(FoodFinderController.this,
+                        UploadPhoto.class);
+                startActivity(i);
+            }
+        });
+
         bundle = getIntent().getExtras();
 
         try {

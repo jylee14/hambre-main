@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal" >
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="75dp"
         android:layout_height="90dp"/>
-    <LinearLayout
+     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -18,41 +19,38 @@
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:padding="5dp"
-                />
-            <TextView
-                android:id="@+id/price"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:padding="5dp"
-                />
-            <TextView
-                android:id="@+id/rating"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:padding="5dp"
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                android:textSize="10pt"
 
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:id="@+id/yelp_btn"
-                android:text="Yelp"
-                android:paddingLeft="10dp"
-                android:focusable="false"/>
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:id="@+id/map_button"
-                android:text="Map"
-                android:focusable="false"/>
+                />
+
         </LinearLayout>
+         <LinearLayout
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
+             <TextView
+                 android:id="@+id/price"
+                 android:layout_width="wrap_content"
+                 android:layout_height="35dp"
+                 android:padding="5dp"
+                 android:paddingRight="8dp"
+                 android:textColor="#259e1f"
+                 android:textSize="9pt"
+                 android:textStyle="bold"
+                 />
+             <RatingBar
+                 style="?android:attr/ratingBarStyleSmall"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:stepSize="0.1"
+                 android:id="@+id/rating"
+                 android:paddingTop="10dp"
+                 android:numStars="5"/>
+
+         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
