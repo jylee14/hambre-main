@@ -113,7 +113,11 @@ public class LandingController extends AppCompatActivity {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // TODO: interface with our own server
+                // Here we can call the server with the account to get an API key
+                // store the api key into UserModel
+                // populate UserModel using the apiKey (I will write a method for this)
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
+                System.out.println("Facebook Login Success!");
             }
 
             @Override

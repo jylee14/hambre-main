@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import com.irs.main.R;
 import com.irs.main.model.FoodModel;
+import com.irs.main.model.UserModel;
+import com.irs.yelp.SortType;
 
 public class PreferencesController extends AppCompatActivity implements Runnable {
     private TextView maxRad;
@@ -20,9 +22,11 @@ public class PreferencesController extends AppCompatActivity implements Runnable
     private FoodModel[] dbfm;
     private final FoodFinderController controller = new FoodFinderController();
 
+    private UserModel user = UserModel.getInstance();
+
     //1=Distance, 2=Highest Rated
-    public static int byRating = 2;  //for ordering later. Rating by default
-    public static int radius = 1;   //minimum radius is 1 mile
+    //public static int byRating = 2;  //for ordering later. Rating by default
+    //public static int radius = 1;   //minimum radius is 1 mile
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +43,8 @@ public class PreferencesController extends AppCompatActivity implements Runnable
 
         pref.check(R.id.rate);  //rate by default
 
-        rad.setProgress(radius);
-        maxRad.setText("" + radius + " mi");
+        rad.setProgress(user.getMaxDist());
+        maxRad.setText("" + user.getMaxDist() + " mi");
 
         /**
          * Diet Button will redirect the user to the dietary restrictions page
@@ -63,13 +67,13 @@ public class PreferencesController extends AppCompatActivity implements Runnable
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                byRating = 2;
+                user.setSortType(SortType.rating);
             }
         });
         dist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                byRating = 1;
+            user.setSortType(SortType.distance);
             }
         });
 
@@ -88,8 +92,8 @@ public class PreferencesController extends AppCompatActivity implements Runnable
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                radius = seekBar.getProgress();
-                maxRad.setText(radius + " mi");
+                user.setMaxDist(seekBar.getProgress());
+                maxRad.setText(user.getMaxDist() + " mi");
             }
         });
 
@@ -99,7 +103,7 @@ public class PreferencesController extends AppCompatActivity implements Runnable
         cont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (radius == 0) {
+                if (user.getMaxDist() == 0) {
                     Toast.makeText(PreferencesController.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
