@@ -62,7 +62,7 @@ public class UploadPhoto extends AppCompatActivity{
         ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, dietPaths);
         dietSpinner.setAdapter(dietAdapter);
-        categorySpinner = (Spinner)findViewById(R.id.catagory_spinner);
+        categorySpinner = (Spinner)findViewById(R.id.category_spinner);
         ArrayAdapter<String> categoryAdapter = new
                 ArrayAdapter<String>(UploadPhoto.this, android.R.layout.simple_spinner_item,
                 categoryPaths);
@@ -194,7 +194,7 @@ public class UploadPhoto extends AppCompatActivity{
                     finish();
                 }
                 catch (Exception ex){
-                    System.out.println("Make it so!");
+                    System.out.println("You will be assimilated. Resistance is futile.");
                     ex.printStackTrace();
                 }
             }
