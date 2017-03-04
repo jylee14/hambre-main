@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -22,20 +23,21 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.irs.main.R;
+import com.irs.main.model.LoginModel;
 import com.irs.server.ServerApi;
 
 public class LandingController extends AppCompatActivity {
     private SignInButton goog;        //google login
-    private CallbackManager cbmanager; //fb login
+    private Button guestButton;
     private GoogleApiClient mGoogleApiClient;
+    private LoginModel loginModel;
+
     private static final String TAG = "LoginActivity";
-
-
-    //// TODO: 3/1/17 We need to move out the Google and Facebook login stuff
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        loginModel = new LoginModel();
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -43,15 +45,28 @@ public class LandingController extends AppCompatActivity {
         setContentView(R.layout.activity_landing);
 
         facebookLogin();
-        Button guest = (Button) findViewById(R.id.Guest);
-        goog = (SignInButton) findViewById(R.id.Google);
+        googleLogin();
+        guestLogin();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken("58151517395-7u4o0o77s2ff8dtbvio1v2tab2snf116.apps.googleusercontent.com")
-                .requestEmail()
-                .build();
+
+    }
+
+    private void guestLogin() {
+        guestButton = (Button) findViewById(R.id.Guest);
+        guestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LandingController.this, PreferencesController.class));
+            }
+        });
+    }
+
+    private void googleLogin() {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
+        goog = (SignInButton) findViewById(R.id.Google);
+        GoogleSignInOptions gso = loginModel.getGoogleSignInOptions();
+
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
@@ -63,14 +78,6 @@ public class LandingController extends AppCompatActivity {
                 })
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-
-
-        guest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LandingController.this, PreferencesController.class));
-            }
-        });
 
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,17 +91,19 @@ public class LandingController extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 9001) {
+            // TODO: 3/2/17 IT BREAKS HERE (result.isSuccess() returns false)
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
                 ServerApi.getInstance().authServer(acct);
             } else {
-                Log.d(TAG, "Google signin failed." + result.getStatus().getStatusCode());
+                Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
             }
         } else {
-            cbmanager.onActivityResult(requestCode, resultCode, data);
+            loginModel.getFBManager().onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -106,16 +115,12 @@ public class LandingController extends AppCompatActivity {
      * or "onError".
      */
     private void facebookLogin() {
-        cbmanager = CallbackManager.Factory.create();
         LoginButton fbButton = (LoginButton) findViewById(R.id.Facebook);
-        fbButton.registerCallback(cbmanager, new FacebookCallback<LoginResult>() {
+        fbButton.registerCallback(loginModel.getFBManager(), new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                // TODO: interface with our own server
-                // Here we can call the server with the account to get an API key
-                // store the api key into UserModel
-                // populate UserModel using the apiKey (I will write a method for this)
+                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
                 System.out.println("Facebook Login Success!");
             }
@@ -127,7 +132,7 @@ public class LandingController extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-
+                Log.d(TAG, "Facebook sign in failed." + error.getMessage());
             }
         });
     }
