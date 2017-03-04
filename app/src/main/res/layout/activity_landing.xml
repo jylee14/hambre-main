@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    android:background="@drawable/landing"
     tools:context="com.irs.main.controller.LandingController"
     android:weightSum="1">
 
@@ -28,6 +29,16 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/Google"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="375dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"/>
+
         <com.facebook.login.widget.LoginButton
             android:id="@+id/Facebook"
             android:layout_width="match_parent"
@@ -36,16 +47,6 @@
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"/>
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/Google"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
-
 
         <Button
             android:layout_width="match_parent"
