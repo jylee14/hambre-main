@@ -50,23 +50,25 @@ public class UploadPhoto extends AppCompatActivity{
         setContentView(R.layout.activity_upload_photo);
 
         foodName = (EditText)findViewById(R.id.name_txt);
-
-
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
+
         cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, culturePaths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cultureSpinner.setAdapter(adapter);
+
         dietSpinner = (Spinner)findViewById(R.id.dietary_spinner);
         ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, dietPaths);
         dietSpinner.setAdapter(dietAdapter);
+
         categorySpinner = (Spinner)findViewById(R.id.category_spinner);
         ArrayAdapter<String> categoryAdapter = new
                 ArrayAdapter<String>(UploadPhoto.this, android.R.layout.simple_spinner_item,
                 categoryPaths);
         categorySpinner.setAdapter(categoryAdapter);
+
         cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -216,15 +218,12 @@ public class UploadPhoto extends AppCompatActivity{
                 startActivity(Intent3);
             }
         });
-
-
     }
 
     public void pickImage(){
         Intent intent = new Intent(Intent.ACTION_PICK,
                 MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         //TODO change these to crop and save as vertical phone pic
-        //TODO figure out why cropping screen is so small
         intent.setType("image/*");
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
@@ -251,16 +250,5 @@ public class UploadPhoto extends AppCompatActivity{
                 selectedPic.setImageBitmap(pic);
             }
         }
-        /*
-        if (requestCode == CAMERA_PIC_REQUEST) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            ImageView imageview = (ImageView) findViewById(R.id.ImageView01);
-            imageview.setImageBitmap(image);
-        }
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            selectedPic.setImageBitmap(imageBitmap);
-        }*/
     }
 }
