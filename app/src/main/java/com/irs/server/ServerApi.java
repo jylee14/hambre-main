@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
+import com.irs.main.DietType;
+import com.irs.yelp.SortType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -166,18 +168,85 @@ public class ServerApi {
 
     }
 
-    public DBSetPreferencesModel[] getSetPreferences(String api_key){
+    public DBSetPreferencesModel setPreferences(
+            String api_key,
+            int vegetarian, int vegan, int kosher, int gluten_free,
+            int by_rating, int by_distance,
+            int distance){
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
+        params.put("vegetarian", "" + vegetarian);
+        params.put("vegan", "" + vegan);
+        params.put("kosher", "" + kosher);
+        params.put("gluten_free", "" + gluten_free);
+
+        params.put("by_rating", "" + by_rating);
+        params.put("by_distance", "" + by_distance);
+
+        params.put("distance", "" + distance);
+
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params,true);
+        String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params, true);
 
         // return parsed object
         Gson gson = new Gson();
-        DBSetPreferencesModel[] result = gson.fromJson(response.toString(), DBSetPreferencesModel[].class);
+        DBSetPreferencesModel result = gson.fromJson(response.toString(), DBSetPreferencesModel.class);
 
         return result;
+    }
+
+    /**
+     * Set users preferences (convenience overload)
+     * @param api_key key of user
+     * @param dietType user diet
+     * @param sortType sort type
+     * @param distance radius to search (in miles)
+     * @return response with the updated preferences or an error
+     */
+    public DBSetPreferencesModel setPreferences(String api_key, DietType dietType, SortType sortType, int distance) {
+        int vegetarian = 0;
+        int vegan = 0;
+        int kosher = 0;
+        int gluten_free = 0;
+
+        switch (dietType) {
+            case Vegetarian:
+                vegetarian = 1;
+                break;
+            case Vegan:
+                vegan = 1;
+                break;
+            case Kosher:
+                kosher = 1;
+                break;
+            case GlutenFree:
+                gluten_free = 1;
+                break;
+        }
+
+        int by_distance = 0;
+        int by_rating = 0;
+
+        switch (sortType) {
+            case rating:
+                by_rating = 1;
+                break;
+            case distance:
+                by_distance = 1;
+                break;
+            default:
+                by_rating = 1;
+                break;
+        }
+
+
+
+        return setPreferences(
+                api_key,
+                vegetarian, vegan, kosher, gluten_free,
+                by_rating, by_distance,
+                distance);
     }
 
     public DBFoodModel[] getFood() {

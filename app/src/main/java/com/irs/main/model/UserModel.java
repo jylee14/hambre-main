@@ -77,6 +77,14 @@ public class UserModel {
 
     }
 
+    public void saveToDatabase() {
+        if (isGuest) {
+            return;
+        }
+
+        ServerApi.getInstance().setPreferences(apiKey, dietType, sortType, maxDist);
+    }
+
     public void setName(String name) {
         this.name = name;
     }
