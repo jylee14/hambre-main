@@ -41,7 +41,7 @@ public class UploadPhoto extends AppCompatActivity{
             "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
         "Kosher", "Gluten Free"};
-    private static final String[] categoryPaths = {"food", "desert", "fruit", "spicey"};
+    private static final String[] categoryPaths = {"food", "desert", "fruit", "spicy"};
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -69,37 +69,37 @@ public class UploadPhoto extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0: //American (new)
-                        culture = "newamerican";
+                        culture = culturePaths[0];
                         break;
                     case 1: //American (traditional)
-                        culture = "tradamerican";
+                        culture = culturePaths[1];
                         break;
                     case 2: //chinese
-                        culture = "Chinese, All";
+                        culture = culturePaths[2];
                         break;
                     case 3: //Cuban
-                        culture = "cuban";
+                        culture = culturePaths[3];
                         break;
                     case 4: //Indian
-                        culture = "indpak";
+                        culture = culturePaths[4];
                         break;
                     case 5: //Italian
-                        culture = "italian, All";
+                        culture = culturePaths[5];
                         break;
                     case 6: //Japanese
-                        culture = "japanese, All";
+                        culture = culturePaths[6];
                         break;
                     case 7: //Korean
-                        culture = "korean, All";
+                        culture = culturePaths[7];
                         break;
                     case 8: //Mexican
-                        culture = "mexican, All";
+                        culture = culturePaths[8];
                         break;
                     case 9: //Russian
-                        culture = "russian, All";
+                        culture = culturePaths[9];
                         break;
                     case 10: //Thai
-                        culture = "thai, All";
+                        culture = culturePaths[10];
                         break;
                 }
             }
@@ -115,19 +115,19 @@ public class UploadPhoto extends AppCompatActivity{
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0://None
-                        diet = "None";
+                        diet = dietPaths[0];
                         break;
                     case 1://Vegetarian
-                        diet = "vegetarian, All";
+                        diet = dietPaths[1];
                         break;
                     case 2://Vegan
-                        diet = "vegan, All";
+                        diet = dietPaths[2];
                         break;
                     case 3://Kosher
-                        diet = "kosher";
+                        diet = dietPaths[3];
                         break;
                     case 4:
-                        diet = "gluten_free, All";
+                        diet = dietPaths[4];
                         break;
                     default:
                         diet = "none";
@@ -147,19 +147,19 @@ public class UploadPhoto extends AppCompatActivity{
                 //{"food", "desert", "fruit", "spicey"};
                 switch (position){
                     case 0://food
-                        category = "food";
+                        category = categoryPaths[0];
                         break;
                     case 1: //desert
-                        category = "desert";
+                        category = categoryPaths[1];
                         break;
                     case 2://fruit
-                        category = "fruit";
+                        category = categoryPaths[2];
                         break;
                     case 3://spicey
-                        category = "spicey";
+                        category = categoryPaths[3];
                         break;
-                    default:
-                        category = "food";
+                    default://food
+                        category = categoryPaths[0];
                         break;
 
 
