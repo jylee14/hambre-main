@@ -27,19 +27,21 @@ public class UploadPhoto extends AppCompatActivity{
 
     private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;
+    private EditText foodName;
     private ImageView selectedPic;
-    private String culture, diet;
-    private Spinner cultureSpinner, dietSpinner;
+    private String culture, diet, category;
+    private Spinner cultureSpinner, dietSpinner, categorySpinner;
 
     //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
 
     //TODO also change switch statement below for cultureSpinner.OnItemSelected
 
-    private static final String[] paths = {"American (new)","American (traditional)", "Chinese", "Cuban",
+    private static final String[] culturePaths = {"American (new)","American (traditional)", "Chinese", "Cuban",
             "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
         "Kosher", "Gluten Free"};
+    private static final String[] categoryPaths = {"food", "desert", "fruit", "spicey"};
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -50,13 +52,18 @@ public class UploadPhoto extends AppCompatActivity{
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
         cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
         ArrayAdapter<String>adapter = new ArrayAdapter<String>(UploadPhoto.this,
-                android.R.layout.simple_spinner_item, paths);
+                android.R.layout.simple_spinner_item, culturePaths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cultureSpinner.setAdapter(adapter);
         dietSpinner = (Spinner)findViewById(R.id.dietary_spinner);
         ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, dietPaths);
         dietSpinner.setAdapter(dietAdapter);
+        categorySpinner = (Spinner)findViewById(R.id.catagory_spinner);
+        ArrayAdapter<String> categoryAdapter = new
+                ArrayAdapter<String>(UploadPhoto.this, android.R.layout.simple_spinner_item,
+                categoryPaths);
+        categorySpinner.setAdapter(categoryAdapter);
         cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -125,6 +132,37 @@ public class UploadPhoto extends AppCompatActivity{
                     default:
                         diet = "none";
                         break;
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                //{"food", "desert", "fruit", "spicey"};
+                switch (position){
+                    case 0://food
+                        category = "food";
+                        break;
+                    case 1: //desert
+                        category = "desert";
+                        break;
+                    case 2://fruit
+                        category = "fruit";
+                        break;
+                    case 3://spicey
+                        category = "spicey";
+                        break;
+                    default:
+                        category = "food";
+                        break;
+
+
                 }
             }
 
