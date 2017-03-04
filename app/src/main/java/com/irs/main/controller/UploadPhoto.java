@@ -29,7 +29,7 @@ public class UploadPhoto extends AppCompatActivity{
     private Bitmap pic;
     private EditText foodName;
     private ImageView selectedPic;
-    private String culture, diet, category;
+    private String culture, diet, category, name;
     private Spinner cultureSpinner, dietSpinner, categorySpinner;
 
     //TODO add all cultures in alphabetical order available in yelp API found at:
@@ -48,6 +48,9 @@ public class UploadPhoto extends AppCompatActivity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
+
+        foodName = (EditText)findViewById(R.id.name_txt);
+
 
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
         cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
@@ -183,9 +186,17 @@ public class UploadPhoto extends AppCompatActivity{
         saveButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v){
-                System.out.println("Culture: " + culture +"\nDiet: " + diet);
-                Toast.makeText(UploadPhoto.this, "photo submitted!", Toast.LENGTH_SHORT).show();
-                finish();
+                try {
+                    name = foodName.getText().toString();
+                    System.out.println("Culture: " + culture + "\nDiet: " + diet +
+                            "\ncategory: " + category + "\nname: " + name);
+                    Toast.makeText(UploadPhoto.this, "photo submitted!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                catch (Exception ex){
+                    System.out.println("Make it so!");
+                    ex.printStackTrace();
+                }
             }
         });
 
