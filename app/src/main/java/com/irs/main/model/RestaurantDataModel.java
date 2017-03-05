@@ -45,6 +45,7 @@ public class RestaurantDataModel {
         params.put("limit", "" + count);
         params.put("open_now", openNow ? "true" : "false");
 
+        System.err.println("Lat: " + latitude + "\tLong: "+ longitude);
         System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
