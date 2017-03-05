@@ -6,23 +6,23 @@ import android.os.Parcelable;
 /**
  * Model defining structure of businesses in Yelp JSON response
  */
-public class BusinessDto implements Parcelable {
+public class BusinessDTO implements Parcelable {
     double rating;
     String price;
     String phone;
     String id;
     boolean is_closed;
-    CategoriesDto[] categories;
+    CategoriesDTO[] categories;
     int review_count;
     String name;
     String url;
-    CoordinatesDto coordinates;
+    CoordinatesDTO coordinates;
     String coordinate;
     String image_url;
-    LocationDto location;
+    LocationDTO location;
     String address;
 
-    protected BusinessDto(Parcel in) {
+    protected BusinessDTO(Parcel in) {
         rating = in.readDouble();
         price = in.readString();
         phone = in.readString();
@@ -36,15 +36,15 @@ public class BusinessDto implements Parcelable {
         address = in.readString();
     }
 
-    public static final Creator<BusinessDto> CREATOR = new Creator<BusinessDto>() {
+    public static final Creator<BusinessDTO> CREATOR = new Creator<BusinessDTO>() {
         @Override
-        public BusinessDto createFromParcel(Parcel in) {
-            return new BusinessDto(in);
+        public BusinessDTO createFromParcel(Parcel in) {
+            return new BusinessDTO(in);
         }
 
         @Override
-        public BusinessDto[] newArray(int size) {
-            return new BusinessDto[size];
+        public BusinessDTO[] newArray(int size) {
+            return new BusinessDTO[size];
         }
     };
 
@@ -68,7 +68,7 @@ public class BusinessDto implements Parcelable {
         return is_closed;
     }
 
-    public CategoriesDto[] categories() {
+    public CategoriesDTO[] categories() {
         return categories;
     }
 
@@ -84,7 +84,7 @@ public class BusinessDto implements Parcelable {
         return url;
     }
 
-    public CoordinatesDto coordinates() {
+    public CoordinatesDTO coordinates() {
         return coordinates;
     }
 
@@ -92,7 +92,7 @@ public class BusinessDto implements Parcelable {
         return image_url;
     }
 
-    public LocationDto location() {
+    public LocationDTO location() {
         return location;
     }
 
@@ -139,8 +139,8 @@ public class BusinessDto implements Parcelable {
     }
 
 
-    public static BusinessDto[] toBusinessModel(Parcelable[] parcelables) {
-        BusinessDto[] businesses = new BusinessDto[parcelables.length];
+    public static BusinessDTO[] toBusinessModel(Parcelable[] parcelables) {
+        BusinessDTO[] businesses = new BusinessDTO[parcelables.length];
         System.arraycopy(parcelables, 0, businesses, 0, parcelables.length);
         return businesses;
     }

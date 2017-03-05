@@ -19,7 +19,7 @@ import com.irs.main.model.RestaurantDataModel;
 import com.irs.main.model.UserModel;
 import com.irs.server.DBFoodDTO;
 import com.irs.server.ServerApi;
-import com.irs.yelp.BusinessDto;
+import com.irs.yelp.BusinessDTO;
 import com.irs.yelp.YelpApi;
 import com.squareup.picasso.Picasso;
 
@@ -61,12 +61,12 @@ public class FoodFinderController extends FragmentActivity {
     private boolean reloadImages = true;
     //private Bitmap[] galleryImages;
 
-    private class LoadRestaurantsTask extends AsyncTask<FoodDTO, Integer, BusinessDto[]> {
+    private class LoadRestaurantsTask extends AsyncTask<FoodDTO, Integer, BusinessDTO[]> {
         @SafeVarargs
         @Override
-        protected final BusinessDto[] doInBackground(FoodDTO...  params) {
+        protected final BusinessDTO[] doInBackground(FoodDTO...  params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
-            BusinessDto[] response = null;
+            BusinessDTO[] response = null;
             FoodDTO food = params[0];
             try {
                 System.out.println(culture);
@@ -88,7 +88,7 @@ public class FoodFinderController extends FragmentActivity {
         }
 
         @Override
-        protected void onPostExecute(BusinessDto[] result) {
+        protected void onPostExecute(BusinessDTO[] result) {
             System.out.println("FINISHED LOADING RESTAURANTS IN BACKGROUND");
             Intent i = new Intent(FoodFinderController.this, SelectRestaurantController.class);
             i.putExtra("model", result);
