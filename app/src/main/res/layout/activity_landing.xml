@@ -10,16 +10,9 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.irs.main.controller.LandingController"
-    android:weightSum="1">
+    android:weightSum="1"
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="48sp"
-        android:textStyle="bold"
-        android:text="Platanos"
-        android:textAlignment="center"
-        android:id="@+id/Title" />
+    android:background="@drawable/landing_small">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,33 +21,33 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/Facebook"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/Google"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="450dp"
             android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
+            android:layout_marginRight="30dp"
+            android:layout_width="290dp" />
 
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/Facebook"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_width="283dp"
+            android:layout_height="100dp" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="50dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:text="Continue as Guest"
-            android:id="@+id/Guest"/>
+            android:id="@+id/Guest"
+            android:layout_width="290dp"
+            android:layout_height="40dp" />
     </LinearLayout>
 </LinearLayout>

@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -26,7 +25,7 @@ import com.irs.main.R;
 import com.irs.main.model.LoginModel;
 import com.irs.server.ServerApi;
 
-public class LandingController extends AppCompatActivity {
+public class LandingController extends FragmentActivity {
     private SignInButton goog;        //google login
     private Button guestButton;
     private GoogleApiClient mGoogleApiClient;
