@@ -18,6 +18,7 @@ public class LoginModel {
                 .build();
 
         cbmanager = CallbackManager.Factory.create();
+
     }
 
     public GoogleSignInOptions getGoogleSignInOptions() {

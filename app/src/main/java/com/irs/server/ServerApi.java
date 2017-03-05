@@ -2,9 +2,11 @@ package com.irs.server;
 
 import android.net.Uri;
 
-import com.facebook.AccessToken;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
+import com.irs.main.DietType;
+import com.irs.yelp.SortType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -48,10 +50,9 @@ public class ServerApi {
         // TODO: get user api key here (design not finalized)
     }
 
-    private void authServer(String token) {
-        URL url = null;
+    public AuthResponse authServer(GoogleSignInAccount acct) {
+        /* URL url = null;
         HttpURLConnection client = null;
-
         try {
             url = new URL(LOGIN_ENDPOINT);
             client = (HttpURLConnection) url.openConnection();
@@ -61,13 +62,9 @@ public class ServerApi {
             client.setRequestMethod("POST");
             client.setDoInput(true);
             client.setDoOutput(true);
-
-            client.setRequestProperty("id_token", token);
-
-
-            Uri.Builder builder = new Uri.Builder().appendQueryParameter("id_token", token);
+            client.setRequestProperty("id_token", acct.getIdToken());
+            Uri.Builder builder = new Uri.Builder().appendQueryParameter("id_token", acct.getIdToken());
             String query = builder.build().getEncodedQuery();
-
             OutputStream os = client.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, "UTF-8"));
@@ -75,33 +72,29 @@ public class ServerApi {
             writer.flush();
             writer.close();
             os.close();
-
             client.connect();
-
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
-
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
             System.out.println(response);
             System.out.println("log in attempt");
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+*/
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_token", acct.getIdToken());
 
-    public void authServer(GoogleSignInAccount acct) {
-        authServer(acct.getIdToken());
-    }
-
-    public void authServer(AccessToken accessToken) {
-        authServer(accessToken.getToken());
+        String response = getJSONResponse(LOGIN_ENDPOINT, "POST", params, true);
+        Gson gson = new Gson();
+        AuthResponse result = gson.fromJson(response, AuthResponse.class);
+        return result;
     }
 
     public PreferencesModel getPreferences(String api_key) {
@@ -176,18 +169,85 @@ public class ServerApi {
 
     }
 
-    public DBSetPreferencesModel[] getSetPreferences(String api_key) {
+    public DBSetPreferencesModel setPreferences(
+            String api_key,
+            int vegetarian, int vegan, int kosher, int gluten_free,
+            int by_rating, int by_distance,
+            int distance) {
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
+
+        params.put("vegetarian", "" + vegetarian);
+        params.put("vegan", "" + vegan);
+        params.put("kosher", "" + kosher);
+        params.put("gluten_free", "" + gluten_free);
+
+        params.put("by_rating", "" + by_rating);
+        params.put("by_distance", "" + by_distance);
+
+        params.put("distance", "" + distance);
 
         // query FOOD_ENDPOINT for a GET request with params
         String response = getJSONResponse(SET_PREFERENCES_ENDPOINT, "POST", params, true);
 
         // return parsed object
         Gson gson = new Gson();
-        DBSetPreferencesModel[] result = gson.fromJson(response.toString(), DBSetPreferencesModel[].class);
+        DBSetPreferencesModel result = gson.fromJson(response.toString(), DBSetPreferencesModel.class);
 
         return result;
+    }
+
+    /**
+     * Set users preferences (convenience overload)
+     *
+     * @param api_key  key of user
+     * @param dietType user diet
+     * @param sortType sort type
+     * @param distance radius to search (in miles)
+     * @return response with the updated preferences or an error
+     */
+    public DBSetPreferencesModel setPreferences(String api_key, DietType dietType, SortType sortType, int distance) {
+        int vegetarian = 0;
+        int vegan = 0;
+        int kosher = 0;
+        int gluten_free = 0;
+
+        switch (dietType) {
+            case Vegetarian:
+                vegetarian = 1;
+                break;
+            case Vegan:
+                vegan = 1;
+                break;
+            case Kosher:
+                kosher = 1;
+                break;
+            case GlutenFree:
+                gluten_free = 1;
+                break;
+        }
+
+        int by_distance = 0;
+        int by_rating = 0;
+
+        switch (sortType) {
+            case rating:
+                by_rating = 1;
+                break;
+            case distance:
+                by_distance = 1;
+                break;
+            default:
+                by_rating = 1;
+                break;
+        }
+
+
+        return setPreferences(
+                api_key,
+                vegetarian, vegan, kosher, gluten_free,
+                by_rating, by_distance,
+                distance);
     }
 
     public DBFoodModel[] getFood() {

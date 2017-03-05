@@ -23,6 +23,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.irs.main.R;
 import com.irs.main.model.LoginModel;
+import com.irs.main.model.UserModel;
+import com.irs.server.AuthResponse;
 import com.irs.server.ServerApi;
 
 public class LandingController extends FragmentActivity {
@@ -93,11 +95,14 @@ public class LandingController extends FragmentActivity {
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 9001) {
-            // TODO: 3/2/17 IT BREAKS HERE (result.isSuccess() returns false)
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
-                ServerApi.getInstance().authServer(acct);
+                System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
+                AuthResponse response = ServerApi.getInstance().authServer(acct);
+                System.out.println("GOT DATA FROM SERVER: " + response.user());
+                UserModel.getInstance().loginAccount(response.user().api_key());
+                System.out.println("LOGGED IN TO SERVER");
             } else {
                 Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
             }
@@ -119,7 +124,7 @@ public class LandingController extends FragmentActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
+//                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
                 System.out.println("Facebook Login Success!");
             }

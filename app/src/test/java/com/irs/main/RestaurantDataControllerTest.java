@@ -1,6 +1,5 @@
 package com.irs.main;
 
-import com.irs.main.model.Restaurant;
 import com.irs.main.model.RestaurantDataModel;
 import com.irs.yelp.SortType;
 
@@ -11,6 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * RestaurantDataModel class tests
  */
+/**
 public class RestaurantDataControllerTest {
 
     @Test
@@ -23,3 +23,4 @@ public class RestaurantDataControllerTest {
         }
     }
 }
+ */
