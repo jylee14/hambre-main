@@ -2,7 +2,7 @@ package com.irs.main.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -12,14 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.irs.main.R;
-import com.irs.main.model.FoodDto;
+import com.irs.main.model.FoodDTO;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
-public class PreferencesController extends AppCompatActivity implements Runnable {
+public class PreferencesController extends FragmentActivity implements Runnable {
     private TextView maxRad;
 
-    private FoodDto[] dbfm;
+    private FoodDTO[] dbfm;
     private final FoodFinderController controller = new FoodFinderController();
 
     private UserModel user = UserModel.getInstance();
