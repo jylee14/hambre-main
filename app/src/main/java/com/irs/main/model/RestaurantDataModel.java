@@ -15,9 +15,7 @@ import java.util.HashMap;
  */
 public class RestaurantDataModel {
     private YelpApi api = YelpApi.getInstance();
-    private static double latitude;
-    private static double longitude;
-
+    private static double latitude, longitude;
 
     /**
      * Method to retrieve a list of restaurants based on a search query
@@ -40,8 +38,9 @@ public class RestaurantDataModel {
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        params.put("longitude", "" + longitude);
+
         params.put("latitude", "" + latitude);
+        params.put("longitude", "" + longitude);
         params.put("categories", ((category == null || category == "") ? "food" : category));
         params.put("term", query);
         params.put("sort_by", "" + sortType);
@@ -49,6 +48,7 @@ public class RestaurantDataModel {
         params.put("limit", "" + count);
         params.put("open_now", openNow ? "true" : "false");
 
+        System.err.println("Lat: " + latitude + "\tLong: "+ longitude);
         System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
@@ -56,11 +56,10 @@ public class RestaurantDataModel {
         return response.businesses();
     }
 
-    public static void setLatitude(double userLatitude){
-        latitude = userLatitude;
+    public static void setLatitude(double userLat){
+        latitude = userLat;
     }
-
-    public static void setLongitude(double userLongitude){
-        longitude = userLongitude;
+    public static void setLongitude(double userLong){
+        longitude = userLong;
     }
 }

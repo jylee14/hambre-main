@@ -13,19 +13,44 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
-        <activity android:name=".controller.LandingController">
+        <activity android:name=".controller.LandingController" android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
              <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".controller.DietRestriction" android:label="@string/app_name"/>
-        <activity android:name=".controller.PreferencesController" android:label="@string/app_name"/>
-        <activity android:name=".controller.FoodFinderController" android:label="@string/app_name"/>
-        <activity android:name=".controller.SelectRestaurantController" android:label="@string/app_name"/>
-        <activity android:name=".controller.Error" android:label="@string/app_name" />
-        <activity android:name=".controller.UploadPhoto" android:label="UploadPhoto"/>
+        <activity android:name=".controller.DietRestriction"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".controller.PreferencesController"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".controller.FoodFinderController"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".controller.SelectRestaurantController"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".controller.Error"
+            android:label="@string/app_name"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".controller.UploadPhoto"
+            android:label="UploadPhoto"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
         <uses-feature android:name="android.hardware.camera"
             android:required="true" />
     </application>
