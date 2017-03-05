@@ -13,11 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.irs.main.R;
-import com.irs.main.model.FoodDTO;
+import com.irs.main.model.FoodDto;
 import com.irs.main.model.OnSwipeTouchListener;
 import com.irs.main.model.RestaurantDataModel;
 import com.irs.main.model.UserModel;
-import com.irs.server.DBFoodDTO;
+import com.irs.server.DBFoodDto;
 import com.irs.server.ServerApi;
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.YelpApi;
@@ -37,12 +37,12 @@ public class FoodFinderController extends FragmentActivity {
     private YelpApi api;
     private Bundle bundle;
     private String culture;
-    private FoodDTO[] gallery;
+    private FoodDto[] gallery;
     private Animation animEnter, animLeave;
     // --Commented out by Inspection (3/1/17, 1:02 PM):private final String LOG_TAG = getClass().getSimpleName(); //for log
     private final String server = "http://159.203.246.214/irs/";
 
-    private FoodDTO[] dbfm;
+    private FoodDto[] dbfm;
     private Button uploadButton;
     private UserModel user = UserModel.getInstance();
 
@@ -61,13 +61,13 @@ public class FoodFinderController extends FragmentActivity {
     private boolean reloadImages = true;
     //private Bitmap[] galleryImages;
 
-    private class LoadRestaurantsTask extends AsyncTask<FoodDTO, Integer, BusinessDto[]> {
+    private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
         @SafeVarargs
         @Override
-        protected final BusinessDto[] doInBackground(FoodDTO...  params) {
+        protected final BusinessDto[] doInBackground(FoodDto...  params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessDto[] response = null;
-            FoodDTO food = params[0];
+            FoodDto food = params[0];
             try {
                 System.out.println(culture);
                 // TODO: set gps based location in first param
@@ -115,7 +115,7 @@ public class FoodFinderController extends FragmentActivity {
         bundle = getIntent().getExtras();
 
         try {
-            gallery = FoodDTO.toFoodModel(bundle.getParcelableArray("model"));
+            gallery = FoodDto.toFoodModel(bundle.getParcelableArray("model"));
             api = YelpApi.getInstance();
             mainView = (ImageView) findViewById(R.id.image);
 
@@ -133,8 +133,11 @@ public class FoodFinderController extends FragmentActivity {
 
                 public void onSwipeRight() {
                     culture = gallery[index].getCulture();
-                    String tag = gallery[index].getTag();
+                    //String tag = gallery[index].getTag();
 
+                    UserLocationService userLoc = new UserLocationService(getApplicationContext());
+                    RestaurantDataModel.setLatitude(userLoc.getLatitude());
+                    RestaurantDataModel.setLongitude(userLoc.getLongitude());
                     // Load Restaurants in the background
                     new LoadRestaurantsTask().execute(gallery[index]);
 
@@ -167,15 +170,15 @@ public class FoodFinderController extends FragmentActivity {
         }
     }
 
-    public FoodDTO[] getFoodFromServer() {
+    public FoodDto[] getFoodFromServer() {
         //connecting db to main
         ServerApi api = ServerApi.getInstance();
-        DBFoodDTO[] DBFoodDTOs = api.getFood();
-        FoodDTO[] fromDB = new FoodDTO[DBFoodDTOs.length];
-        for (int i = 0; i < DBFoodDTOs.length; i++) {
+        DBFoodDto[] DBFoodDtos = api.getFood();
+        FoodDto[] fromDB = new FoodDto[DBFoodDtos.length];
+        for (int i = 0; i < DBFoodDtos.length; i++) {
             try {
-                DBFoodDTO tempDB = DBFoodDTOs[i];
-                FoodDTO temp = new FoodDTO(tempDB.name(), tempDB.name(), tempDB.getTag(), "" + tempDB.path());
+                DBFoodDto tempDB = DBFoodDtos[i];
+                FoodDto temp = new FoodDto(tempDB.name(), tempDB.name(), tempDB.getTag(), "" + tempDB.path());
                 fromDB[i] = temp;
             } catch (Exception e) {
                 System.err.println("D'OH");

@@ -41,39 +41,39 @@ public class ServerApi {
 
     // cache to store food models so we only retrieve them once
 
-    private DBTagDTO[] tagModelsCache;
-    private DBUsersFoodDTO[] usersFoodsCache;
+    private DBTagDto[] tagModelsCache;
+    private DBUsersFoodDto[] usersFoodsCache;
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
     }
 
-    public AuthDTO authServer(GoogleSignInAccount acct) {
+    public AuthDto authServer(GoogleSignInAccount acct) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id_token", acct.getIdToken());
 
         String response = getJSONResponse(LOGIN_ENDPOINT_GOOG, "POST", params, true);
         Gson gson = new Gson();
-        AuthDTO result = gson.fromJson(response, AuthDTO.class);
+        AuthDto result = gson.fromJson(response, AuthDto.class);
         return result;
     }
 
 
-    private AuthDTO authServer(String token, String loginEndpoint){
+    private AuthDto authServer(String token, String loginEndpoint){
         HashMap<String, String> params = new HashMap<>();
         params.put("id_token", token);
 
         String response = getJSONResponse(loginEndpoint, "POST", params, true);
         Gson gson = new Gson();
-        AuthDTO result = gson.fromJson(response, AuthDTO.class);
+        AuthDto result = gson.fromJson(response, AuthDto.class);
         return result;
     }
 
-    public AuthDTO authServer(AccessToken token) {
+    public AuthDto authServer(AccessToken token) {
         return authServer(token.getToken(), LOGIN_ENDPOINT_FB);
     }
 
 
-    public PreferencesDTO getPreferences(String api_key) {
+    public PreferencesDto getPreferences(String api_key) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("api_key", api_key + "");
@@ -83,11 +83,11 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        PreferencesDTO result = gson.fromJson(response.toString(), PreferencesDTO.class);
+        PreferencesDto result = gson.fromJson(response.toString(), PreferencesDto.class);
         return result;
     }
 
-    public DBTagDTO[] getTag() {
+    public DBTagDto[] getTag() {
 
         // if cache is empty, make request to server
         if (tagModelsCache == null) {
@@ -131,7 +131,7 @@ public class ServerApi {
 
                     // parse accessToken object from json
                     Gson gson = new Gson();
-                    tagModelsCache = gson.fromJson(response.toString(), DBTagDTO[].class);
+                    tagModelsCache = gson.fromJson(response.toString(), DBTagDto[].class);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -145,7 +145,7 @@ public class ServerApi {
 
     }
 
-    public DBSetPreferencesDTO setPreferences(
+    public DBSetPreferencesDto setPreferences(
             String api_key,
             int vegetarian, int vegan, int kosher, int gluten_free,
             int by_rating, int by_distance,
@@ -168,7 +168,7 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBSetPreferencesDTO result = gson.fromJson(response.toString(), DBSetPreferencesDTO.class);
+        DBSetPreferencesDto result = gson.fromJson(response.toString(), DBSetPreferencesDto.class);
 
         return result;
     }
@@ -182,7 +182,7 @@ public class ServerApi {
      * @param distance radius to search (in miles)
      * @return response with the updated preferences or an error
      */
-    public DBSetPreferencesDTO setPreferences(String api_key, DietType dietType, SortType sortType, int distance) {
+    public DBSetPreferencesDto setPreferences(String api_key, DietType dietType, SortType sortType, int distance) {
         int vegetarian = 0;
         int vegan = 0;
         int kosher = 0;
@@ -226,7 +226,7 @@ public class ServerApi {
                 distance);
     }
 
-    public DBFoodDTO[] getFood() {
+    public DBFoodDto[] getFood() {
 
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
@@ -237,11 +237,11 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBFoodDTO[] result = gson.fromJson(response.toString(), DBFoodDTO[].class);
+        DBFoodDto[] result = gson.fromJson(response.toString(), DBFoodDto[].class);
         return result;
     }
 
-    public DBLinkTagToFoodDTO getLinkTagToFood(int tag_id, int food_id){
+    public DBLinkTagToFoodDto getLinkTagToFood(int tag_id, int food_id){
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("food_id", food_id + "");
@@ -251,11 +251,11 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBLinkTagToFoodDTO result = gson.fromJson(response.toString(), DBLinkTagToFoodDTO.class);
+        DBLinkTagToFoodDto result = gson.fromJson(response.toString(), DBLinkTagToFoodDto.class);
         return result;
     }
 
-    public DBFoodTagDTO[] getFoodTags(int food_id) {
+    public DBFoodTagDto[] getFoodTags(int food_id) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("food_id", food_id + "");
@@ -265,14 +265,14 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBFoodTagDTO[] result = gson.fromJson(response.toString(), DBFoodTagDTO[].class);
+        DBFoodTagDto[] result = gson.fromJson(response.toString(), DBFoodTagDto[].class);
         return result;
     }
 
     /*Not for version 1.0
     * Returns a null pointer exception
     * */
-    public DBUsersFoodDTO[] getUsersFood(String api_key){
+    public DBUsersFoodDto[] getUsersFood(String api_key){
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
@@ -281,7 +281,7 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBUsersFoodDTO[] result = gson.fromJson(response.toString(), DBUsersFoodDTO[].class);
+        DBUsersFoodDto[] result = gson.fromJson(response.toString(), DBUsersFoodDto[].class);
 
         return result;
     }
@@ -292,7 +292,7 @@ public class ServerApi {
     * */
 
     /*NOT TESTABLE*/
-    public DBUserToFoodDTO[] getUserToFood(String api_key, int food_id, int liked, int disliked){
+    public DBUserToFoodDto[] getUserToFood(String api_key, int food_id, int liked, int disliked){
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<>();
         params.put("food_id", food_id + "");
@@ -306,11 +306,11 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBUserToFoodDTO[] result = gson.fromJson(response.toString(), DBUserToFoodDTO[].class);
+        DBUserToFoodDto[] result = gson.fromJson(response.toString(), DBUserToFoodDto[].class);
         return result;
     }
 
-    public DBCreateTagDTO createTag(String tag_name) {
+    public DBCreateTagDto createTag(String tag_name) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<>();
         params.put("tag_name", tag_name + "");
@@ -320,7 +320,7 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBCreateTagDTO result = gson.fromJson(response.toString(), DBCreateTagDTO.class);
+        DBCreateTagDto result = gson.fromJson(response.toString(), DBCreateTagDto.class);
         return result;
     }
 
