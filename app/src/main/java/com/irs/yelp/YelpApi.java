@@ -33,7 +33,7 @@ public class YelpApi {
     private final int CONNECTION_TRIES = 3;
     private final int CONNECTION_SUCCESS = 200;
     // access token for this session
-    private AccessTokenModel accessToken;
+    private AccessTokenDto accessToken;
 
     /**
      * Constructor. Connects to yelp api to get access token to be used in later queries
@@ -77,7 +77,7 @@ public class YelpApi {
 
                 // parse accessToken object from json
                 Gson gson = new Gson();
-                accessToken = gson.fromJson(response.toString(), AccessTokenModel.class);
+                accessToken = gson.fromJson(response.toString(), AccessTokenDto.class);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -103,9 +103,9 @@ public class YelpApi {
      * @param params list of params that should be specified according to Yelp Business Search Docs
      * @return response model containing the POJO corresponding to response or null if invalid call
      */
-    public BusinessResponseModel businessSearch(HashMap<String, String> params) {
+    public BusinessResponseDto businessSearch(HashMap<String, String> params) {
 
-        BusinessResponseModel result = null;
+        BusinessResponseDto result = null;
 
         try {
             // form the query string
@@ -165,7 +165,7 @@ public class YelpApi {
 
             // parse response json into result object
             Gson gson = new Gson();
-            result = gson.fromJson(response.toString(), BusinessResponseModel.class);
+            result = gson.fromJson(response.toString(), BusinessResponseDto.class);
 
             //System.err.println("API response");
             //System.err.println(response.toString());

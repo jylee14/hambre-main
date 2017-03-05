@@ -1,9 +1,9 @@
 package com.irs.server;
 
-public class DBCreateTagModel {
+public class DBCreateTagDto {
     private boolean error;
     private int id;
-    private DBTagModel tag;
+    private DBTagDto tag;
 
     public boolean error() {
         return error;
@@ -13,7 +13,7 @@ public class DBCreateTagModel {
         return id;
     }
 
-    public DBTagModel tag() {
+    public DBTagDto tag() {
         return tag;
     }
 }

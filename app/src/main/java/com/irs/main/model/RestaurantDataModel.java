@@ -1,7 +1,7 @@
 package com.irs.main.model;
 
-import com.irs.yelp.BusinessModel;
-import com.irs.yelp.BusinessResponseModel;
+import com.irs.yelp.BusinessDto;
+import com.irs.yelp.BusinessResponseDto;
 import com.irs.yelp.SortType;
 import com.irs.yelp.YelpApi;
 
@@ -24,7 +24,7 @@ public class RestaurantDataModel {
      * @param openNow     retrieve only open restaurants
      * @return list of restaurants
      */
-    public static BusinessModel[] getRestaurants(
+    public static BusinessDto[] getRestaurants(
             String location,
             String category,
             String query,
@@ -33,7 +33,7 @@ public class RestaurantDataModel {
             int count,
             boolean openNow) {
 
-        BusinessModel[] restaurants = new BusinessModel[count];
+        BusinessDto[] restaurants = new BusinessDto[count];
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
@@ -48,7 +48,7 @@ public class RestaurantDataModel {
 
         System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
-        BusinessResponseModel response = YelpApi.getInstance().businessSearch(params);
+        BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
 
         return response.businesses();
     }

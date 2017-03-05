@@ -3,7 +3,7 @@ package com.irs.yelp;
 /**
  * Model representing Yelp API Categories JSON object
  */
-public class CategoriesModel {
+public class CategoriesDto {
     String alias;
     String title;
 
