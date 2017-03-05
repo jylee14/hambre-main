@@ -1,5 +1,7 @@
 package com.irs.main.model;
 
+import android.location.Location;
+
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.BusinessResponseDto;
 import com.irs.yelp.SortType;
@@ -36,6 +38,7 @@ public class RestaurantDataModel {
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
+
         params.put("latitude", "" + latitude);
         params.put("longitude", "" + longitude);
         params.put("categories", ((category == null || category == "") ? "food" : category));
