@@ -41,7 +41,11 @@ public class PreferencesController extends AppCompatActivity implements Runnable
         RadioButton dist = (RadioButton) findViewById(R.id.dist);
         Button cont = (Button) findViewById(R.id.cont);
 
-        pref.check(R.id.rate);  //rate by default
+        if (UserModel.getInstance().getSortType() == SortType.distance) {
+            pref.check(R.id.dist);
+        } else {
+            pref.check(R.id.rate);
+        }
 
         rad.setProgress(user.getMaxDist());
         maxRad.setText("" + user.getMaxDist() + " mi");
@@ -109,6 +113,11 @@ public class PreferencesController extends AppCompatActivity implements Runnable
                     try {
                         run();
 
+                        // save preferences
+                        UserModel.getInstance().saveToDatabaseAsync();
+                        System.out.println("SAVED TO DB FROM PREFERENCES");
+
+                        // switch to food finder screen
                         Intent i = new Intent(PreferencesController.this, FoodFinderController.class);
                         i.putExtra("model", dbfm);
                         startActivity(i);

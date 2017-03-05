@@ -2,6 +2,7 @@ package com.irs.server;
 
 import android.net.Uri;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 import com.irs.main.DietType;
@@ -48,8 +49,8 @@ public class ServerApi {
         // TODO: get user api key here (design not finalized)
     }
 
-    public void authServer(GoogleSignInAccount acct) {
-        URL url = null;
+    public AuthResponse authServer(GoogleSignInAccount acct) {
+        /* URL url = null;
         HttpURLConnection client = null;
 
         try {
@@ -94,6 +95,14 @@ public class ServerApi {
         } catch (IOException e) {
             e.printStackTrace();
         }
+*/
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_token", acct.getIdToken());
+
+        String response = getJSONResponse(LOGIN_ENDPOINT, "POST", params, true);
+        Gson gson = new Gson();
+        AuthResponse result = gson.fromJson(response, AuthResponse.class);
+        return result;
     }
     
     public PreferencesModel getPreferences(String api_key) {
