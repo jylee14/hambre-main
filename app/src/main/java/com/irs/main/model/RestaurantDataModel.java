@@ -1,5 +1,7 @@
 package com.irs.main.model;
 
+import android.location.Location;
+
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.BusinessResponseDto;
 import com.irs.yelp.SortType;
@@ -12,13 +14,14 @@ import java.util.HashMap;
  * Restaurant POJO
  */
 public class RestaurantDataModel {
-
     private YelpApi api = YelpApi.getInstance();
+    private static double latitude;
+    private static double longitude;
+
 
     /**
      * Method to retrieve a list of restaurants based on a search query
      *
-     * @param searchQuery query to enter into yelp API
      * @param count       number of restaurants to retrieve (max 50)
      * @param sortType    how to sort the response
      * @param openNow     retrieve only open restaurants
@@ -37,8 +40,8 @@ public class RestaurantDataModel {
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        // TODO: get location from GPS
-        params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
+        params.put("longitude", "" + longitude);
+        params.put("latitude", "" + latitude);
         params.put("categories", ((category == null || category == "") ? "food" : category));
         params.put("term", query);
         params.put("sort_by", "" + sortType);
@@ -51,5 +54,13 @@ public class RestaurantDataModel {
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
 
         return response.businesses();
+    }
+
+    public static void setLatitude(double userLatitude){
+        latitude = userLatitude;
+    }
+
+    public static void setLongitude(double userLongitude){
+        longitude = userLongitude;
     }
 }

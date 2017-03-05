@@ -3,7 +3,7 @@ package com.irs.main.model;
 import android.os.AsyncTask;
 
 import com.irs.main.DietType;
-import com.irs.server.PreferencesDto;
+import com.irs.server.PreferencesDTO;
 import com.irs.server.ServerApi;
 import com.irs.yelp.SortType;
 
@@ -70,7 +70,7 @@ public class UserModel {
     public void loginAccount(String apiKey) {
         isGuest = false;
         ServerApi server = ServerApi.getInstance();
-        PreferencesDto preferences = server.getPreferences(apiKey);
+        PreferencesDTO preferences = server.getPreferences(apiKey);
         updateUser(
                 preferences.user().email(),
                 preferences.user().getDietType(),
