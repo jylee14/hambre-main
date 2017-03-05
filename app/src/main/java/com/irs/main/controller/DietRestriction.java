@@ -2,6 +2,7 @@ package com.irs.main.controller;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,7 +13,7 @@ import com.irs.main.DietType;
 import com.irs.main.R;
 import com.irs.main.model.UserModel;
 
-public class DietRestriction extends AppCompatActivity {
+public class DietRestriction extends FragmentActivity {
     private RadioGroup prefs;
     private Button save;
     private Button cancel;

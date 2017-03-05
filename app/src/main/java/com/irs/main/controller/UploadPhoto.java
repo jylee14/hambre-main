@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,7 +24,7 @@ import com.irs.main.R;
 //TODO add name field, add catagory (food, desert or fruit etc...) dropdown
 
 
-public class UploadPhoto extends AppCompatActivity{
+public class UploadPhoto extends FragmentActivity {
 
     private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -26,7 +27,7 @@ import com.squareup.picasso.Picasso;
 import java.lang.*;
 import java.util.HashMap;
 
-public class FoodFinderController extends AppCompatActivity {
+public class FoodFinderController extends FragmentActivity {
 
     private final Context context = this;
 

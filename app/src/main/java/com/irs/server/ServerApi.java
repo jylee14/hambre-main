@@ -2,6 +2,7 @@ package com.irs.server;
 
 import android.net.Uri;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
@@ -29,7 +30,8 @@ public class ServerApi {
 
     private final String SERVER_BASE = "http://159.203.246.214/irs/";
     private final String FOOD_ENDPOINT = SERVER_BASE + "randomFood.php";
-    private final String LOGIN_ENDPOINT = SERVER_BASE + "googleLogin.php";
+    private final String LOGIN_ENDPOINT_GOOG = SERVER_BASE + "googleLogin.php";
+    private final String LOGIN_ENDPOINT_FB = SERVER_BASE + "facebookLogin.php";
     private final String GET_PREFERENCES_ENDPOINT = SERVER_BASE + "preferences.php";
     private final String SET_PREFERENCES_ENDPOINT = SERVER_BASE + "changePreferences.php";
     private final String CREATE_TAG_ENDPOINT = SERVER_BASE + "createTag.php";
@@ -45,14 +47,28 @@ public class ServerApi {
     // cache to store food models so we only retrieve them once
     private DBTagModel[] tagModelsCache;
     private DBUsersFood[] usersFoodsCache;
+
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
+    }
+
+    private AuthResponse authServer(String token, String loginEndpoint){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_token", token);
+
+        String response = getJSONResponse(loginEndpoint, "POST", params, true);
+        Gson gson = new Gson();
+        AuthResponse result = gson.fromJson(response, AuthResponse.class);
+        return result;
+    }
+
+    public AuthResponse authServer(AccessToken token) {
+        return authServer(token.getToken(), LOGIN_ENDPOINT_FB);
     }
 
     public AuthResponse authServer(GoogleSignInAccount acct) {
         /* URL url = null;
         HttpURLConnection client = null;
-
         try {
             url = new URL(LOGIN_ENDPOINT);
             client = (HttpURLConnection) url.openConnection();
@@ -62,13 +78,9 @@ public class ServerApi {
             client.setRequestMethod("POST");
             client.setDoInput(true);
             client.setDoOutput(true);
-
             client.setRequestProperty("id_token", acct.getIdToken());
-
-
             Uri.Builder builder = new Uri.Builder().appendQueryParameter("id_token", acct.getIdToken());
             String query = builder.build().getEncodedQuery();
-
             OutputStream os = client.getOutputStream();
             BufferedWriter writer = new BufferedWriter(
                     new OutputStreamWriter(os, "UTF-8"));
@@ -76,35 +88,25 @@ public class ServerApi {
             writer.flush();
             writer.close();
             os.close();
-
             client.connect();
-
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             String inputLine;
             StringBuffer response = new StringBuffer();
-
             while ((inputLine = in.readLine()) != null) {
                 response.append(inputLine);
             }
             in.close();
             System.out.println(response);
             System.out.println("log in attempt");
-
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
 */
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id_token", acct.getIdToken());
-
-        String response = getJSONResponse(LOGIN_ENDPOINT, "POST", params, true);
-        Gson gson = new Gson();
-        AuthResponse result = gson.fromJson(response, AuthResponse.class);
-        return result;
+        return authServer(acct.getIdToken(), LOGIN_ENDPOINT_GOOG);
     }
-    
+
     public PreferencesModel getPreferences(String api_key) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
@@ -181,7 +183,7 @@ public class ServerApi {
             String api_key,
             int vegetarian, int vegan, int kosher, int gluten_free,
             int by_rating, int by_distance,
-            int distance){
+            int distance) {
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
@@ -207,7 +209,8 @@ public class ServerApi {
 
     /**
      * Set users preferences (convenience overload)
-     * @param api_key key of user
+     *
+     * @param api_key  key of user
      * @param dietType user diet
      * @param sortType sort type
      * @param distance radius to search (in miles)
@@ -250,7 +253,6 @@ public class ServerApi {
         }
 
 
-
         return setPreferences(
                 api_key,
                 vegetarian, vegan, kosher, gluten_free,
@@ -273,13 +275,13 @@ public class ServerApi {
         return result;
     }
 
-    public DBLinkTagToFoodModel getLinkTagToFood(int tag_id,int food_id){
+    public DBLinkTagToFoodModel getLinkTagToFood(int tag_id, int food_id) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("food_id", food_id + "");
         params.put("tag_id", tag_id + "");
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params,true);
+        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params, true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -304,12 +306,12 @@ public class ServerApi {
     /*Not for version 1.0
     * Returns a null pointer exception
     * */
-    public DBUsersFood[] getUsersFood(String api_key){
+    public DBUsersFood[] getUsersFood(String api_key) {
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params,true);
+        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params, true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -324,17 +326,17 @@ public class ServerApi {
     * */
 
     /*NOT TESTABLE*/
-    public DBUserToFoodModel[] getUserToFood(String api_key,int food_id,int liked, int disliked){
+    public DBUserToFoodModel[] getUserToFood(String api_key, int food_id, int liked, int disliked) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<>();
         params.put("food_id", food_id + "");
         params.put("api_key", api_key + "");
-        params.put("liked", liked +"");
-        params.put("disliked", disliked +"");
+        params.put("liked", liked + "");
+        params.put("disliked", disliked + "");
 
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params,true);
+        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params, true);
 
         // return parsed object
         Gson gson = new Gson();
@@ -358,9 +360,10 @@ public class ServerApi {
 
     /**
      * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
-     * @param urlBase url to call
-     * @param method String value either "GET" or "POST"
-     * @param params params to append to request
+     *
+     * @param urlBase     url to call
+     * @param method      String value either "GET" or "POST"
+     * @param params      params to append to request
      * @param writeToBody should write to body of request or head?
      * @return
      */
@@ -411,13 +414,13 @@ public class ServerApi {
 
 
                     if (!queryString.equals("")) {
-                            OutputStream os = client.getOutputStream();
-                            BufferedWriter writer = new BufferedWriter(
-                                    new OutputStreamWriter(os, "UTF-8"));
-                            writer.write(queryString);
-                            writer.flush();
-                            writer.close();
-                            os.close();
+                        OutputStream os = client.getOutputStream();
+                        BufferedWriter writer = new BufferedWriter(
+                                new OutputStreamWriter(os, "UTF-8"));
+                        writer.write(queryString);
+                        writer.flush();
+                        writer.close();
+                        os.close();
 
                     }
                 } else {
