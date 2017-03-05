@@ -1,11 +1,11 @@
 package com.irs.server;
 
-public class DBSetPreferencesModel {
+public class DBSetPreferencesDto {
     private String error;
-    private DBUserModel user;
+    private DBUserDto user;
 
     public String error(){return error;}
-    public DBUserModel user() {return user; }
+    public DBUserDto user() {return user; }
     @Override
     public String toString() {
         return "TODO";

@@ -1,6 +1,6 @@
 package com.irs.server;
 
-public class DBLinkTagToFoodModel {
+public class DBLinkTagToFoodDto {
     private String error;
     private int food_id;
     private int tag_id;
@@ -11,7 +11,7 @@ public class DBLinkTagToFoodModel {
 
 
     public String toString() {
-        return "DBFoodModel{" +
+        return "DBFoodDto{" +
                 "error='" + error + '\'' +
                 ", tag_id='" + tag_id + '\'' +
                 ", food_id='" + food_id + '\'' +

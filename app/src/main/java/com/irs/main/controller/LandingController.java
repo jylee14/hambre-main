@@ -23,7 +23,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.irs.main.R;
 import com.irs.main.model.UserModel;
-import com.irs.server.AuthResponse;
+import com.irs.server.AuthDto;
 import com.irs.server.ServerApi;
 
 public class LandingController extends AppCompatActivity {
@@ -92,7 +92,7 @@ public class LandingController extends AppCompatActivity {
             if (result.isSuccess()) {
                 GoogleSignInAccount acct = result.getSignInAccount();
                 System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
-                AuthResponse response = ServerApi.getInstance().authServer(acct);
+                AuthDto response = ServerApi.getInstance().authServer(acct);
                 System.out.println("GOT DATA FROM SERVER: " + response.user());
                 UserModel.getInstance().loginAccount(response.user().api_key());
                 System.out.println("LOGGED IN TO SERVER");

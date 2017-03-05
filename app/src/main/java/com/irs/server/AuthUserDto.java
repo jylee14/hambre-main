@@ -1,6 +1,6 @@
 package com.irs.server;
 
-public class AuthUserResponse {
+public class AuthUserDto {
     private String email;
     private String oauth_provider;
     private String api_key;

@@ -4,7 +4,7 @@ package com.irs.server;
  * Created by bryle on 3/1/2017.
  */
 
-public class DBTagModel {
+public class DBTagDto {
         private int tag_id;
         private String description;
 
@@ -17,7 +17,7 @@ public class DBTagModel {
 
         @Override
         public String toString() {
-            return "DBTagModel{" +
+            return "DBTagDto{" +
                     "tagId= " + tag_id +
                     ", description= " + description +
                     '}';

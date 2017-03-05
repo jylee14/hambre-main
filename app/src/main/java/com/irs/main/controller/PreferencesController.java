@@ -12,14 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.irs.main.R;
-import com.irs.main.model.FoodModel;
+import com.irs.main.model.FoodDto;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
 public class PreferencesController extends AppCompatActivity implements Runnable {
     private TextView maxRad;
 
-    private FoodModel[] dbfm;
+    private FoodDto[] dbfm;
     private final FoodFinderController controller = new FoodFinderController();
 
     private UserModel user = UserModel.getInstance();

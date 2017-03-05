@@ -6,23 +6,23 @@ import android.os.Parcelable;
 /**
  * Model defining structure of businesses in Yelp JSON response
  */
-public class BusinessModel implements Parcelable {
+public class BusinessDto implements Parcelable {
     double rating;
     String price;
     String phone;
     String id;
     boolean is_closed;
-    CategoriesModel[] categories;
+    CategoriesDto[] categories;
     int review_count;
     String name;
     String url;
-    CoordinatesModel coordinates;
+    CoordinatesDto coordinates;
     String coordinate;
     String image_url;
-    LocationModel location;
+    LocationDto location;
     String address;
 
-    protected BusinessModel(Parcel in) {
+    protected BusinessDto(Parcel in) {
         rating = in.readDouble();
         price = in.readString();
         phone = in.readString();
@@ -36,15 +36,15 @@ public class BusinessModel implements Parcelable {
         address = in.readString();
     }
 
-    public static final Creator<BusinessModel> CREATOR = new Creator<BusinessModel>() {
+    public static final Creator<BusinessDto> CREATOR = new Creator<BusinessDto>() {
         @Override
-        public BusinessModel createFromParcel(Parcel in) {
-            return new BusinessModel(in);
+        public BusinessDto createFromParcel(Parcel in) {
+            return new BusinessDto(in);
         }
 
         @Override
-        public BusinessModel[] newArray(int size) {
-            return new BusinessModel[size];
+        public BusinessDto[] newArray(int size) {
+            return new BusinessDto[size];
         }
     };
 
@@ -68,7 +68,7 @@ public class BusinessModel implements Parcelable {
         return is_closed;
     }
 
-    public CategoriesModel[] categories() {
+    public CategoriesDto[] categories() {
         return categories;
     }
 
@@ -84,7 +84,7 @@ public class BusinessModel implements Parcelable {
         return url;
     }
 
-    public CoordinatesModel coordinates() {
+    public CoordinatesDto coordinates() {
         return coordinates;
     }
 
@@ -92,7 +92,7 @@ public class BusinessModel implements Parcelable {
         return image_url;
     }
 
-    public LocationModel location() {
+    public LocationDto location() {
         return location;
     }
 
@@ -139,8 +139,8 @@ public class BusinessModel implements Parcelable {
     }
 
 
-    public static BusinessModel[] toBusinessModel(Parcelable[] parcelables) {
-        BusinessModel[] businesses = new BusinessModel[parcelables.length];
+    public static BusinessDto[] toBusinessModel(Parcelable[] parcelables) {
+        BusinessDto[] businesses = new BusinessDto[parcelables.length];
         System.arraycopy(parcelables, 0, businesses, 0, parcelables.length);
         return businesses;
     }

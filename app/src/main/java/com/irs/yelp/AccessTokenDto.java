@@ -3,7 +3,7 @@ package com.irs.yelp;
 /**
  * Model representing access token object Yelp returns on access token request
  */
-public class AccessTokenModel {
+public class AccessTokenDto {
     private String access_token;
     private String token_type;
     private int expires_in;

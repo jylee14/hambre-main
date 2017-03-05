@@ -1,14 +1,12 @@
 package com.irs.server;
 
-import com.irs.main.model.UserModel;
-
 /**
  * Represents Preferences Response from the user
  */
-public class PreferencesModel {
+public class PreferencesDto {
     private boolean error;
     private String error_msg;
-    private DBUserModel user;
+    private DBUserDto user;
 
     public boolean error() {
         return error;
@@ -18,7 +16,7 @@ public class PreferencesModel {
         return error_msg;
     }
 
-    public DBUserModel user() {
+    public DBUserDto user() {
         return user;
     }
 }

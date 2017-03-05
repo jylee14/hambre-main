@@ -6,7 +6,7 @@ import android.os.Parcelable;
 /**
  * The class represents the current food shown on the food selection activity.
  */
-public class FoodModel implements Parcelable {
+public class FoodDto implements Parcelable {
     private String name; // name of food
     private String culture; // culture of the food
     private String tag;
@@ -19,7 +19,7 @@ public class FoodModel implements Parcelable {
      * @param culture name of the culture of the food
      * @param link    image link to the picture of the food
      */
-    public FoodModel(String name, String culture, String tag, String link) {
+    public FoodDto(String name, String culture, String tag, String link) {
         this.name = name;
         this.culture = culture;
         this.tag = tag;
@@ -31,7 +31,7 @@ public class FoodModel implements Parcelable {
      *
      * @param in the parcel that we use to construct the food
      */
-    public FoodModel(Parcel in) {
+    public FoodDto(Parcel in) {
         this.name = in.readString();
         this.culture = in.readString();
         this.tag = in.readString();
@@ -45,7 +45,7 @@ public class FoodModel implements Parcelable {
     /**
      * Temporary getter for culture until db is finished
      *
-     * @return the culture of the FoodModel
+     * @return the culture of the FoodDto
      */
     public String getCulture() {
         return culture;
@@ -54,13 +54,13 @@ public class FoodModel implements Parcelable {
     public String getTag() { return this.tag; }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
-    public static final Parcelable.Creator<FoodModel> CREATOR = new Parcelable.Creator<FoodModel>() {
-        public FoodModel createFromParcel(Parcel in) {
-            return new FoodModel(in);
+    public static final Parcelable.Creator<FoodDto> CREATOR = new Parcelable.Creator<FoodDto>() {
+        public FoodDto createFromParcel(Parcel in) {
+            return new FoodDto(in);
         }
 
-        public FoodModel[] newArray(int size) {
-            return new FoodModel[size];
+        public FoodDto[] newArray(int size) {
+            return new FoodDto[size];
         }
     };
 
@@ -80,14 +80,14 @@ public class FoodModel implements Parcelable {
         dest.writeString(link);
     }
 
-    public static FoodModel[] toFoodModel(Parcelable[] parcelables) {
-        FoodModel[] foods = new FoodModel[parcelables.length];
+    public static FoodDto[] toFoodModel(Parcelable[] parcelables) {
+        FoodDto[] foods = new FoodDto[parcelables.length];
         System.arraycopy(parcelables, 0, foods, 0, parcelables.length);
         return foods;
     }
 
     @Override
     public String toString() {
-        return "FoodModel{" + "name='" + name + '\'' + ", culture='" + culture + '\'' + ", link='" + link + '}';
+        return "FoodDto{" + "name='" + name + '\'' + ", culture='" + culture + '\'' + ", link='" + link + '}';
     }
 }
