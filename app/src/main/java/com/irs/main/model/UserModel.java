@@ -1,5 +1,7 @@
 package com.irs.main.model;
 
+import android.os.AsyncTask;
+
 import com.irs.main.DietType;
 import com.irs.server.PreferencesModel;
 import com.irs.server.ServerApi;
@@ -66,6 +68,7 @@ public class UserModel {
     }
 
     public void loginAccount(String apiKey) {
+        isGuest = false;
         ServerApi server = ServerApi.getInstance();
         PreferencesModel preferences = server.getPreferences(apiKey);
         updateUser(
@@ -75,6 +78,34 @@ public class UserModel {
                 preferences.user().distance(),
                 preferences.user().api_key());
 
+        System.out.println("UPDATE USER: " + this.sortType.name());
+
+    }
+
+    public void saveToDatabase() {
+        if (isGuest) {
+            return;
+        }
+        System.out.println("SAVE TO DB: " + this.maxDist);
+        ServerApi.getInstance().setPreferences(apiKey, dietType, sortType, maxDist);
+    }
+
+    public void saveToDatabaseAsync() {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            public Void doInBackground(Void... what) {
+                System.out.println("SAVING TO DB");
+                saveToDatabase();
+
+                // have to do this because return type is Void, thanks Java
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Void result) {
+                System.out.println("Updated User info in the database");
+            }
+        }.execute();
     }
 
     public void setName(String name) {

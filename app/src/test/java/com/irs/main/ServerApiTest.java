@@ -5,11 +5,13 @@ import com.irs.server.DBCreateTagModel;
 import com.irs.server.DBFoodModel;
 import com.irs.server.DBFoodTagModel;
 import com.irs.server.DBLinkTagToFoodModel;
+import com.irs.server.DBSetPreferencesModel;
 import com.irs.server.DBTagModel;
 import com.irs.server.DBUserToFoodModel;
 import com.irs.server.DBUsersFood;
 import com.irs.server.PreferencesModel;
 import com.irs.server.ServerApi;
+import com.irs.yelp.SortType;
 
 import org.junit.Test;
 
@@ -102,9 +104,8 @@ public class ServerApiTest {
     public void getPreferences_test() {
         ServerApi api = ServerApi.getInstance();
 
-        PreferencesModel preferencesModel = api.getPreferences("b0aab7dfbca43fc13dc5fdb8529fe7a0");
-        System.out.println(preferencesModel.user().api_key());
-
+        PreferencesModel preferencesModel = api.getPreferences("f2ea485bedb5a9dfc7a6cf372c748d68");
+        System.out.println(preferencesModel.user().distance());
     }
 
     // need a delete tag to test properly
@@ -114,5 +115,13 @@ public class ServerApiTest {
 
         // change tag name per test so there are no duplicates
         DBCreateTagModel model = api.createTag("peruvian");
+    }
+
+    @Test
+    public void setPreferences_test() {
+        ServerApi api = ServerApi.getInstance();
+
+        DBSetPreferencesModel setPreferencesModel = api.setPreferences("f2ea485bedb5a9dfc7a6cf372c748d68", DietType.Vegetarian, SortType.rating, 12);
+        System.out.println(setPreferencesModel.error() + " " + setPreferencesModel.user().distance());
     }
 }
