@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,7 +14,7 @@ import com.irs.main.R;
 import com.irs.yelp.BusinessDto;
 
 //TODO check into adding a distance and if they are open or closed currently
-public class SelectRestaurantController extends AppCompatActivity implements Runnable {
+public class SelectRestaurantController extends FragmentActivity implements Runnable {
 
     ListView list;
     BusinessDto[] businesses;

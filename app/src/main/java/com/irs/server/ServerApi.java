@@ -1,5 +1,6 @@
 package com.irs.server;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
 import com.irs.main.DietType;
@@ -24,7 +25,8 @@ public class ServerApi {
 
     private final String SERVER_BASE = "http://159.203.246.214/irs/";
     private final String FOOD_ENDPOINT = SERVER_BASE + "randomFood.php";
-    private final String LOGIN_ENDPOINT = SERVER_BASE + "googleLogin.php";
+    private final String LOGIN_ENDPOINT_GOOG = SERVER_BASE + "googleLogin.php";
+    private final String LOGIN_ENDPOINT_FB = SERVER_BASE + "facebookLogin.php";
     private final String GET_PREFERENCES_ENDPOINT = SERVER_BASE + "preferences.php";
     private final String SET_PREFERENCES_ENDPOINT = SERVER_BASE + "changePreferences.php";
     private final String CREATE_TAG_ENDPOINT = SERVER_BASE + "createTag.php";
@@ -38,69 +40,40 @@ public class ServerApi {
     private final int CONNECTION_TRIES = 3;
 
     // cache to store food models so we only retrieve them once
-    private DBTagDto[] tagModelsCache;
-    private DBUsersFoodDto[] usersFoodsCache;
+
+    private DBTagDTO[] tagModelsCache;
+    private DBUsersFoodDTO[] usersFoodsCache;
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
     }
 
-    public AuthDto authServer(GoogleSignInAccount acct) {
-        /* URL url = null;
-        HttpURLConnection client = null;
-
-        try {
-            url = new URL(LOGIN_ENDPOINT);
-            client = (HttpURLConnection) url.openConnection();
-            client.setRequestProperty("User-Agent", "Mozilla/5.0");
-            client.setReadTimeout(10000);
-            client.setConnectTimeout(15000);
-            client.setRequestMethod("POST");
-            client.setDoInput(true);
-            client.setDoOutput(true);
-
-            client.setRequestProperty("id_token", acct.getIdToken());
-
-
-            Uri.Builder builder = new Uri.Builder().appendQueryParameter("id_token", acct.getIdToken());
-            String query = builder.build().getEncodedQuery();
-
-            OutputStream os = client.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-            writer.write(query);
-            writer.flush();
-            writer.close();
-            os.close();
-
-            client.connect();
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            System.out.println(response);
-            System.out.println("log in attempt");
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
+    public AuthDTO authServer(GoogleSignInAccount acct) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id_token", acct.getIdToken());
 
-        String response = getJSONResponse(LOGIN_ENDPOINT, "POST", params, true);
+        String response = getJSONResponse(LOGIN_ENDPOINT_GOOG, "POST", params, true);
         Gson gson = new Gson();
-        AuthDto result = gson.fromJson(response, AuthDto.class);
+        AuthDTO result = gson.fromJson(response, AuthDTO.class);
         return result;
     }
-    
-    public PreferencesDto getPreferences(String api_key) {
+
+
+    private AuthDTO authServer(String token, String loginEndpoint){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_token", token);
+
+        String response = getJSONResponse(loginEndpoint, "POST", params, true);
+        Gson gson = new Gson();
+        AuthDTO result = gson.fromJson(response, AuthDTO.class);
+        return result;
+    }
+
+    public AuthDTO authServer(AccessToken token) {
+        return authServer(token.getToken(), LOGIN_ENDPOINT_FB);
+    }
+
+
+    public PreferencesDTO getPreferences(String api_key) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("api_key", api_key + "");
@@ -110,11 +83,11 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        PreferencesDto result = gson.fromJson(response.toString(), PreferencesDto.class);
+        PreferencesDTO result = gson.fromJson(response.toString(), PreferencesDTO.class);
         return result;
     }
 
-    public DBTagDto[] getTag() {
+    public DBTagDTO[] getTag() {
 
         // if cache is empty, make request to server
         if (tagModelsCache == null) {
@@ -158,7 +131,7 @@ public class ServerApi {
 
                     // parse accessToken object from json
                     Gson gson = new Gson();
-                    tagModelsCache = gson.fromJson(response.toString(), DBTagDto[].class);
+                    tagModelsCache = gson.fromJson(response.toString(), DBTagDTO[].class);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -172,11 +145,11 @@ public class ServerApi {
 
     }
 
-    public DBSetPreferencesDto setPreferences(
+    public DBSetPreferencesDTO setPreferences(
             String api_key,
             int vegetarian, int vegan, int kosher, int gluten_free,
             int by_rating, int by_distance,
-            int distance){
+            int distance) {
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
@@ -195,20 +168,21 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBSetPreferencesDto result = gson.fromJson(response.toString(), DBSetPreferencesDto.class);
+        DBSetPreferencesDTO result = gson.fromJson(response.toString(), DBSetPreferencesDTO.class);
 
         return result;
     }
 
     /**
      * Set users preferences (convenience overload)
-     * @param api_key key of user
+     *
+     * @param api_key  key of user
      * @param dietType user diet
      * @param sortType sort type
      * @param distance radius to search (in miles)
      * @return response with the updated preferences or an error
      */
-    public DBSetPreferencesDto setPreferences(String api_key, DietType dietType, SortType sortType, int distance) {
+    public DBSetPreferencesDTO setPreferences(String api_key, DietType dietType, SortType sortType, int distance) {
         int vegetarian = 0;
         int vegan = 0;
         int kosher = 0;
@@ -245,7 +219,6 @@ public class ServerApi {
         }
 
 
-
         return setPreferences(
                 api_key,
                 vegetarian, vegan, kosher, gluten_free,
@@ -253,7 +226,7 @@ public class ServerApi {
                 distance);
     }
 
-    public DBFoodDto[] getFood() {
+    public DBFoodDTO[] getFood() {
 
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
@@ -264,25 +237,25 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBFoodDto[] result = gson.fromJson(response.toString(), DBFoodDto[].class);
+        DBFoodDTO[] result = gson.fromJson(response.toString(), DBFoodDTO[].class);
         return result;
     }
 
-    public DBLinkTagToFoodDto getLinkTagToFood(int tag_id, int food_id){
+    public DBLinkTagToFoodDTO getLinkTagToFood(int tag_id, int food_id){
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("food_id", food_id + "");
         params.put("tag_id", tag_id + "");
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params,true);
+        String response = getJSONResponse(SET_TAG_FOOD_ENDPOINT, "GET", params, true);
 
         // return parsed object
         Gson gson = new Gson();
-        DBLinkTagToFoodDto result = gson.fromJson(response.toString(), DBLinkTagToFoodDto.class);
+        DBLinkTagToFoodDTO result = gson.fromJson(response.toString(), DBLinkTagToFoodDTO.class);
         return result;
     }
 
-    public DBFoodTagDto[] getFoodTags(int food_id) {
+    public DBFoodTagDTO[] getFoodTags(int food_id) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("food_id", food_id + "");
@@ -292,23 +265,23 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBFoodTagDto[] result = gson.fromJson(response.toString(), DBFoodTagDto[].class);
+        DBFoodTagDTO[] result = gson.fromJson(response.toString(), DBFoodTagDTO[].class);
         return result;
     }
 
     /*Not for version 1.0
     * Returns a null pointer exception
     * */
-    public DBUsersFoodDto[] getUsersFood(String api_key){
+    public DBUsersFoodDTO[] getUsersFood(String api_key){
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params,true);
+        String response = getJSONResponse(USERS_FOOD_ENDPOINT, "POST", params, true);
 
         // return parsed object
         Gson gson = new Gson();
-        DBUsersFoodDto[] result = gson.fromJson(response.toString(), DBUsersFoodDto[].class);
+        DBUsersFoodDTO[] result = gson.fromJson(response.toString(), DBUsersFoodDTO[].class);
 
         return result;
     }
@@ -319,25 +292,25 @@ public class ServerApi {
     * */
 
     /*NOT TESTABLE*/
-    public DBUserToFoodDto[] getUserToFood(String api_key, int food_id, int liked, int disliked){
+    public DBUserToFoodDTO[] getUserToFood(String api_key, int food_id, int liked, int disliked){
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<>();
         params.put("food_id", food_id + "");
         params.put("api_key", api_key + "");
-        params.put("liked", liked +"");
-        params.put("disliked", disliked +"");
+        params.put("liked", liked + "");
+        params.put("disliked", disliked + "");
 
 
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params,true);
+        String response = getJSONResponse(USER_TO_FOOD_ENDPOINT, "POST", params, true);
 
         // return parsed object
         Gson gson = new Gson();
-        DBUserToFoodDto[] result = gson.fromJson(response.toString(), DBUserToFoodDto[].class);
+        DBUserToFoodDTO[] result = gson.fromJson(response.toString(), DBUserToFoodDTO[].class);
         return result;
     }
 
-    public DBCreateTagDto createTag(String tag_name) {
+    public DBCreateTagDTO createTag(String tag_name) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<>();
         params.put("tag_name", tag_name + "");
@@ -347,23 +320,20 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        DBCreateTagDto result = gson.fromJson(response.toString(), DBCreateTagDto.class);
+        DBCreateTagDTO result = gson.fromJson(response.toString(), DBCreateTagDTO.class);
         return result;
     }
 
     /**
      * gets a json string, makes multiple connection attempts and works for arbitrary url/method/param combos
-     * @param urlBase url to call
-     * @param method String value either "GET" or "POST"
-     * @param params params to append to request
+     *
+     * @param urlBase     url to call
+     * @param method      String value either "GET" or "POST"
+     * @param params      params to append to request
      * @param writeToBody should write to body of request or head?
      * @return
      */
-    private String getJSONResponse(
-            String urlBase,
-            String method,
-            HashMap<String, String> params,
-            boolean writeToBody) {
+    private String getJSONResponse(String urlBase, String method, HashMap<String, String> params,boolean writeToBody) {
 
         String result = null;
 
@@ -406,13 +376,13 @@ public class ServerApi {
 
 
                     if (!queryString.equals("")) {
-                            OutputStream os = client.getOutputStream();
-                            BufferedWriter writer = new BufferedWriter(
-                                    new OutputStreamWriter(os, "UTF-8"));
-                            writer.write(queryString);
-                            writer.flush();
-                            writer.close();
-                            os.close();
+                        OutputStream os = client.getOutputStream();
+                        BufferedWriter writer = new BufferedWriter(
+                                new OutputStreamWriter(os, "UTF-8"));
+                        writer.write(queryString);
+                        writer.flush();
+                        writer.close();
+                        os.close();
 
                     }
                 } else {

@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -12,11 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.irs.main.R;
-import com.irs.main.model.FoodDto;
+import com.irs.main.model.FoodDTO;
 import com.irs.main.model.OnSwipeTouchListener;
 import com.irs.main.model.RestaurantDataModel;
 import com.irs.main.model.UserModel;
-import com.irs.server.DBFoodDto;
+import com.irs.server.DBFoodDTO;
 import com.irs.server.ServerApi;
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.YelpApi;
@@ -24,7 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.*;
 
-public class FoodFinderController extends AppCompatActivity {
+public class FoodFinderController extends FragmentActivity {
 
     private final Context context = this;
 
@@ -36,12 +37,12 @@ public class FoodFinderController extends AppCompatActivity {
     private YelpApi api;
     private Bundle bundle;
     private String culture;
-    private FoodDto[] gallery;
+    private FoodDTO[] gallery;
     private Animation animEnter, animLeave;
     // --Commented out by Inspection (3/1/17, 1:02 PM):private final String LOG_TAG = getClass().getSimpleName(); //for log
     private final String server = "http://159.203.246.214/irs/";
 
-    private FoodDto[] dbfm;
+    private FoodDTO[] dbfm;
     private Button uploadButton;
     private UserModel user = UserModel.getInstance();
 
@@ -60,13 +61,13 @@ public class FoodFinderController extends AppCompatActivity {
     private boolean reloadImages = true;
     //private Bitmap[] galleryImages;
 
-    private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
+    private class LoadRestaurantsTask extends AsyncTask<FoodDTO, Integer, BusinessDto[]> {
         @SafeVarargs
         @Override
-        protected final BusinessDto[] doInBackground(FoodDto...  params) {
+        protected final BusinessDto[] doInBackground(FoodDTO...  params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessDto[] response = null;
-            FoodDto food = params[0];
+            FoodDTO food = params[0];
             try {
                 System.out.println(culture);
                 // TODO: set gps based location in first param
@@ -114,7 +115,7 @@ public class FoodFinderController extends AppCompatActivity {
         bundle = getIntent().getExtras();
 
         try {
-            gallery = FoodDto.toFoodModel(bundle.getParcelableArray("model"));
+            gallery = FoodDTO.toFoodModel(bundle.getParcelableArray("model"));
             api = YelpApi.getInstance();
             mainView = (ImageView) findViewById(R.id.image);
 
@@ -166,15 +167,15 @@ public class FoodFinderController extends AppCompatActivity {
         }
     }
 
-    public FoodDto[] getFoodFromServer() {
+    public FoodDTO[] getFoodFromServer() {
         //connecting db to main
         ServerApi api = ServerApi.getInstance();
-        DBFoodDto[] DBFoodDtos = api.getFood();
-        FoodDto[] fromDB = new FoodDto[DBFoodDtos.length];
-        for (int i = 0; i < DBFoodDtos.length; i++) {
+        DBFoodDTO[] DBFoodDTOs = api.getFood();
+        FoodDTO[] fromDB = new FoodDTO[DBFoodDTOs.length];
+        for (int i = 0; i < DBFoodDTOs.length; i++) {
             try {
-                DBFoodDto tempDB = DBFoodDtos[i];
-                FoodDto temp = new FoodDto(tempDB.name(), tempDB.name(), tempDB.getTag(), "" + tempDB.path());
+                DBFoodDTO tempDB = DBFoodDTOs[i];
+                FoodDTO temp = new FoodDTO(tempDB.name(), tempDB.name(), tempDB.getTag(), "" + tempDB.path());
                 fromDB[i] = temp;
             } catch (Exception e) {
                 System.err.println("D'OH");

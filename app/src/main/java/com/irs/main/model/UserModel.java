@@ -24,7 +24,7 @@ public class UserModel {
     // type of sorting (rating by default)
     private SortType sortType = SortType.rating;
 
-    // maximum distance the user is willing to go to go to a restauraunt
+    // maximum distance the user is willing to go to go to a restaurant
     private int maxDist = 1;
 
     private String apiKey = "";
