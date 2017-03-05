@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -43,10 +44,10 @@ public class LandingController extends AppCompatActivity {
         StrictMode.setThreadPolicy(policy);
 
         setContentView(R.layout.activity_landing);
-
         facebookLogin();
         Button guest = (Button) findViewById(R.id.Guest);
         goog = (SignInButton) findViewById(R.id.Google);
+
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken("58151517395-7u4o0o77s2ff8dtbvio1v2tab2snf116.apps.googleusercontent.com")
@@ -71,6 +72,7 @@ public class LandingController extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
+
             }
         });
 
@@ -124,6 +126,7 @@ public class LandingController extends AppCompatActivity {
                 // populate UserModel using the apiKey (I will write a method for this)
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
                 System.out.println("Facebook Login Success!");
+
             }
 
             @Override
