@@ -162,6 +162,4 @@ public class LandingController extends FragmentActivity {
             Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
         }
     }
-
-
 }
