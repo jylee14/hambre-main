@@ -2,6 +2,7 @@ package com.irs.server;
 
 import android.net.Uri;
 
+import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
@@ -29,7 +30,8 @@ public class ServerApi {
 
     private final String SERVER_BASE = "http://159.203.246.214/irs/";
     private final String FOOD_ENDPOINT = SERVER_BASE + "randomFood.php";
-    private final String LOGIN_ENDPOINT = SERVER_BASE + "googleLogin.php";
+    private final String LOGIN_ENDPOINT_GOOG = SERVER_BASE + "googleLogin.php";
+    private final String LOGIN_ENDPOINT_FB = SERVER_BASE + "facebookLogin.php";
     private final String GET_PREFERENCES_ENDPOINT = SERVER_BASE + "preferences.php";
     private final String SET_PREFERENCES_ENDPOINT = SERVER_BASE + "changePreferences.php";
     private final String CREATE_TAG_ENDPOINT = SERVER_BASE + "createTag.php";
@@ -48,6 +50,20 @@ public class ServerApi {
 
     private ServerApi() {
         // TODO: get user api key here (design not finalized)
+    }
+
+    private AuthResponse authServer(String token, String loginEndpoint){
+        HashMap<String, String> params = new HashMap<>();
+        params.put("id_token", token);
+
+        String response = getJSONResponse(loginEndpoint, "POST", params, true);
+        Gson gson = new Gson();
+        AuthResponse result = gson.fromJson(response, AuthResponse.class);
+        return result;
+    }
+
+    public AuthResponse authServer(AccessToken token) {
+        return authServer(token.getToken(), LOGIN_ENDPOINT_FB);
     }
 
     public AuthResponse authServer(GoogleSignInAccount acct) {
@@ -88,13 +104,7 @@ public class ServerApi {
             e.printStackTrace();
         }
 */
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id_token", acct.getIdToken());
-
-        String response = getJSONResponse(LOGIN_ENDPOINT, "POST", params, true);
-        Gson gson = new Gson();
-        AuthResponse result = gson.fromJson(response, AuthResponse.class);
-        return result;
+        return authServer(acct.getIdToken(), LOGIN_ENDPOINT_GOOG);
     }
 
     public PreferencesModel getPreferences(String api_key) {
