@@ -3,7 +3,7 @@ package com.irs.server;
 /**
  * Model which represents a food_id tag_id pair
  */
-public class DBFoodTagDto {
+public class DBFoodTagDTO {
     private int food_id;
     private int tag_id;
 

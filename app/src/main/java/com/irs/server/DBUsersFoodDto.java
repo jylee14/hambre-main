@@ -1,6 +1,6 @@
 package com.irs.server;
 
-public class DBUsersFoodDto {
+public class DBUsersFoodDTO {
     private int user_id;
     private int food_id;
     private int liked;
@@ -16,7 +16,7 @@ public class DBUsersFoodDto {
     public int unliked(){return unliked;}
 
     public String toString() {
-        return "DBUsersFoodDto{" +
+        return "DBUsersFoodDTO{" +
                 "user_id='" + user_id +
                 ", food_id='" + food_id +
                 ", liked=" + liked +

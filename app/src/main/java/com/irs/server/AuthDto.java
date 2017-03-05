@@ -3,15 +3,15 @@ package com.irs.server;
 /**
  * Authorization response from backend
  */
-public class AuthDto {
+public class AuthDTO {
     private boolean error;
-    private AuthUserDto user;
+    private AuthUserDTO user;
 
     public boolean error() {
         return error;
     }
 
-    public AuthUserDto user() {
+    public AuthUserDTO user() {
         return user;
     }
 }

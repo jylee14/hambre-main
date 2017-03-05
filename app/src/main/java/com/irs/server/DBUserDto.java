@@ -7,7 +7,7 @@ import com.irs.yelp.SortType;
  * Represent a User model
  */
 
-public class DBUserDto {
+public class DBUserDTO {
     private int user_id;
     private String email;
     private String api_key;
