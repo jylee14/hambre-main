@@ -140,10 +140,6 @@ public class FoodFinderController extends FragmentActivity {
                     culture = gallery[index].getCulture();
                     //String tag = gallery[index].getTag();
 
-                    Intent intent = new Intent(context, UserLocationService.class);
-                    startActivityForResult(intent,1);
-
-
                     /*
                    UserLocationService location = new UserLocationService(getApplicationContext());
                    RestaurantDataModel.setLongitude(location.getLongitude());
