@@ -1,10 +1,15 @@
 package com.irs.main.controller;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -64,7 +69,7 @@ public class FoodFinderController extends FragmentActivity {
     private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
         @SafeVarargs
         @Override
-        protected final BusinessDto[] doInBackground(FoodDto...  params) {
+        protected final BusinessDto[] doInBackground(FoodDto... params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessDto[] response = null;
             FoodDto food = params[0];
@@ -102,10 +107,10 @@ public class FoodFinderController extends FragmentActivity {
 
         setContentView(R.layout.activity_food_finder);
 
-        uploadButton = (Button)findViewById(R.id.btn_upload);
-        uploadButton.setOnClickListener(new Button.OnClickListener(){
+        uploadButton = (Button) findViewById(R.id.btn_upload);
+        uploadButton.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this,
                         UploadPhoto.class);
                 startActivity(i);
@@ -135,9 +140,15 @@ public class FoodFinderController extends FragmentActivity {
                     culture = gallery[index].getCulture();
                     //String tag = gallery[index].getTag();
 
-                    UserLocationService location = new UserLocationService(getApplicationContext());
-                    RestaurantDataModel.setLongitude(location.getLongitude());
+                    Intent intent = new Intent(context, UserLocationService.class);
+                    startActivityForResult(intent,1);
+
+
+                    /*
+                   UserLocationService location = new UserLocationService(getApplicationContext());
+                   RestaurantDataModel.setLongitude(location.getLongitude());
                     RestaurantDataModel.setLatitude(location.getLatitude());
+                    */
 
                     // Load Restaurants in the background
                     new LoadRestaurantsTask().execute(gallery[index]);
