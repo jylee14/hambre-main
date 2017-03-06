@@ -75,6 +75,7 @@ public class UserLocationService extends Service implements LocationListener {
                     }
                 }
             }
+
             // if GPS Enabled get lat/long using GPS Services
             if (checkGPS) {
                 Toast.makeText(mContext, "GPS Is Enabled", Toast.LENGTH_SHORT).show();

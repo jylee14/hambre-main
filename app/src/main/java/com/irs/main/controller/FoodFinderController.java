@@ -136,6 +136,7 @@ public class FoodFinderController extends FragmentActivity {
                     //String tag = gallery[index].getTag();
 
                     UserLocationService location = new UserLocationService(getApplicationContext());
+                    System.err.println(location.loc);
                     RestaurantDataModel.setLongitude(location.getLongitude());
                     RestaurantDataModel.setLatitude(location.getLatitude());
 
