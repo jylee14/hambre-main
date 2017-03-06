@@ -12,14 +12,11 @@
 
     <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dp"
         android:id="@+id/image"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
 
-        android:layout_centerInParent="true"
         android:adjustViewBounds="true"
-        android:layout_weight="1"
+        android:layout_weight=".8"
         android:scaleType="fitCenter"
         android:cropToPadding="false" />
 
@@ -29,11 +26,24 @@
         android:orientation="horizontal">
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".8"
             android:id="@+id/btn_upload"
-            android:text="Upload Photo"/>
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginRight="5dp"
+            android:text="Upload Photo"
+            android:fontFamily="casual"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:text="settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:id="@+id/btn_settings"
+            android:textColor="@android:color/white"
+            android:fontFamily="casual" />
 
     </LinearLayout>
 </LinearLayout>

@@ -43,5 +43,6 @@
         android:text="Continue as Guest"
         android:layout_width="200dp"
         android:fontFamily="casual"
-        android:background="?android:attr/colorPressedHighlight" />
+        android:background="?android:attr/colorPressedHighlight"
+        android:textColor="@android:color/white" />
 </LinearLayout>
