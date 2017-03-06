@@ -15,6 +15,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.irs.main.R;
+import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 
@@ -60,8 +61,10 @@ public class RestaurantList extends ArrayAdapter<String> {
         //TODO this might block the UI thread.
         try {
             URL url = new URL(imageUrl[position]);
-            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            imageView.setImageBitmap(bmp);
+            //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            //imageView.setImageBitmap(bmp);
+
+            Picasso.with(context).load(url.toString()).into(imageView);
         }
         catch (Exception e){
             System.out.println("KAAAAAAAAAAAAAAAAAAAAHHHHNNNN!!!");
