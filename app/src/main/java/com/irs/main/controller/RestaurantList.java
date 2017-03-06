@@ -62,7 +62,7 @@ public class RestaurantList extends ArrayAdapter<String> {
         mapButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v){
-
+                openMaps("dummy coords", "dumm label");
             }
         });
 
