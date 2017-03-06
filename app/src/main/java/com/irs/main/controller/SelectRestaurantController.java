@@ -53,7 +53,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         Uri uri = Uri.parse(uriString);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
         startActivity(intent);
-    }
+    } 
 
     public void run() {
         businesses = BusinessDto.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
