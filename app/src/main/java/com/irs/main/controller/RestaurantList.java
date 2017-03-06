@@ -19,10 +19,6 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 
-/**
- * Created by jeff on 3/2/17.
- */
-
 public class RestaurantList extends ArrayAdapter<String> {
     private final Activity context;
     private final String []name;
