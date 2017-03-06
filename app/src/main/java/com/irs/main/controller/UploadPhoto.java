@@ -22,7 +22,7 @@ import com.irs.main.R;
  */
 
 //TODO add name field, add catagory (food, desert or fruit etc...) dropdown
-
+//TODO save the photo to the database
 
 public class UploadPhoto extends FragmentActivity {
 
