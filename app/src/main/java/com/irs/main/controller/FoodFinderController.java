@@ -1,20 +1,16 @@
 package com.irs.main.controller;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.irs.main.R;
@@ -49,6 +45,7 @@ public class FoodFinderController extends FragmentActivity {
 
     private FoodDto[] dbfm;
     private Button uploadButton;
+    private Button settingsButton;
     private UserModel user = UserModel.getInstance();
 
     private final Thread getFoodThread = new Thread() {
@@ -69,7 +66,7 @@ public class FoodFinderController extends FragmentActivity {
     private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
         @SafeVarargs
         @Override
-        protected final BusinessDto[] doInBackground(FoodDto... params) {
+        protected final BusinessDto[] doInBackground(FoodDto...  params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessDto[] response = null;
             FoodDto food = params[0];
@@ -107,18 +104,32 @@ public class FoodFinderController extends FragmentActivity {
 
         setContentView(R.layout.activity_food_finder);
 
-        uploadButton = (Button) findViewById(R.id.btn_upload);
-        uploadButton.setOnClickListener(new Button.OnClickListener() {
+        uploadButton = (Button)findViewById(R.id.btn_upload);
+        uploadButton.setOnClickListener(new Button.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 Intent i = new Intent(FoodFinderController.this,
                         UploadPhoto.class);
                 startActivity(i);
             }
         });
 
+        settingsButton = (Button)findViewById(R.id.btn_settings);
+        settingsButton.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent i = new Intent(FoodFinderController.this,
+                        PreferencesController.class);
+                startActivity(i);
+            }
+        });
+
         bundle = getIntent().getExtras();
 
+        swipeAnimation();
+    }
+
+    private void swipeAnimation() {
         try {
             gallery = FoodDto.toFoodModel(bundle.getParcelableArray("model"));
             api = YelpApi.getInstance();
@@ -126,30 +137,7 @@ public class FoodFinderController extends FragmentActivity {
 
             Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
 
-            mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderController.this) {
-                public void onSwipeLeft() {
-                    mainView.startAnimation(animLeave);
-                    index++;
-                    if (index == gallery.length) {
-                        getFoodThread.run();
-                        index = 0; //(index + 1);
-                    }
-                }
-
-                public void onSwipeRight() {
-                    culture = gallery[index].getCulture();
-                    //String tag = gallery[index].getTag();
-
-
-                   UserLocationService location = new UserLocationService(getApplicationContext());
-                   RestaurantDataModel.setLongitude(location.getLongitude());
-                    RestaurantDataModel.setLatitude(location.getLatitude());
-
-
-                    // Load Restaurants in the background
-                    new LoadRestaurantsTask().execute(gallery[index]);
-                }
-            });
+            setSwipeTouchListener();
 
             animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
             animLeave = AnimationUtils.loadAnimation(this, R.anim.animation_leave);
@@ -175,6 +163,31 @@ public class FoodFinderController extends FragmentActivity {
             startActivity(new Intent(FoodFinderController.this, Error.class));
             e.printStackTrace();
         }
+    }
+
+    private void setSwipeTouchListener() {
+        mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderController.this) {
+            public void onSwipeLeft() {
+                mainView.startAnimation(animLeave);
+                index++;
+                if (index == gallery.length) {
+                    getFoodThread.run();
+                    index = 0; //(index + 1);
+                }
+            }
+
+            public void onSwipeRight() {
+                culture = gallery[index].getCulture();
+                //String tag = gallery[index].getTag();
+
+                UserLocationService location = new UserLocationService(getApplicationContext());
+                RestaurantDataModel.setLongitude(location.getLongitude());
+                RestaurantDataModel.setLatitude(location.getLatitude());
+
+                // Load Restaurants in the background
+                new LoadRestaurantsTask().execute(gallery[index]);
+            }
+        });
     }
 
     public FoodDto[] getFoodFromServer() {
