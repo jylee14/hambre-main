@@ -1,5 +1,8 @@
 package com.irs.main;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.irs.main.model.FoodDto;
 import com.irs.server.DBCreateTagDto;
 import com.irs.server.DBFoodDto;
@@ -122,5 +125,11 @@ public class ServerApiTest {
 
         DBSetPreferencesDto setPreferencesModel = api.setPreferences("f2ea485bedb5a9dfc7a6cf372c748d68", DietType.Vegetarian, SortType.rating, 12);
         System.out.println(setPreferencesModel.error() + " " + setPreferencesModel.user().distance());
+    }
+
+    @Test
+    public void uploadFood_test() {
+        ServerApi.getInstance().uploadFood(null, "Big_Mac_hamburger.jpg", "big mac", "american", "none",
+                "220d763d2aa724c6a59d5649138a0211", 0, 0, 0, 0);
     }
 }
