@@ -331,19 +331,18 @@ public class ServerApi {
         return result;
     }
 
-    public byte[] convertBitmapToString(Bitmap bitmap) {
+    public byte[] convertBitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte [] bytes = byteArrayOutputStream.toByteArray();
         return bytes;
-
     }
 
     public String uploadFood(
             Bitmap picture, String pictureName, String name, String culture,
             String category, String api_key,
             int vegetarian, int vegan, int kosher, int gluten_free) {
-        byte[] imageString = convertBitmapToString(picture);
+        byte[] imageString = convertBitmapToBytes(picture);
 
         // hope this works
 
