@@ -17,14 +17,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="5dp"
-                android:textSize="10pt"
-
-                />
+                android:textSize="10pt" />
 
         </LinearLayout>
          <LinearLayout
@@ -39,8 +38,8 @@
                  android:paddingRight="8dp"
                  android:textColor="#259e1f"
                  android:textSize="9pt"
-                 android:textStyle="bold"
-                 />
+                 android:textStyle="bold" />
+
              <RatingBar
                  style="?android:attr/ratingBarStyleSmall"
                  android:layout_width="wrap_content"
@@ -49,8 +48,12 @@
                  android:id="@+id/rating"
                  android:paddingTop="10dp"
                  android:numStars="5"/>
-
          </LinearLayout>
-
     </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/map_button"
+        android:text="Open Map"/>
 </LinearLayout>
