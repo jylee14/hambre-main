@@ -33,7 +33,6 @@ public class LandingController extends FragmentActivity {
     private SignInButton goog;        //google login
     private Button guestButton;
     private GoogleApiClient mGoogleApiClient;
-    private CallbackManager cbmanager;
 
     private static final String TAG = "LoginActivity";
     private static final int GOOG_SIGN_IN = 9001;
@@ -93,20 +92,10 @@ public class LandingController extends FragmentActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 9001) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()) {
-                GoogleSignInAccount acct = result.getSignInAccount();
-                System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
-                AuthDto response = ServerApi.getInstance().authServer(acct);
-                System.out.println("GOT DATA FROM SERVER: " + response.user());
-                UserModel.getInstance().loginAccount(response.user().api_key());
-                System.out.println("LOGGED IN TO SERVER");
-            } else {
-                Log.d(TAG, "Google signin failed." + result.getStatus().getStatusCode());
-            }
+        if (requestCode == GOOG_SIGN_IN) {
+            googleLoginResult(data);
         } else {
-            cbmanager.onActivityResult(requestCode, resultCode, data);
+            FBGoogLoginModel.getFBManager().onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -117,7 +106,6 @@ public class LandingController extends FragmentActivity {
      * or "onError".
      */
     private void facebookLoginButton() {
-        cbmanager = CallbackManager.Factory.create();
         LoginButton fbButton = (LoginButton) findViewById(R.id.Facebook);
         fbButton.registerCallback(FBGoogLoginModel.getFBManager(), new FacebookCallback<LoginResult>() {
 

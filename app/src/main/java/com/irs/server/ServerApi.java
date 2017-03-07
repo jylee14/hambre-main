@@ -54,16 +54,6 @@ public class ServerApi {
         // TODO: get user api key here (design not finalized)
     }
 
-    public AuthDto authServer(GoogleSignInAccount acct) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("id_token", acct.getIdToken());
-
-        String response = getJSONResponse(LOGIN_ENDPOINT_GOOG, "POST", params, true);
-        Gson gson = new Gson();
-        AuthDto result = gson.fromJson(response, AuthDto.class);
-        return result;
-    }
-
 
     private AuthDto authServer(String token, String loginEndpoint){
         HashMap<String, String> params = new HashMap<>();
@@ -71,8 +61,11 @@ public class ServerApi {
 
         String response = getJSONResponse(loginEndpoint, "POST", params, true);
         Gson gson = new Gson();
-        AuthDto result = gson.fromJson(response, AuthDto.class);
-        return result;
+        return gson.fromJson(response, AuthDto.class);
+    }
+
+    public AuthDto authServer(GoogleSignInAccount acct) {
+        return authServer(acct.getIdToken(), LOGIN_ENDPOINT_GOOG);
     }
 
     public AuthDto authServer(AccessToken token) {
@@ -90,8 +83,7 @@ public class ServerApi {
 
         // return parsed object
         Gson gson = new Gson();
-        PreferencesDto result = gson.fromJson(response.toString(), PreferencesDto.class);
-        return result;
+        return gson.fromJson(response, PreferencesDto.class);
     }
 
     public DBTagDto[] getTag() {

@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,14 +28,13 @@ import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
 public class PreferencesController
-        extends AppCompatActivity
-        implements Runnable, android.location.LocationListener{
+        extends FragmentActivity
+        implements android.location.LocationListener{
 
     private final FoodFinderController controller = new FoodFinderController();
     private final int LOCATION_REQUEST_CODE = 101;
     private final int MAX_TRIES = 2;
     private TextView maxRad;
-    private FoodDto[] dbfm;
     private UserModel user = UserModel.getInstance();
     public LocationManager mLocationManager;
     protected static Location loc;
@@ -103,15 +102,12 @@ public class PreferencesController
                     Toast.makeText(PreferencesController.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
-                        run();
                         // save preferences
                         UserModel.getInstance().saveToDatabaseAsync();
                         System.out.println("SAVED TO DB FROM PREFERENCES");
 
                         // switch to food finder screen
-                        Intent i = new Intent(PreferencesController.this, FoodFinderController.class);
-                        i.putExtra("model", dbfm);
-                        startActivity(i);
+                        startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
                     } catch (Exception e) {
                         startActivity(new Intent(PreferencesController.this, Error.class));
                     }
@@ -140,10 +136,6 @@ public class PreferencesController
                 maxRad.setText(user.getMaxDist() + " mi");
             }
         });
-    }
-
-    public void run() {
-        dbfm = controller.getFoodFromServer();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

@@ -54,7 +54,6 @@ public class FoodFinderController extends FragmentActivity {
 
             // copy database foodmodels into gallery array
             System.arraycopy(dbfm, 0, gallery, 0, gallery.length);
-
             reloadImages = true;
         }
     };
@@ -69,17 +68,15 @@ public class FoodFinderController extends FragmentActivity {
             BusinessDto[] response = null;
             FoodDto food = params[0];
             try {
-                System.out.println(culture);
-                // TODO: set gps based location in first param
                 response = RestaurantDataModel.getRestaurants(
                         food.getTag(), food.getCulture(),
                         UserModel.getInstance().getSortType(),
                         UserModel.getInstance().getMaxDist() * METERS_PER_MILE,
                         LIMIT, false);
-                System.out.println("Response: " + response[0].name());
+                //System.out.println("Response: " + response[0].name());
             } catch (Exception e) {
                 System.out.println("MAYBE I WASN'T TRYING HARD ENOUGH");
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             System.out.println("finished loading restaurants");
             return response;
@@ -121,7 +118,6 @@ public class FoodFinderController extends FragmentActivity {
         });
 
         bundle = getIntent().getExtras();
-
         swipeAnimation();
     }
 
@@ -157,7 +153,7 @@ public class FoodFinderController extends FragmentActivity {
         } catch (Exception e) {
             System.err.println("Ayy LMAO");
             startActivity(new Intent(FoodFinderController.this, Error.class));
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -174,12 +170,6 @@ public class FoodFinderController extends FragmentActivity {
 
             public void onSwipeRight() {
                 culture = gallery[index].getCulture();
-                //String tag = gallery[index].getTag();
-
-                Location mloc = PreferencesController.loc;
-                Toast.makeText(context, mloc.getLatitude() + ", " + mloc.getLongitude(), Toast.LENGTH_SHORT).show();
-                RestaurantDataModel.setLongitude(mloc.getLongitude());
-                RestaurantDataModel.setLatitude(mloc.getLatitude());
 
                 // Load Restaurants in the background
                 new LoadRestaurantsTask().execute(gallery[index]);
@@ -188,7 +178,6 @@ public class FoodFinderController extends FragmentActivity {
     }
 
     public FoodDto[] getFoodFromServer() {
-        //connecting db to main
         ServerApi api = ServerApi.getInstance();
         DBFoodDto[] DBFoodDtos = api.getFood();
         FoodDto[] fromDB = new FoodDto[DBFoodDtos.length];
@@ -199,7 +188,7 @@ public class FoodFinderController extends FragmentActivity {
                 fromDB[i] = temp;
             } catch (Exception e) {
                 System.err.println("D'OH");
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
         return fromDB;

@@ -1,5 +1,6 @@
 package com.irs.main.model;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
@@ -26,5 +27,9 @@ public class FBGoogLoginModel {
             cbmanager = CallbackManager.Factory.create();
         }
         return cbmanager;
+    }
+
+    public static boolean loggedIn(){
+        return AccessToken.getCurrentAccessToken() != null;
     }
 }
