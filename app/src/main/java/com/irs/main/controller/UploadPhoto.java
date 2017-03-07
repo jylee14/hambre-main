@@ -24,7 +24,7 @@ import com.irs.server.ServerApi;
  */
 
 //TODO add name field, add catagory (food, desert or fruit etc...) dropdown
-
+//TODO save the photo to the database
 
 public class UploadPhoto extends FragmentActivity {
 
@@ -188,7 +188,7 @@ public class UploadPhoto extends FragmentActivity {
                 pickImage();
            }
         });
-        saveButton = (Button)findViewById(R.id.save_photo_buttton);
+        saveButton = (Button)findViewById(R.id.save_photo_button);
         saveButton.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v){

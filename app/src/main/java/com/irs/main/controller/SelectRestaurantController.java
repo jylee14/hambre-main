@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import com.irs.main.R;
 import com.irs.yelp.BusinessDto;
+import com.irs.yelp.CoordinatesDto;
 
 //TODO check into adding a distance and if they are open or closed currently
 public class SelectRestaurantController extends FragmentActivity implements Runnable {
@@ -23,6 +24,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
     String [] imageUrl;
     double [] ratings;
     String [] prices;
+    CoordinatesDto[] coordinates;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +55,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         Uri uri = Uri.parse(uriString);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
         startActivity(intent);
-    }
+    } 
 
     public void run() {
         businesses = BusinessDto.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
@@ -62,16 +64,19 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         imageUrl = new String[businesses.length];
         ratings = new double[businesses.length];
         prices = new String[businesses.length];
+        coordinates = new CoordinatesDto[businesses.length];
+
         for(int i = 0; i < businesses.length; i++){
             names[i] = businesses[i].name();
             url[i] = businesses[i].url();
             imageUrl[i] = businesses[i].image_url();
             ratings[i] = businesses[i].rating();
             prices[i] = businesses[i].price();
+            coordinates[i] = businesses[i].coordinates();
         }
         RestaurantList adapter = new
                 RestaurantList(SelectRestaurantController.this,
-                names, url, imageUrl, ratings, prices);
+                names, url, imageUrl, ratings, prices, coordinates);
         list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);
 
