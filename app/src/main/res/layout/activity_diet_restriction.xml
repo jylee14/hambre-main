@@ -74,20 +74,27 @@
 
         <Button
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".33"
-            android:layout_gravity="center|bottom"
-            android:text="Cancel"
-            android:id="@+id/cancel"/>
-
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
             android:layout_weight=".33"
             android:layout_gravity="center|bottom"
             android:text="Save"
-            android:id="@+id/save"/>
+            android:id="@+id/save"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginRight="2dp"
+            android:fontFamily="monospace"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:layout_width="4dp"
+            android:layout_height="45dp"
+            android:layout_weight=".33"
+            android:layout_gravity="center|bottom"
+            android:text="Cancel"
+            android:id="@+id/cancel"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginLeft="2dp"
+            android:fontFamily="monospace"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 </LinearLayout>

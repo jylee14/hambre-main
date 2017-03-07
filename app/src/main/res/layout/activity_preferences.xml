@@ -23,6 +23,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Dietary Preferences"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"
+        android:fontFamily="monospace"
         android:layout_margin="30dp"
         android:id="@+id/DPref"/>
 
@@ -96,9 +99,12 @@
 
         <Button
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:text="Continue"
+            android:layout_height="45dp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@android:color/white"
+            android:fontFamily="monospace"
             android:textSize="18sp"
             android:id="@+id/cont"/>
     </LinearLayout>
