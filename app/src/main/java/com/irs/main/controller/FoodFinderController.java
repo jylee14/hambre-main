@@ -72,7 +72,7 @@ public class FoodFinderController extends FragmentActivity {
                 System.out.println(culture);
                 // TODO: set gps based location in first param
                 response = RestaurantDataModel.getRestaurants(
-                        "", food.getTag(), food.getCulture(),
+                        food.getTag(), food.getCulture(),
                         UserModel.getInstance().getSortType(),
                         UserModel.getInstance().getMaxDist() * METERS_PER_MILE,
                         LIMIT, false);
