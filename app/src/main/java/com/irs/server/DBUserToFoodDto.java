@@ -1,6 +1,6 @@
 package com.irs.server;
 
-public class DBUserToFoodDto {
+public class DBUserToFoodDTO {
     private int user_id;
     private int food_id;
     private int liked;
@@ -19,7 +19,7 @@ public class DBUserToFoodDto {
 
     @Override
     public String toString() {
-        return "DBFoodDto{" +
+        return "DBFoodDTO{" +
                 "food_id='" + food_id +
                 ", user_id='" + user_id +
                 "liked='" + liked +

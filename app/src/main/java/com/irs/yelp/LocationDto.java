@@ -3,7 +3,7 @@ package com.irs.yelp;
 /**
  * Model representing location object in JSON response from Yelp API
  */
-public class LocationDto {
+public class LocationDTO {
     private String city;
     private String country;
     private String address2;

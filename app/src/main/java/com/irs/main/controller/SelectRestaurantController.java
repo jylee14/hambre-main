@@ -11,13 +11,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import com.irs.main.R;
-import com.irs.yelp.BusinessDto;
+import com.irs.yelp.BusinessDTO;
 
 //TODO check into adding a distance and if they are open or closed currently
 public class SelectRestaurantController extends FragmentActivity implements Runnable {
 
     ListView list;
-    BusinessDto[] businesses;
+    BusinessDTO[] businesses;
     String [] names;
     String [] url;
     String [] imageUrl;
@@ -56,7 +56,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
     }
 
     public void run() {
-        businesses = BusinessDto.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
+        businesses = BusinessDTO.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
         names = new String[businesses.length];
         url = new String[businesses.length];
         imageUrl = new String[businesses.length];

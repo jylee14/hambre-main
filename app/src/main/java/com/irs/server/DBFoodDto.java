@@ -4,7 +4,7 @@ package com.irs.server;
  * Model for food objects retrieved from db
  */
 
-public class DBFoodDto {
+public class DBFoodDTO {
     private int food_id;
     private String name;
     private String description;
@@ -49,7 +49,7 @@ public class DBFoodDto {
 
     @Override
     public String toString() {
-        return "DBFoodDto{" +
+        return "DBFoodDTO{" +
                 "name='" + name + '\'' +
                 ", path='" + path + '\'' +
                 ", vegetarian=" + vegetarian +

@@ -6,25 +6,25 @@ import android.os.Parcelable;
 /**
  * Model representing Yelp response to a business search request
  */
-public class BusinessResponseDto implements Parcelable {
+public class BusinessResponseDTO implements Parcelable {
     private String total;
-    private BusinessDto[] businesses;
-    private RegionDto region;
+    private BusinessDTO[] businesses;
+    private RegionDTO region;
 
-    protected BusinessResponseDto(Parcel in) {
+    protected BusinessResponseDTO(Parcel in) {
         total = in.readString();
-        businesses = in.createTypedArray(BusinessDto.CREATOR);
+        businesses = in.createTypedArray(BusinessDTO.CREATOR);
     }
 
-    public static final Creator<BusinessResponseDto> CREATOR = new Creator<BusinessResponseDto>() {
+    public static final Creator<BusinessResponseDTO> CREATOR = new Creator<BusinessResponseDTO>() {
         @Override
-        public BusinessResponseDto createFromParcel(Parcel in) {
-            return new BusinessResponseDto(in);
+        public BusinessResponseDTO createFromParcel(Parcel in) {
+            return new BusinessResponseDTO(in);
         }
 
         @Override
-        public BusinessResponseDto[] newArray(int size) {
-            return new BusinessResponseDto[size];
+        public BusinessResponseDTO[] newArray(int size) {
+            return new BusinessResponseDTO[size];
         }
     };
 
@@ -32,11 +32,11 @@ public class BusinessResponseDto implements Parcelable {
         return total;
     }
 
-    public BusinessDto[] businesses() {
+    public BusinessDTO[] businesses() {
         return businesses;
     }
 
-    public RegionDto region() {
+    public RegionDTO region() {
         return region;
     }
 

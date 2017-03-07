@@ -1,7 +1,7 @@
 package com.irs.main;
 
-import com.irs.yelp.BusinessDto;
-import com.irs.yelp.BusinessResponseDto;
+import com.irs.yelp.BusinessDTO;
+import com.irs.yelp.BusinessResponseDTO;
 import com.irs.yelp.YelpApi;
 
 import org.junit.Test;
@@ -23,9 +23,9 @@ public class YelpApiTest {
         params.put("latitude", "37.7670169511878");
         params.put("longitude", "-122.42184275");
         params.put("radius_filter", "40000");
-        BusinessResponseDto businessResponse = api.businessSearch(params);
+        BusinessResponseDTO businessResponse = api.businessSearch(params);
 
-        for (BusinessDto business : businessResponse.businesses()) {
+        for (BusinessDTO business : businessResponse.businesses()) {
             System.out.println(business.name());
         }
     }
@@ -41,9 +41,9 @@ public class YelpApiTest {
         params.put("categories", "food");
         params.put("term", "japanese");
 
-        BusinessResponseDto businessResponse = api.businessSearch(params);
+        BusinessResponseDTO businessResponse = api.businessSearch(params);
 
-        for (BusinessDto business : businessResponse.businesses()) {
+        for (BusinessDTO business : businessResponse.businesses()) {
             System.out.println(business.toString());
         }
     }
