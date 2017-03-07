@@ -562,7 +562,7 @@ public class ServerApi {
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("THAT'S NOT ON FIRE");
+                System.out.println("COULD NOT CONNECT TO DB, TRYING AGAIN...");
             }
         }
 
