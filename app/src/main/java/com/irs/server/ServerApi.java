@@ -1,5 +1,8 @@
 package com.irs.server;
 
+import android.graphics.Bitmap;
+import android.util.Base64;
+
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.gson.Gson;
@@ -8,9 +11,13 @@ import com.irs.yelp.SortType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -32,10 +39,10 @@ public class ServerApi {
     private final String CREATE_TAG_ENDPOINT = SERVER_BASE + "createTag.php";
     private final String SET_TAG_FOOD_ENDPOINT = SERVER_BASE + "tagFood.php";
     private final String GET_TAGS_FOOD_ENDPOINT = SERVER_BASE + "getTagsOfFood.php";
-    private final String LIKE_FOOD_ENDPOINT = SERVER_BASE + "createFood.php";
     private final String TAG_ENDPOINT = SERVER_BASE + "getTags.php";
     private final String USER_TO_FOOD_ENDPOINT = SERVER_BASE + "userToFood.php";
     private final String USERS_FOOD_ENDPOINT = SERVER_BASE + "getUserFoods.php";
+    private final String CREATE_FOOD_ENDPOINT = SERVER_BASE + "createFood.php";
 
     private final int CONNECTION_TRIES = 3;
 
@@ -321,6 +328,141 @@ public class ServerApi {
         // return parsed object
         Gson gson = new Gson();
         DBCreateTagDto result = gson.fromJson(response.toString(), DBCreateTagDto.class);
+        return result;
+    }
+
+    public byte[] convertBitmapToString(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte [] bytes = byteArrayOutputStream.toByteArray();
+        return bytes;
+
+    }
+
+    public String uploadFood(
+            Bitmap picture, String pictureName, String name, String culture,
+            String category, String api_key,
+            int vegetarian, int vegan, int kosher, int gluten_free) {
+        byte[] imageString = convertBitmapToString(picture);
+
+        // hope this works
+
+        HashMap<String, String>  params = new HashMap<>();
+        String boundary = "BOUNDARY";
+    String imageType = "image/jpeg";
+
+        params.put("name", name);
+        params.put("culture", culture);
+        params.put("category", category);
+        params.put("api_key", api_key);
+        params.put("vegetarian", "" + vegetarian);
+        params.put("vegan", "" + vegan);
+        params.put("kosher", "" + kosher);
+        params.put("gluten_free","" + gluten_free);
+        params.put("submit", "submit");
+
+        String result = null;
+
+        // variables to verify connection
+        int tries = 0;
+        boolean connected = false;
+
+        while (tries < CONNECTION_TRIES) {
+            tries++;
+
+
+            URL url = null;
+            HttpURLConnection client = null;
+
+            // get access token
+            try {
+
+                url = new URL(CREATE_FOOD_ENDPOINT);
+                client = (HttpURLConnection) url.openConnection();
+                client.setRequestProperty("User-Agent", "Mozilla/5.0");
+                client.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+                client.setReadTimeout(10000);
+                client.setConnectTimeout(15000);
+                client.setRequestMethod("POST");
+                client.setDoInput(true);
+                client.setDoOutput(true);
+
+                DataOutputStream dataOS = new DataOutputStream(client.getOutputStream());
+
+                String imageQueryString = "";
+                String queryString = "";
+
+                // add picture
+                imageQueryString += "--"+ boundary + "\n";
+                imageQueryString  += "Content-Disposition: form-data;";
+                imageQueryString  += " name=\"picture\";";
+                imageQueryString  += " filename=\"" + pictureName + "\"";
+                imageQueryString  += "\n";
+                imageQueryString  += "Content-Type: " + imageType;
+                imageQueryString  += "\n";
+                imageQueryString  += "\n";
+                dataOS.writeBytes(imageQueryString);
+                dataOS.write(imageString);
+                dataOS.writeBytes("\n");
+                dataOS.writeBytes("\n");
+
+                Iterator<String> keys = params.keySet().iterator();
+                for (int i = 0; i < params.size(); i++) {
+                    String key = keys.next();
+                    String value = params.get(key);
+
+                    queryString += "--" + boundary + "\n";
+                    queryString += "Content-Disposition: form-data;";
+                    queryString += " name=\"" + key + "\"";
+                    queryString += "\n";
+                    queryString += "\n";
+                    queryString += value;
+                    queryString += "\n";
+                }
+                queryString += "--" + boundary + "--";
+
+
+                System.out.println("DATA BEING SENT TO SERVER ---------------");
+                System.out.println(queryString);
+                System.out.println("-----------------------------------------");
+
+                // Write queryString to the body
+                if (!queryString.equals("")) {
+                    dataOS.writeBytes(queryString);
+                    dataOS.flush();
+                    dataOS.close();
+                }
+
+                client.connect();
+
+                // read response
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                result = response.toString();
+                System.out.println(response);
+                System.out.println("log in attempt");
+
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("THAT'S NOT ON FIRE");
+            }
+        }
+
+        if (tries == CONNECTION_TRIES) {
+            System.out.println("fatal error");
+            // TODO: fatal exception here
+            // NO WIFI
+        }
+
         return result;
     }
 
