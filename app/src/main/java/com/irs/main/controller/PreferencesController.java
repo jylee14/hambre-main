@@ -29,13 +29,12 @@ import com.irs.yelp.SortType;
 
 public class PreferencesController
         extends FragmentActivity
-        implements Runnable, android.location.LocationListener{
+        implements android.location.LocationListener{
 
     private final FoodFinderController controller = new FoodFinderController();
     private final int LOCATION_REQUEST_CODE = 101;
     private final int MAX_TRIES = 2;
     private TextView maxRad;
-    private FoodDto[] dbfm;
     private UserModel user = UserModel.getInstance();
     public LocationManager mLocationManager;
     protected static Location loc;
@@ -103,15 +102,12 @@ public class PreferencesController
                     Toast.makeText(PreferencesController.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
-                        run();
                         // save preferences
                         UserModel.getInstance().saveToDatabaseAsync();
                         System.out.println("SAVED TO DB FROM PREFERENCES");
 
                         // switch to food finder screen
-                        Intent i = new Intent(PreferencesController.this, FoodFinderController.class);
-                        i.putExtra("model", dbfm);
-                        startActivity(i);
+                        startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
                     } catch (Exception e) {
                         startActivity(new Intent(PreferencesController.this, Error.class));
                     }
@@ -140,10 +136,6 @@ public class PreferencesController
                 maxRad.setText(user.getMaxDist() + " mi");
             }
         });
-    }
-
-    public void run() {
-        dbfm = controller.getFoodFromServer();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

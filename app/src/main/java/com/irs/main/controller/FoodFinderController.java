@@ -42,7 +42,7 @@ public class FoodFinderController extends FragmentActivity {
     private Animation animEnter, animLeave;
     private final String server = "http://159.203.246.214/irs/";
 
-    private FoodDto[] dbfm;
+    private static FoodDto[] dbfm;
     private Button uploadButton;
     private Button settingsButton;
     private UserModel user = UserModel.getInstance();
@@ -99,6 +99,7 @@ public class FoodFinderController extends FragmentActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_food_finder);
+        gallery = getFoodFromServer();
 
         uploadButton = (Button)findViewById(R.id.btn_upload);
         uploadButton.setOnClickListener(new Button.OnClickListener(){
@@ -120,14 +121,11 @@ public class FoodFinderController extends FragmentActivity {
             }
         });
 
-        bundle = getIntent().getExtras();
-
         swipeAnimation();
     }
 
     private void swipeAnimation() {
         try {
-            gallery = FoodDto.toFoodModel(bundle.getParcelableArray("model"));
             api = YelpApi.getInstance();
             mainView = (ImageView) findViewById(R.id.image);
 
@@ -187,7 +185,7 @@ public class FoodFinderController extends FragmentActivity {
         });
     }
 
-    public FoodDto[] getFoodFromServer() {
+    public static FoodDto[] getFoodFromServer() {
         //connecting db to main
         ServerApi api = ServerApi.getInstance();
         DBFoodDto[] DBFoodDtos = api.getFood();
@@ -203,5 +201,9 @@ public class FoodFinderController extends FragmentActivity {
             }
         }
         return fromDB;
+    }
+
+    public static void updateFoodArray(){
+        dbfm = getFoodFromServer();
     }
 }
