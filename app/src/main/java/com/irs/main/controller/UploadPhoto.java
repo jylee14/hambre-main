@@ -16,13 +16,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.irs.main.R;
+import com.irs.main.model.UserModel;
+import com.irs.server.ServerApi;
 
 /**
  * Created by jeff on 3/3/17.
  */
 
 //TODO add name field, add catagory (food, desert or fruit etc...) dropdown
-
+//TODO save the photo to the database
 
 public class UploadPhoto extends FragmentActivity {
 
@@ -43,6 +45,7 @@ public class UploadPhoto extends FragmentActivity {
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
         "Kosher", "Gluten Free"};
     private static final String[] categoryPaths = {"food", "desert", "fruit", "spicy"};
+    private String picName = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -192,8 +195,12 @@ public class UploadPhoto extends FragmentActivity {
                 try {
                     name = foodName.getText().toString();
                     System.out.println("Culture: " + culture + "\nDiet: " + diet +
-                            "\ncategory: " + category + "\nname: " + name);
+                            "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
                     Toast.makeText(UploadPhoto.this, "photo submitted!", Toast.LENGTH_SHORT).show();
+
+                    // upload image
+                    ServerApi.getInstance().uploadFood(pic, picName + ".jpg", name, culture, category, "220d763d2aa724c6a59d5649138a0211", 0, 0, 0, 0);
+
                     finish();
                 }
                 catch (Exception ex){
@@ -245,9 +252,20 @@ public class UploadPhoto extends FragmentActivity {
         }
         if (requestCode == 1) {
             final Bundle extras = data.getExtras();
+            System.out.println("BUNDLE: " + extras.toString());
+            if (extras != null) {
+                for (String key : extras.keySet()) {
+                    Object value = extras.get(key);
+                    System.out.println("Key: " + key);
+                    if (value != null) { System.out.println(" value: " + value.toString() + " class: " + value.getClass().getName());};
+                }
+            }
             if (extras != null) {
                 //Get image
                 pic = extras.getParcelable("data");
+                String uri = extras.getString("src_uri");
+                String [] parts = uri.split("/");
+                picName = parts[parts.length - 1];
                 selectedPic.setImageBitmap(pic);
             }
         }

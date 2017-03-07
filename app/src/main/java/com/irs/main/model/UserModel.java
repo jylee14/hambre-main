@@ -108,6 +108,11 @@ public class UserModel {
         }.execute();
     }
 
+    public void uploadPhoto() {
+        System.out.println("UPLOADING TO DB");
+        ServerApi.getInstance();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -161,5 +166,9 @@ public class UserModel {
 
     public void setApiKey(String apiKey) {
         this.apiKey = apiKey;
+    }
+
+    public String getApiKey() {
+        return apiKey;
     }
 }
