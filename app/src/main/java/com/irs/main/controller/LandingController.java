@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -49,6 +50,11 @@ public class LandingController extends FragmentActivity {
         facebookLoginButton();
         googleLoginButton();
         guestLogin();
+
+        UserLocationService location = new UserLocationService(LandingController.this);
+        double lat = location.getLatitude();
+        double lo = location.getLongitude();
+        Toast.makeText(getApplicationContext(),"Longitude:"+Double.toString(lo)+"\nLatitude:"+Double.toString(lat),Toast.LENGTH_SHORT).show();
     }
 
     private void guestLogin() {
