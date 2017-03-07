@@ -50,11 +50,6 @@ public class LandingController extends FragmentActivity {
         facebookLoginButton();
         googleLoginButton();
         guestLogin();
-
-        UserLocationService location = new UserLocationService(LandingController.this);
-        double lat = location.getLatitude();
-        double lo = location.getLongitude();
-        Toast.makeText(getApplicationContext(),"Longitude:"+Double.toString(lo)+"\nLatitude:"+Double.toString(lat),Toast.LENGTH_SHORT).show();
     }
 
     private void guestLogin() {

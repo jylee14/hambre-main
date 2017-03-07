@@ -4,6 +4,7 @@ import android.location.Location;
 
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.BusinessResponseDto;
+import com.irs.yelp.CoordinatesDto;
 import com.irs.yelp.SortType;
 import com.irs.yelp.YelpApi;
 
@@ -36,11 +37,12 @@ public class RestaurantDataModel {
 
         BusinessDto[] restaurants = new BusinessDto[count];
 
+        String coordinate = latitude + "," + longitude;
+
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        params.put("location", "9450%20Gilman%20Dr.%20La%20Jolla%20CA%2092092");
-        //params.put("latitude", "" + latitude);
-        //params.put("longitude", "" + longitude);
+        params.put("coordinates", coordinate);
+        params.put("longitude", "" + longitude);
         params.put("categories", ((category == null || category == "") ? "food" : category));
         params.put("term", query);
         params.put("sort_by", "" + sortType);
