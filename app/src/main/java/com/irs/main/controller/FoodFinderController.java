@@ -140,11 +140,11 @@ public class FoodFinderController extends FragmentActivity {
                     culture = gallery[index].getCulture();
                     //String tag = gallery[index].getTag();
 
-                    /*
+
                    UserLocationService location = new UserLocationService(getApplicationContext());
                    RestaurantDataModel.setLongitude(location.getLongitude());
                     RestaurantDataModel.setLatitude(location.getLatitude());
-                    */
+
 
                     // Load Restaurants in the background
                     new LoadRestaurantsTask().execute(gallery[index]);
