@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -27,7 +28,7 @@ import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
 public class PreferencesController
-        extends AppCompatActivity
+        extends FragmentActivity
         implements Runnable, android.location.LocationListener{
 
     private final FoodFinderController controller = new FoodFinderController();
