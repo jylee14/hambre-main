@@ -498,7 +498,6 @@ public class ServerApi {
                     client.setDoInput(true);
                     client.setDoOutput(true);
 
-
                     if (!queryString.equals("")) {
                         OutputStream os = client.getOutputStream();
                         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -536,6 +535,7 @@ public class ServerApi {
                 System.out.println(response);
                 System.out.println("log in attempt");
 
+                client.disconnect();
                 break;
             } catch (Exception e) {
                 //e.printStackTrace();
