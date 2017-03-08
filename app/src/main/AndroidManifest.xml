@@ -5,58 +5,66 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <activity android:name=".controller.LauncherController" android:configChanges="orientation"
+        <activity
+            android:name=".controller.LandingController"
+            android:configChanges="orientation"
+            android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-             <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".controller.LandingController"
-            android:label="@string/app_name"
+        <activity
+            android:name=".controller.DietRestriction"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".controller.DietRestriction"
             android:label="@string/app_name"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".controller.PreferencesController"
+        <activity
+            android:name=".controller.PreferencesController"
+            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".controller.FoodFinderController"
+        <activity
+            android:name=".controller.FoodFinderController"
+            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".controller.SelectRestaurantController"
+        <activity
+            android:name=".controller.SelectRestaurantController"
+            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".controller.Error"
+        <activity
+            android:name=".controller.Error"
+            android:configChanges="orientation"
             android:label="@string/app_name"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".controller.UploadPhoto"
+        <activity
+            android:name=".controller.UploadPhoto"
+            android:configChanges="orientation"
             android:label="UploadPhoto"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
 
-        <uses-feature android:name="android.hardware.camera"
+        <uses-feature
+            android:name="android.hardware.camera"
             android:required="true" />
     </application>
 </manifest>
