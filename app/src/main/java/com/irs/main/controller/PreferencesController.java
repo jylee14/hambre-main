@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.irs.main.R;
+import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
@@ -52,9 +53,22 @@ public class PreferencesController extends FragmentActivity{
                 user.setSortType(SortType.distance);
             }
         });
+        setLogout();
         distanceBar(rad);
         toNextPage(cont);
         toDietPreferences(diet);
+    }
+
+    private void setLogout() {
+        // TODO: 3/8/17 add confirmation dialogue
+        Button logout = (Button)findViewById(R.id.button_logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FBGoogLoginModel.logout();
+                startActivity(new Intent(PreferencesController.this, LandingController.class));
+            }
+        });
     }
 
     private void toDietPreferences(Button diet) {
