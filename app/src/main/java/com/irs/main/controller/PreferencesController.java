@@ -1,19 +1,10 @@
 package com.irs.main.controller;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.app.FragmentActivity;;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -23,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.irs.main.R;
-import com.irs.main.model.FoodDto;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 

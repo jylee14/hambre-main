@@ -9,23 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.facebook.AccessToken;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
-import com.irs.main.model.UserModel;
-import com.irs.server.AuthDto;
-import com.irs.server.ServerApi;
 
 public class LandingController extends FragmentActivity {
     private SignInButton goog;        //google login
@@ -39,7 +33,6 @@ public class LandingController extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // check google login
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
@@ -52,8 +45,12 @@ public class LandingController extends FragmentActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, FBGoogLoginModel.getGoogleSignInOptions())
                 .build();
 
-        if(FBGoogLoginModel.loggedIn(mGoogleApiClient)){
+        FBGoogLoginModel.setGoogleApiClient(mGoogleApiClient);
+
+        // check if we are already logged in, if yes, start in foodFinderController
+        if(FBGoogLoginModel.loggedIn()){
             startActivity(new Intent(LandingController.this, FoodFinderController.class));
+            return;
         }
 
         setContentView(R.layout.activity_landing);
@@ -113,21 +110,14 @@ public class LandingController extends FragmentActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                AuthDto response =
-                        ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
-                System.out.println("GOT DATA FROM SERVER: " + response.user());
-
-                UserModel.getInstance().loginAccount(response.user().api_key());
-                System.out.println("LOGGED IN TO SERVER");
+                FBGoogLoginModel.useFacebookToLogin();
 
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
                 System.out.println("Facebook Login Success!");
             }
 
             @Override
-            public void onCancel() {
-
-            }
+            public void onCancel() {}
 
             @Override
             public void onError(FacebookException error) {
@@ -139,15 +129,7 @@ public class LandingController extends FragmentActivity {
     private void googleLoginResult(Intent data) {
         GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
         if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
-
-            AuthDto response = ServerApi.getInstance().authServer(acct);
-            System.out.println("GOT DATA FROM SERVER: " + response.user());
-
-            UserModel.getInstance().loginAccount(response.user().api_key());
-            System.out.println("LOGGED IN TO SERVER");
-
+            FBGoogLoginModel.useGoogleToLogin(result);
             startActivity(new Intent(LandingController.this, PreferencesController.class));
         } else {
             Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
