@@ -1,10 +1,15 @@
 package com.irs.main.controller;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -13,12 +18,17 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
-public class PreferencesController extends FragmentActivity{
+public class PreferencesController extends FragmentActivity {
     private TextView maxRad;
     private UserModel user = UserModel.getInstance();
 
@@ -61,14 +71,50 @@ public class PreferencesController extends FragmentActivity{
 
     private void setLogout() {
         // TODO: 3/8/17 add confirmation dialogue
-        Button logout = (Button)findViewById(R.id.button_logout);
+        Button logout = (Button) findViewById(R.id.button_logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FBGoogLoginModel.logout();
+                logout();
                 startActivity(new Intent(PreferencesController.this, LandingController.class));
             }
         });
+    }
+
+    private void logout() {
+        // logout of facebook
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        // logout of Google
+        if (FBGoogLoginModel.loggedIntoGoogle) {
+            final GoogleApiClient googleApiClient = FBGoogLoginModel.getGoogleApiClient();
+            googleApiClient.connect();
+            googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(@Nullable Bundle bundle) {
+
+
+                    if (googleApiClient.isConnected()) {
+                        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(@NonNull Status status) {
+                                if (status.isSuccess()) {
+                                    //Log.d(TAG, "User Logged out");
+                                    Intent intent = new Intent(PreferencesController.this, LandingController.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+                    //Log.d(TAG, "Google API Client Connection Suspended");
+                }
+            });
+        }
     }
 
     private void toDietPreferences(Button diet) {

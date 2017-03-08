@@ -1,7 +1,14 @@
 package com.irs.main.model;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -14,18 +21,32 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.irs.main.controller.LandingController;
 import com.irs.server.AuthDto;
 import com.irs.server.ServerApi;
 
 public class FBGoogLoginModel {
-    private static GoogleSignInOptions gso;
-    private static GoogleApiClient  googleApiClient;
-    private static CallbackManager cbmanager;
+    private static FBGoogLoginModel instance;
+    private GoogleSignInOptions gso;
+    private static GoogleApiClient googleApiClient;
+    private CallbackManager cbmanager;
 
-    private static boolean loggedIntoFacebook = false;
-    private static boolean loggedIntoGoogle = false;
+    public static boolean loggedIntoFacebook;
+    public static boolean loggedIntoGoogle = !loggedIntoFacebook;
 
-    public static GoogleSignInOptions getGoogleSignInOptions() {
+    private FBGoogLoginModel() {
+        loggedIntoFacebook = false;
+        loggedIntoGoogle = false;
+    }
+
+    public static FBGoogLoginModel getInstance() {
+        if (instance == null) {
+            instance = new FBGoogLoginModel();
+        }
+        return instance;
+    }
+
+    public GoogleSignInOptions getGoogleSignInOptions() {
         if (gso == null) {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken("58151517395-7u4o0o77s2ff8dtbvio1v2tab2snf116.apps.googleusercontent.com")
@@ -35,20 +56,22 @@ public class FBGoogLoginModel {
         return gso;
     }
 
-    public static void setGoogleApiClient(GoogleApiClient client){
+    public void setGoogleApiClient(GoogleApiClient client) {
         googleApiClient = client;
     }
 
-    public static CallbackManager getFBManager() {
+    public static GoogleApiClient getGoogleApiClient() { return googleApiClient; }
+
+    public CallbackManager getFBManager() {
         if (cbmanager == null) {
             cbmanager = CallbackManager.Factory.create();
         }
         return cbmanager;
     }
 
-    public static boolean loggedIn() {
+    public boolean loggedIn() {
         // if facebook is logged in
-        if(AccessToken.getCurrentAccessToken() != null){
+        if (AccessToken.getCurrentAccessToken() != null) {
             useFacebookToLogin();
             return true;
         }
@@ -60,21 +83,24 @@ public class FBGoogLoginModel {
 
     /**
      * Gets whether the user logged in via google previously
-     *
+     * <p>
      * "Adapted" from
      * http://stackoverflow.com/questions/35195673/check-whether-the-user-is-already-logged-in-using-auth-googlesigninapi
+     *
      * @return Whether the user logged in via google previously
      */
-    private static boolean googleLoggedIn() {
+    private boolean googleLoggedIn() {
         OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
-        if(opr.isDone()){
+        if (opr.isDone()) {
             useGoogleToLogin(opr.get());
+            loggedIntoGoogle = true;
+            loggedIntoFacebook = false;
             return true;
         }
         return false;
     }
 
-    public static void useFacebookToLogin(){
+    public void useFacebookToLogin() {
         // TODO: 3/8/17 ASYNC?
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -89,7 +115,7 @@ public class FBGoogLoginModel {
         loggedIntoFacebook = true;
     }
 
-    public static void useGoogleToLogin(GoogleSignInResult result){
+    public void useGoogleToLogin(GoogleSignInResult result) {
         // TODO: 3/8/17 ASYNC?
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -105,26 +131,4 @@ public class FBGoogLoginModel {
 
         loggedIntoGoogle = true;
     }
-
-    public static void logout(){
-        // logout of facebook
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        if(loggedIntoFacebook) {
-            LoginManager.getInstance().logOut();
-        }
-
-        // logout of Google
-        if(loggedIntoGoogle) {
-            Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(
-                    new ResultCallback<Status>() {
-                        @Override
-                        public void onResult(@NonNull Status status) {
-
-                        }
-                    });
-        }
-    }
-
 }
