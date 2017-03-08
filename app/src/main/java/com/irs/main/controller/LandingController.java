@@ -21,8 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
 import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
@@ -82,7 +80,6 @@ public class LandingController extends FragmentActivity {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         goog = (SignInButton) findViewById(R.id.Google);
-        GoogleSignInOptions gso = FBGoogLoginModel.getGoogleSignInOptions();
 
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
