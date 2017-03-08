@@ -72,7 +72,6 @@ public class ServerApi {
         return authServer(token.getToken(), LOGIN_ENDPOINT_FB);
     }
 
-
     public PreferencesDto getPreferences(String api_key) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
@@ -226,17 +225,14 @@ public class ServerApi {
     }
 
     public DBFoodDto[] getFood() {
-
-        // params are empty (no params needed for get food)
-        HashMap<String, String> params = new HashMap<String, String>();
-
         // query FOOD_ENDPOINT for a GET request with params
-        String response = getJSONResponse(FOOD_ENDPOINT, "GET", params, false);
+        // TODO Crashes here
+        String response = getJSONResponse(FOOD_ENDPOINT, "GET", null, false);
 
 
         // return parsed object
         Gson gson = new Gson();
-        DBFoodDto[] result = gson.fromJson(response.toString(), DBFoodDto[].class);
+        DBFoodDto[] result = gson.fromJson(response, DBFoodDto[].class);
         return result;
     }
 
@@ -467,38 +463,33 @@ public class ServerApi {
      * @return
      */
     private String getJSONResponse(String urlBase, String method, HashMap<String, String> params,boolean writeToBody) {
-
         String result = null;
-
         // variables to verify connection
         int tries = 0;
         boolean connected = false;
 
         while (tries < CONNECTION_TRIES) {
             tries++;
-
             // get access token
             try {
                 String queryString = "";
+                if(params != null) {
+                    Iterator<String> keys = params.keySet().iterator();
+                    for (int i = 0; i < params.size(); i++) {
+                        String key = keys.next();
+                        String value = params.get(key);
 
-                Iterator<String> keys = params.keySet().iterator();
-                for (int i = 0; i < params.size(); i++) {
-                    String key = keys.next();
-                    String value = params.get(key);
-
-                    queryString += key + "=" + value;
-
-                    if (i != params.size() - 1) {
-                        queryString += "&";
+                        queryString += key + "=" + value;
+                        if (i != params.size() - 1)
+                            queryString += "&";
                     }
                 }
 
-                URL url = null;
-                HttpURLConnection client = null;
+                URL url;
+                HttpURLConnection client;
 
                 if (writeToBody) {
                     url = new URL(urlBase);
-                    client = null;
                     client = (HttpURLConnection) url.openConnection();
                     client.setRequestProperty("User-Agent", "Mozilla/5.0");
                     client.setReadTimeout(10000);
@@ -510,21 +501,18 @@ public class ServerApi {
 
                     if (!queryString.equals("")) {
                         OutputStream os = client.getOutputStream();
-                        BufferedWriter writer = new BufferedWriter(
-                                new OutputStreamWriter(os, "UTF-8"));
+                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
                         writer.write(queryString);
                         writer.flush();
                         writer.close();
                         os.close();
-
                     }
                 } else {
-                    if (!queryString.equals("")) {
+                    if (!queryString.equals(""))
                         urlBase += "?" + queryString;
-                    }
 
                     url = new URL(urlBase);
-                    client = (HttpURLConnection) url.openConnection();
+                    client = (HttpURLConnection)(url.openConnection());
                     client.setRequestProperty("User-Agent", "Mozilla/5.0");
                     client.setReadTimeout(10000);
                     client.setConnectTimeout(15000);
@@ -533,18 +521,15 @@ public class ServerApi {
                     client.setDoOutput(true);
                 }
 
-
                 client.connect();
-
                 // read response
-
                 BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 String inputLine;
                 StringBuffer response = new StringBuffer();
 
-                while ((inputLine = in.readLine()) != null) {
+                while ((inputLine = in.readLine()) != null)
                     response.append(inputLine);
-                }
+
                 in.close();
 
                 result = response.toString();
@@ -553,14 +538,13 @@ public class ServerApi {
 
                 break;
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
                 System.out.println("COULD NOT CONNECT TO DB, TRYING AGAIN...");
             }
         }
 
         if (tries == CONNECTION_TRIES) {
             System.out.println("fatal error");
-            // TODO: fatal exception here
             // NO WIFI
         }
 

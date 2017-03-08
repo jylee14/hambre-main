@@ -7,21 +7,16 @@ import android.support.v4.app.FragmentActivity;
 import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 
-/**
- * Created by paulosliu on 3/7/17.
- */
-
 public class LauncherController extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_launcher);
-        FoodFinderController.updateFoodArray();
 
 
         if (FBGoogLoginModel.loggedIn()) {
+            //FoodFinderController.updateFoodArray();
             startActivity(new Intent(LauncherController.this, FoodFinderController.class));
         } else {
             startActivity(new Intent(LauncherController.this, LandingController.class));
