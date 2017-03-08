@@ -8,10 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -23,6 +21,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.OptionalPendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
@@ -41,14 +41,27 @@ public class LandingController extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if(FBGoogLoginModel.loggedIn()){
+        // check google login
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        // An unresolvable Error has occurred and Google APIs (including Sign-In) will not
+                        // be available.
+                        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, FBGoogLoginModel.getGoogleSignInOptions())
+                .build();
+
+        if(FBGoogLoginModel.loggedIn(mGoogleApiClient)){
             startActivity(new Intent(LandingController.this, FoodFinderController.class));
         }
 
+        setContentView(R.layout.activity_landing);
+
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-        setContentView(R.layout.activity_landing);
 
         facebookLoginButton();
         googleLoginButton();
@@ -70,18 +83,6 @@ public class LandingController extends FragmentActivity {
         // options specified by gso.
         goog = (SignInButton) findViewById(R.id.Google);
         GoogleSignInOptions gso = FBGoogLoginModel.getGoogleSignInOptions();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        // An unresolvable Error has occurred and Google APIs (including Sign-In) will not
-                        // be available.
-                        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
