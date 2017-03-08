@@ -34,17 +34,15 @@ public class RestaurantDataModel {
             int count,
             boolean openNow) {
 
-        BusinessDto[] restaurants = new BusinessDto[count];
-
-        String coordinate = latitude + "," + longitude;
+        //BusinessDto[] restaurants = new BusinessDto[count];
+        String urlName = noSpace(query);
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        //params.put("coordinates", coordinate);
         params.put("latitude", "" + latitude);
         params.put("longitude", "" + longitude);
         params.put("categories", ((category == null || category == "") ? "food" : category));
-        params.put("term", query);
+        params.put("term", urlName);
         params.put("sort_by", "" + sortType);
         params.put("radius", "" + radius);
         params.put("limit", "" + count);
@@ -56,6 +54,29 @@ public class RestaurantDataModel {
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
 
         return response.businesses();
+    }
+
+    private static String noSpace(String link){
+        int spaces = 0;
+        for(int i = 0; i < link.length(); i++)
+            if(link.charAt(i) == ' ')
+                spaces ++;
+
+        char[] url = new char[(2 * spaces) + link.length()];
+        int urlPos = url.length - 1;
+        for(int i = link.length() - 1; i >= 0; i--){
+            if(link.charAt(i) != ' '){
+                url[urlPos] = link.charAt(i);
+                urlPos--;
+            }else{
+                url[urlPos] = '0';
+                url[urlPos - 1] = '2';
+                url[urlPos - 2] = '%';
+                urlPos -= 3;
+            }
+        }
+
+        return new String(url);
     }
 
     public static void setLatitude(double userLat){

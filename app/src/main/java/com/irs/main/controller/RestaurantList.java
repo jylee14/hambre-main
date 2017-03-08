@@ -61,6 +61,7 @@ public class RestaurantList extends ArrayAdapter<String> {
 
         ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
         Button mapButton = (Button)rowView.findViewById(R.id.map_button);
+        mapButton.setFocusable(false);
 
         mapButton.setOnClickListener(new View.OnClickListener(){
             @Override
