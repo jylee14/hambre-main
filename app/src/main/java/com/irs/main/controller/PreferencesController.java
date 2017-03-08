@@ -9,7 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.app.FragmentActivity;;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,18 +27,9 @@ import com.irs.main.model.FoodDto;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
-public class PreferencesController
-        extends AppCompatActivity
-        implements Runnable, android.location.LocationListener{
-
-    private final FoodFinderController controller = new FoodFinderController();
-    private final int LOCATION_REQUEST_CODE = 101;
-    private final int MAX_TRIES = 2;
+public class PreferencesController extends FragmentActivity{
     private TextView maxRad;
-    private FoodDto[] dbfm;
     private UserModel user = UserModel.getInstance();
-    public LocationManager mLocationManager;
-    protected static Location loc;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -53,7 +45,6 @@ public class PreferencesController
         RadioButton dist = (RadioButton) findViewById(R.id.dist);
         Button cont = (Button) findViewById(R.id.cont);
 
-        askGPS();
         pref.check((UserModel.getInstance().getSortType() == SortType.distance) ? R.id.dist : R.id.rate);
 
         rad.setProgress(user.getMaxDist());
@@ -102,15 +93,12 @@ public class PreferencesController
                     Toast.makeText(PreferencesController.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
-                        run();
                         // save preferences
                         UserModel.getInstance().saveToDatabaseAsync();
                         System.out.println("SAVED TO DB FROM PREFERENCES");
 
                         // switch to food finder screen
-                        Intent i = new Intent(PreferencesController.this, FoodFinderController.class);
-                        i.putExtra("model", dbfm);
-                        startActivity(i);
+                        startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
                     } catch (Exception e) {
                         startActivity(new Intent(PreferencesController.this, Error.class));
                     }
@@ -139,86 +127,5 @@ public class PreferencesController
                 maxRad.setText(user.getMaxDist() + " mi");
             }
         });
-    }
-
-    public void run() {
-        dbfm = controller.getFoodFromServer();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void askGPS() {
-        getLocation();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    protected void getLocation() {
-        int LOCATION_REFRESH_TIME = 1000;
-        int LOCATION_REFRESH_DISTANCE = 5;
-
-        int tries = 0;
-        while(tries < MAX_TRIES) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-                try {
-                    mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                    loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
-                } catch (NullPointerException e) {
-                    startActivity(new Intent(PreferencesController.this, Error.class));
-                    e.printStackTrace();
-                } finally {
-                    break;
-                }
-            } else {
-                ActivityCompat.requestPermissions(PreferencesController.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-                tries++;
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_REQUEST_CODE:
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
-                }
-                return ;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return true;
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        loc = location;
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        //Log.d("Latitude","disable");
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        //Log.d("Latitude","enable");
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-        //Log.d("Latitude", "status");
     }
 }
