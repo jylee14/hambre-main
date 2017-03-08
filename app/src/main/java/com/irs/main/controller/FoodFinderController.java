@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import android.os.StrictMode;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -42,10 +43,12 @@ public class FoodFinderController extends FragmentActivity {
     private Animation animEnter, animLeave;
     private final String server = "http://159.203.246.214/irs/";
 
-    private FoodDto[] dbfm;
+    private static FoodDto[] dbfm = new FoodDto[20];
     private Button uploadButton;
     private Button settingsButton;
     private UserModel user = UserModel.getInstance();
+
+    private boolean reloadImages = false;
 
     private final Thread getFoodThread = new Thread() {
         public void run() {
@@ -54,17 +57,14 @@ public class FoodFinderController extends FragmentActivity {
 
             // copy database foodmodels into gallery array
             System.arraycopy(dbfm, 0, gallery, 0, gallery.length);
-
             reloadImages = true;
         }
     };
 
-    private boolean reloadImages = true;
-
     private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
         @SafeVarargs
         @Override
-        protected final BusinessDto[] doInBackground(FoodDto...  params) {
+        protected final BusinessDto[] doInBackground(FoodDto... params) {
             System.out.println("LOADING RESTAURANTS IN BACKGROUND");
             BusinessDto[] response = null;
             FoodDto food = params[0];
@@ -98,36 +98,37 @@ public class FoodFinderController extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_food_finder);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
-        uploadButton = (Button)findViewById(R.id.btn_upload);
-        uploadButton.setOnClickListener(new Button.OnClickListener(){
+        setContentView(R.layout.activity_food_finder);
+        gallery = getFoodFromServer();
+
+        uploadButton = (Button) findViewById(R.id.btn_upload);
+        uploadButton.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this,
                         UploadPhoto.class);
                 startActivity(i);
             }
         });
 
-        settingsButton = (Button)findViewById(R.id.btn_settings);
-        settingsButton.setOnClickListener(new Button.OnClickListener(){
+        settingsButton = (Button) findViewById(R.id.btn_settings);
+        settingsButton.setOnClickListener(new Button.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this,
                         PreferencesController.class);
                 startActivity(i);
             }
         });
 
-        bundle = getIntent().getExtras();
-
         swipeAnimation();
     }
 
     private void swipeAnimation() {
         try {
-            gallery = FoodDto.toFoodModel(bundle.getParcelableArray("model"));
             api = YelpApi.getInstance();
             mainView = (ImageView) findViewById(R.id.image);
 
@@ -187,7 +188,7 @@ public class FoodFinderController extends FragmentActivity {
         });
     }
 
-    public FoodDto[] getFoodFromServer() {
+    public static FoodDto[] getFoodFromServer() {
         //connecting db to main
         ServerApi api = ServerApi.getInstance();
         DBFoodDto[] DBFoodDtos = api.getFood();

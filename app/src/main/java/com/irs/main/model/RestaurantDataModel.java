@@ -40,7 +40,9 @@ public class RestaurantDataModel {
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        params.put("coordinates", coordinate);
+        //params.put("coordinates", coordinate);
+        params.put("latitude", "" + latitude);
+        params.put("longitude", "" + longitude);
         params.put("categories", ((category == null || category == "") ? "food" : category));
         params.put("term", query);
         params.put("sort_by", "" + sortType);
