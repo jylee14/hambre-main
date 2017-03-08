@@ -8,10 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
@@ -41,10 +39,27 @@ public class LandingController extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        // check google login
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                        // An unresolvable Error has occurred and Google APIs (including Sign-In) will not
+                        // be available.
+                        Log.d(TAG, "onConnectionFailed:" + connectionResult);
+                    }
+                })
+                .addApi(Auth.GOOGLE_SIGN_IN_API, FBGoogLoginModel.getGoogleSignInOptions())
+                .build();
+
+        if(FBGoogLoginModel.loggedIn(mGoogleApiClient)){
+            startActivity(new Intent(LandingController.this, FoodFinderController.class));
+        }
 
         setContentView(R.layout.activity_landing);
+
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         facebookLoginButton();
         googleLoginButton();
@@ -65,19 +80,6 @@ public class LandingController extends FragmentActivity {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
         goog = (SignInButton) findViewById(R.id.Google);
-        GoogleSignInOptions gso = FBGoogLoginModel.getGoogleSignInOptions();
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        // An unresolvable Error has occurred and Google APIs (including Sign-In) will not
-                        // be available.
-                        Log.d(TAG, "onConnectionFailed:" + connectionResult);
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
 
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
