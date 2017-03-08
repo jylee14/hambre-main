@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -22,14 +23,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.irs.main.R;
+import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.FoodDto;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
 public class PreferencesController
         extends FragmentActivity
-        implements android.location.LocationListener{
+        implements android.location.LocationListener {
 
     private final FoodFinderController controller = new FoodFinderController();
     private final int LOCATION_REQUEST_CODE = 101;
@@ -39,19 +44,26 @@ public class PreferencesController
     public LocationManager mLocationManager;
     protected static Location loc;
 
+    private SeekBar rad;
+    private Button cont;
+    private Button logout;
+    private Button diet;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
 
-        Button diet = (Button) findViewById(R.id.DPref);
-        SeekBar rad = (SeekBar) findViewById(R.id.radius);
+        diet = (Button) findViewById(R.id.DPref);
+        rad = (SeekBar) findViewById(R.id.radius);
         maxRad = (TextView) findViewById(R.id.currMax);
+        cont = (Button) findViewById(R.id.cont);
+        logout = (Button) findViewById(R.id.button_logout);
+
         RadioGroup pref = (RadioGroup) findViewById(R.id.sorting);
         RadioButton rate = (RadioButton) findViewById(R.id.rate);
         RadioButton dist = (RadioButton) findViewById(R.id.dist);
-        Button cont = (Button) findViewById(R.id.cont);
 
         askGPS();
         pref.check((UserModel.getInstance().getSortType() == SortType.distance) ? R.id.dist : R.id.rate);
@@ -71,12 +83,24 @@ public class PreferencesController
                 user.setSortType(SortType.distance);
             }
         });
-        distanceBar(rad);
-        toNextPage(cont);
-        toDietPreferences(diet);
+
+        setLogout();
+        distanceBar();
+        toNextPage();
+        toDietPreferences();
     }
 
-    private void toDietPreferences(Button diet) {
+    private void setLogout() {
+        // TODO: 3/8/17 add confirmation dialogue
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FBGoogLoginModel.logout();
+            }
+        });
+    }
+
+    private void toDietPreferences() {
         /**
          * Diet Button will redirect the user to the dietary restrictions page
          */
@@ -94,7 +118,7 @@ public class PreferencesController
     /**
      * move the user onto next page
      */
-    private void toNextPage(Button cont) {
+    private void toNextPage() {
         cont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +144,7 @@ public class PreferencesController
      * change the preference of the user.
      * Need to find a way to propagate the value here throughout the app
      */
-    private void distanceBar(SeekBar rad) {
+    private void distanceBar() {
         rad.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -149,7 +173,7 @@ public class PreferencesController
         int LOCATION_REFRESH_DISTANCE = 5;
 
         int tries = 0;
-        while(tries < MAX_TRIES) {
+        while (tries < MAX_TRIES) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
@@ -165,7 +189,7 @@ public class PreferencesController
                 }
             } else {
                 ActivityCompat.requestPermissions(PreferencesController.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
                 tries++;
             }
         }
@@ -181,7 +205,7 @@ public class PreferencesController
                 } else {
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
-                return ;
+                return;
         }
     }
 
