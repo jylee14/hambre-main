@@ -78,6 +78,7 @@ public class YelpApi {
                 // parse accessToken object from json
                 Gson gson = new Gson();
                 accessToken = gson.fromJson(response.toString(), AccessTokenDto.class);
+                connected = true;
 
             } catch (Exception e) {
                 e.printStackTrace();

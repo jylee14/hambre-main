@@ -20,7 +20,7 @@ public class AccessTokenDto {
     /**
      * Token type (always Bearer)
      *
-     * @return
+     * @return yelp token type
      */
     public String token_type() {
         return token_type;
@@ -29,7 +29,7 @@ public class AccessTokenDto {
     /**
      * Expiration time of token
      *
-     * @return
+     * @return token expiration (~8 months later)
      */
     public int expires_in() {
         return expires_in;
