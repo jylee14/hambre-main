@@ -31,15 +31,14 @@ public class UploadPhotoController extends FragmentActivity {
     private EditText foodName;
     private ImageView selectedPic;
     private String culture, diet, category, name;
-    private Spinner cultureSpinner, dietSpinner, categorySpinner;
+    private Spinner  dietSpinner, categorySpinner;
+    private EditText cultureTxt;
 
     //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
 
     //TODO also change switch statement below for cultureSpinner.OnItemSelected
 
-    private static final String[] culturePaths = {"American (new)","American (traditional)", "Chinese", "Cuban",
-            "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
         "Kosher", "Gluten Free"};
     Map<String, DietType> dietMap = new HashMap<String, DietType>(){{
@@ -61,12 +60,7 @@ public class UploadPhotoController extends FragmentActivity {
         foodName = (EditText)findViewById(R.id.name_txt);
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
 
-        cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
-        ArrayAdapter<String>adapter = new ArrayAdapter<>(UploadPhotoController.this,
-                android.R.layout.simple_spinner_item, culturePaths);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cultureSpinner.setAdapter(adapter);
-
+        cultureTxt = (EditText)findViewById(R.id.culture_txt);
         dietSpinner = (Spinner)findViewById(R.id.dietary_spinner);
         final ArrayAdapter<String>dietAdapter = new ArrayAdapter<>(UploadPhotoController.this,
                 android.R.layout.simple_spinner_item, dietPaths);
@@ -77,18 +71,6 @@ public class UploadPhotoController extends FragmentActivity {
                 ArrayAdapter<>(UploadPhotoController.this, android.R.layout.simple_spinner_item,
                 categoryPaths);
         categorySpinner.setAdapter(categoryAdapter);
-
-        cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                culture = culturePaths[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         dietSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -126,6 +108,7 @@ public class UploadPhotoController extends FragmentActivity {
             @Override
             public void onClick(View v){
                 try {
+                    culture = cultureTxt.getText().toString();
                     name = foodName.getText().toString();
                     System.out.println("Culture: " + culture + "\nDiet: " + diet +
                             "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
