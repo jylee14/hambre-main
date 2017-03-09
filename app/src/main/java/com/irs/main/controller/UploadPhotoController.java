@@ -18,6 +18,8 @@ import com.irs.main.DietType;
 import com.irs.main.R;
 import com.irs.main.model.UserModel;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,7 +52,6 @@ public class UploadPhotoController extends FragmentActivity {
         put("None", DietType.None);
     }};
     private static final String[] categoryPaths = {"food", "desert", "fruit", "spicy"};
-    private String picName = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,12 +111,15 @@ public class UploadPhotoController extends FragmentActivity {
                 try {
                     name = foodName.getText().toString();
                     System.out.println("Culture: " + culture + "\nDiet: " + diet +
-                            "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
+                            "\ncategory: " + category + "\nname: " + name + "\npicName: " + getPicName(name));
                     Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
                     // upload image
-                    UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
+                    UserModel.getInstance().uploadPhoto(pic, getPicName(name) +
+                            ".jpg", name, culture, category, dietMap.get(diet));
 
+
+                    startActivity(new Intent(UploadPhotoController.this, FoodFinderController.class));
                     finish();
                 } catch (Exception ex) {
                     System.out.println("You will be assimilated. Resistance is futile.");
@@ -199,6 +203,10 @@ public class UploadPhotoController extends FragmentActivity {
         startActivityForResult(intent, GALLERY_REQUEST);
     }
 
+    private String getPicName(String name) throws UnsupportedEncodingException {
+        return URLEncoder.encode(name, "UTF-8");
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent data) {
@@ -206,30 +214,9 @@ public class UploadPhotoController extends FragmentActivity {
             return;
         }
         // image from camera
-        if (requestCode == CAMERA_REQUEST) {
+        if (requestCode == CAMERA_REQUEST || requestCode == GALLERY_REQUEST) {
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             selectedPic.setImageBitmap(photo);
-        } else if (requestCode == GALLERY_REQUEST) {
-            // image from gallery
-            final Bundle extras = data.getExtras();
-            System.out.println("BUNDLE: " + extras.toString());
-            if (extras != null) {
-                for (String key : extras.keySet()) {
-                    Object value = extras.get(key);
-                    System.out.println("Key: " + key);
-                    if (value != null) {
-                        System.out.println(" value: " + value.toString() + " class: " + value.getClass().getName());
-                    }
-                }
-            }
-            if (extras != null) {
-                //Get image
-                pic = extras.getParcelable("data");
-                String uri = extras.getString("src_uri");
-                String[] parts = uri.split("/");
-                picName = parts[parts.length - 1];
-                selectedPic.setImageBitmap(pic);
-            }
         }
     }
 }
