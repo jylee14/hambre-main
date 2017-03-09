@@ -99,11 +99,10 @@ public class UploadPhotoController extends FragmentActivity {
                     Toast.makeText(UploadPhotoController.this, "Please fill in all text fields", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
-
                         name = foodName.getText().toString();
                         culture = cultureTxt.getText().toString();
                         String picName = getPicName(name);
-
+                        
                         System.out.println("Culture: " + culture + "\nDiet: " + diet +
                                 "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
 
