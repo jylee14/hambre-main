@@ -49,7 +49,7 @@ public class UploadPhotoController extends FragmentActivity {
         put("Vegetarian", DietType.Vegetarian);
         put("None", DietType.None);
     }};
-    private static final String[] categoryPaths = {"food", "desert", "fruit", "spicy"};
+    private static final String[] categoryPaths = {"food", "dessert", "fruit", "spicy"};
     private String picName = "";
 
     @Override

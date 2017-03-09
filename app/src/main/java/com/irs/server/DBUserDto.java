@@ -23,7 +23,6 @@ public class DBUserDto {
     private int number_submitted;
     private int admin;
 
-    // TODO: make 0/1 "ints" into booleans
     public int user_id() {
        return user_id;
     }

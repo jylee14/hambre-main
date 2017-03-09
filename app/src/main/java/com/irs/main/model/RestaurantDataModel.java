@@ -36,6 +36,7 @@ public class RestaurantDataModel {
 
         String categoriesParam = ((category == null || category == "") ? "food": category);
         categoriesParam += ",restaurants";
+        categoriesParam += "," + UserModel.getInstance().getDietType().toYelpString();
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();

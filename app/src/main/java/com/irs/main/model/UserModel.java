@@ -194,6 +194,7 @@ public class UserModel {
         return dietType;
     }
 
+    @Deprecated
     public String getDietString() {
         String[] types = {"vegetarian", "vegan", "kosher", "gluten_free", "none"};
         for (int i = 0; i < DietType.values().length; i++) {
