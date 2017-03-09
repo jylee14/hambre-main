@@ -33,23 +33,13 @@
 
             <Button
                 android:id="@+id/DPref"
-                android:layout_width="260dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="0dp"
+                android:layout_margin="10dp"
                 android:background="@color/colorPrimaryDark"
                 android:fontFamily="monospace"
                 android:text="@string/dietary_preferences"
                 android:textColor="@android:color/white" />
-
-            <Button
-                android:id="@+id/button_logout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorAccent"
-                android:fontFamily="monospace"
-                android:text="@string/logout"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -115,6 +105,17 @@
 
             </RadioGroup>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorAccent"
+            android:fontFamily="monospace"
+            android:text="@string/logout"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
