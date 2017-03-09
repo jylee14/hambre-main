@@ -1,6 +1,5 @@
 package com.irs.main.controller;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -10,9 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -30,8 +27,6 @@ import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
-
-import java.util.prefs.Preferences;
 
 public class PreferencesController extends FragmentActivity {
     private TextView maxRad;

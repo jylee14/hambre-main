@@ -1,10 +1,7 @@
 package com.irs.main.model;
 
-import android.location.Location;
-
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.BusinessResponseDto;
-import com.irs.yelp.CoordinatesDto;
 import com.irs.yelp.SortType;
 import com.irs.yelp.YelpApi;
 
