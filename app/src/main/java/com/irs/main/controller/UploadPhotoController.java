@@ -105,7 +105,6 @@ public class UploadPhotoController extends FragmentActivity {
                     culture = cultureTxt.getText().toString();
 
                     try {
-                        name = foodName.getText().toString();
                         System.out.println("Culture: " + culture + "\nDiet: " + diet +
                                 "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
                         Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
