@@ -1,38 +1,26 @@
 package com.irs.main.model;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.irs.main.controller.LandingController;
 import com.irs.server.AuthDto;
 import com.irs.server.ServerApi;
 
 public class FBGoogLoginModel {
     private static FBGoogLoginModel instance;
     private GoogleSignInOptions gso;
-    private static GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
     private CallbackManager cbmanager;
 
-    public static boolean loggedIntoFacebook;
-    public static boolean loggedIntoGoogle = !loggedIntoFacebook;
+    private boolean loggedIntoFacebook;
+    private boolean loggedIntoGoogle;
 
     private FBGoogLoginModel() {
         loggedIntoFacebook = false;
@@ -44,6 +32,14 @@ public class FBGoogLoginModel {
             instance = new FBGoogLoginModel();
         }
         return instance;
+    }
+
+    public boolean isLoggedIntoFacebook(){
+        return loggedIntoFacebook;
+    }
+
+    public boolean isLoggedIntoGoogle(){
+        return loggedIntoGoogle;
     }
 
     public GoogleSignInOptions getGoogleSignInOptions() {
@@ -60,7 +56,9 @@ public class FBGoogLoginModel {
         googleApiClient = client;
     }
 
-    public static GoogleApiClient getGoogleApiClient() { return googleApiClient; }
+    public GoogleApiClient getGoogleApiClient() {
+        return googleApiClient;
+    }
 
     public CallbackManager getFBManager() {
         if (cbmanager == null) {
@@ -131,4 +129,5 @@ public class FBGoogLoginModel {
 
         loggedIntoGoogle = true;
     }
+
 }

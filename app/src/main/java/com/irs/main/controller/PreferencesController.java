@@ -1,6 +1,7 @@
 package com.irs.main.controller;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.FragmentActivity;;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -28,15 +31,20 @@ import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
+import java.util.prefs.Preferences;
+
 public class PreferencesController extends FragmentActivity {
     private TextView maxRad;
     private UserModel user = UserModel.getInstance();
+    private FBGoogLoginModel loginModel;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
+
+        loginModel = FBGoogLoginModel.getInstance();
 
         Button diet = (Button) findViewById(R.id.DPref);
         SeekBar rad = (SeekBar) findViewById(R.id.radius);
@@ -76,18 +84,48 @@ public class PreferencesController extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 logout();
-                startActivity(new Intent(PreferencesController.this, LandingController.class));
             }
         });
     }
 
     private void logout() {
-        // logout of facebook
+
+        if(loginModel.isLoggedIntoFacebook() || loginModel.isLoggedIntoGoogle()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Logout Confirmation")
+                    .setMessage("Are you sure you want to logout?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PreferencesController.this.logoutOfGoogle();
+                            logoutOfFacebook();
+
+                            // change to landing screen
+                            Intent intent = new Intent(PreferencesController.this, LandingController.class);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        } else {
+            Toast.makeText(this, "You're not logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void logoutOfFacebook() {
+        if (loginModel.isLoggedIntoFacebook()) {
+            LoginManager.getInstance().logOut();
+        }
+    }
+
+    private void logoutOfGoogle() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        // logout of Google
-        if (FBGoogLoginModel.loggedIntoGoogle) {
-            final GoogleApiClient googleApiClient = FBGoogLoginModel.getGoogleApiClient();
+
+        if (loginModel.isLoggedIntoGoogle()) {
+            final GoogleApiClient googleApiClient = loginModel.getGoogleApiClient();
             googleApiClient.connect();
             googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                 @Override
@@ -98,12 +136,6 @@ public class PreferencesController extends FragmentActivity {
                         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
                             @Override
                             public void onResult(@NonNull Status status) {
-                                if (status.isSuccess()) {
-                                    //Log.d(TAG, "User Logged out");
-                                    Intent intent = new Intent(PreferencesController.this, LandingController.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
                             }
                         });
                     }
