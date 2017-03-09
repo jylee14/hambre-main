@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 
-public class RestaurantList extends ArrayAdapter<String> {
+public class RestaurantListController extends ArrayAdapter<String> {
     private final Activity context;
     private final String []name;
     private final String []url;
@@ -32,8 +32,8 @@ public class RestaurantList extends ArrayAdapter<String> {
     private final String []price;
     private final CoordinatesDto[]coordinates;
 
-    RestaurantList(Activity context, String [] name, String[] url,
-                   String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates){
+    RestaurantListController(Activity context, String [] name, String[] url,
+                             String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates){
 
         super(context, R.layout.list_single, name);
         this.context = context;

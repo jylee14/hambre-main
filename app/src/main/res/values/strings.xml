@@ -11,4 +11,9 @@
     <string name="by_rating">By Rating</string>
     <string name="by_distance">By Distance</string>
     <string name="continue_button">Continue</string>
+
+    <string name="vegetarian">"1000"</string>
+    <string name="vegan">"0100"</string>
+    <string name="kosher">"0010"</string>
+    <string name="gluten">"0001"</string>
 </resources>

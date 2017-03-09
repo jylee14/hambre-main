@@ -39,7 +39,7 @@ public class LandingController extends FragmentActivity {
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
                     @Override
                     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                        // An unresolvable Error has occurred and Google APIs (including Sign-In) will not
+                        // An unresolvable ErrorController has occurred and Google APIs (including Sign-In) will not
                         // be available.
                         Log.d(TAG, "onConnectionFailed:" + connectionResult);
                     }

@@ -12,7 +12,7 @@ import com.irs.main.DietType;
 import com.irs.main.R;
 import com.irs.main.model.UserModel;
 
-public class DietRestriction extends FragmentActivity {
+public class DietRestrictionController extends FragmentActivity {
     private RadioGroup prefs;
     private Button save;
     private Button cancel;
@@ -42,7 +42,7 @@ public class DietRestriction extends FragmentActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(DietRestriction.this, "Changes discarded", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DietRestrictionController.this, "Changes discarded", Toast.LENGTH_SHORT).show();
                 returnToPrev();
             }
         });
@@ -56,7 +56,7 @@ public class DietRestriction extends FragmentActivity {
                 //push update to server);
                 //database.getUser(username)
                 //username.updateDiet(newPref, prefIndex);
-                Toast.makeText(DietRestriction.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DietRestrictionController.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                 returnToPrev();
                 //else
                 //propagate the data throughout the app via preferenceID
@@ -114,7 +114,7 @@ public class DietRestriction extends FragmentActivity {
     }
 
     private void returnToPrev() {
-        Intent i = new Intent(DietRestriction.this, PreferencesController.class);
+        Intent i = new Intent(DietRestrictionController.this, PreferencesController.class);
         startActivity(i);
     }
 }

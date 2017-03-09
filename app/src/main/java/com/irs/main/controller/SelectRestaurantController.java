@@ -73,8 +73,8 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
             prices[i] = businesses[i].price();
             coordinates[i] = businesses[i].coordinates();
         }
-        RestaurantList adapter = new
-                RestaurantList(SelectRestaurantController.this,
+        RestaurantListController adapter = new
+                RestaurantListController(SelectRestaurantController.this,
                 names, url, imageUrl, ratings, prices, coordinates);
         list = (ListView)findViewById(R.id.list);
         list.setAdapter(adapter);

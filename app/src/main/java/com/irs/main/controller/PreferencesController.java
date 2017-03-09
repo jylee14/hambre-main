@@ -84,22 +84,18 @@ public class PreferencesController extends FragmentActivity {
     }
 
     private void logout() {
-
         if(loginModel.isLoggedIntoFacebook() || loginModel.isLoggedIntoGoogle()) {
-            new AlertDialog.Builder(this)
-                    .setTitle("Logout Confirmation")
+            new AlertDialog.Builder(this).setTitle("Logout Confirmation")
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            PreferencesController.this.logoutOfGoogle();
-                            logoutOfFacebook();
-                            loginModel.loggedOut();
+                            if(loginModel.isLoggedIntoGoogle())
+                                PreferencesController.this.logoutOfGoogle();
+                            else
+                                logoutOfFacebook();
 
-                            // change to landing screen
-                            Intent intent = new Intent(PreferencesController.this, LandingController.class);
-                            startActivity(intent);
-                            finish();
+                            loginModel.loggedOut();
                         }
 
                     })
@@ -113,7 +109,14 @@ public class PreferencesController extends FragmentActivity {
     private void logoutOfFacebook() {
         if (loginModel.isLoggedIntoFacebook()) {
             LoginManager.getInstance().logOut();
+            logoutToLanding();
         }
+    }
+
+    private void logoutToLanding() {
+        Intent intent = new Intent(PreferencesController.this, LandingController.class);
+        startActivity(intent);
+        finish();
     }
 
     private void logoutOfGoogle() {
@@ -126,12 +129,11 @@ public class PreferencesController extends FragmentActivity {
             googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
                 @Override
                 public void onConnected(@Nullable Bundle bundle) {
-
-
                     if (googleApiClient.isConnected()) {
                         Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
                             @Override
                             public void onResult(@NonNull Status status) {
+                                logoutToLanding();
                             }
                         });
                     }
@@ -152,7 +154,7 @@ public class PreferencesController extends FragmentActivity {
         diet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(PreferencesController.this, DietRestriction.class);
+                Intent i = new Intent(PreferencesController.this, DietRestrictionController.class);
                 Bundle bundle = getIntent().getExtras();
                 if (bundle != null) i.putExtras(bundle);
                 startActivity(i);
@@ -178,7 +180,7 @@ public class PreferencesController extends FragmentActivity {
                         // switch to food finder screen
                         startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
                     } catch (Exception e) {
-                        startActivity(new Intent(PreferencesController.this, Error.class));
+                        startActivity(new Intent(PreferencesController.this, ErrorController.class));
                     }
                 }
             }

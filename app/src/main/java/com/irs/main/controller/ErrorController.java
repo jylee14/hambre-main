@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentActivity;
 
 import com.irs.main.R;
 
-public class Error extends FragmentActivity {
+public class ErrorController extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

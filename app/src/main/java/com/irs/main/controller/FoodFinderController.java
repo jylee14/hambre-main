@@ -163,14 +163,14 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                         Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        startActivity(new Intent(FoodFinderController.this, Error.class));
+                        startActivity(new Intent(FoodFinderController.this, ErrorController.class));
                     }
                     mainView.startAnimation(animEnter);
                 }
             });
         } catch (Exception e) {
             System.err.println("Ayy LMAO");
-            startActivity(new Intent(FoodFinderController.this, Error.class));
+            startActivity(new Intent(FoodFinderController.this, ErrorController.class));
             e.printStackTrace();
         }
     }
@@ -248,7 +248,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 if(loc == null)
                     throw new Exception();
             } catch (NullPointerException e) {
-                startActivity(new Intent(FoodFinderController.this, Error.class));
+                startActivity(new Intent(FoodFinderController.this, ErrorController.class));
             } catch (Exception e){
 
             }
