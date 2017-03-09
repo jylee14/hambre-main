@@ -99,6 +99,7 @@ public class PreferencesController extends FragmentActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             PreferencesController.this.logoutOfGoogle();
                             logoutOfFacebook();
+                            loginModel.loggedOut();
 
                             // change to landing screen
                             Intent intent = new Intent(PreferencesController.this, LandingController.class);

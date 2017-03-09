@@ -67,7 +67,12 @@ public class FBGoogLoginModel {
         return cbmanager;
     }
 
-    public boolean loggedIn() {
+    /**
+     * Returns if the user was logged in previously. Also logs in to our server
+     * if the user had logged in
+     * @return if the user was logged in previously
+     */
+    public boolean loggedInPreviously() {
         // if facebook is logged in
         if (AccessToken.getCurrentAccessToken() != null) {
             useFacebookToLogin();
@@ -130,4 +135,11 @@ public class FBGoogLoginModel {
         loggedIntoGoogle = true;
     }
 
+    /**
+     * Changes the values when the user logs out
+     */
+    public void loggedOut() {
+        loggedIntoFacebook = false;
+        loggedIntoGoogle = false;
+    }
 }
