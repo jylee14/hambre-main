@@ -33,7 +33,7 @@ public class RestaurantDataModel {
         //BusinessDto[] restaurants = new BusinessDto[count];
         String urlName = noSpace(query);
 
-        String categoriesParam = ((category == null || category == "") ? "food": category);
+        String categoriesParam = ((category == null || category == "") ? "food" : category);
         categoriesParam += ",restaurants";
         if (UserModel.getInstance().getDietType().toYelpString() != null) {
             categoriesParam += "," + UserModel.getInstance().getDietType().toYelpString();

@@ -75,6 +75,7 @@ public class UserModel {
 
     /**
      * login user with api key
+     *
      * @param apiKey key to login with
      */
     public void loginAccount(String apiKey) {
@@ -134,10 +135,11 @@ public class UserModel {
 
     /**
      * upload a photo to db with user data
-     * @param pic picture to upload
-     * @param picName name of picture
+     *
+     * @param pic      picture to upload
+     * @param picName  name of picture
      * @param foodName name of food
-     * @param culture culture data
+     * @param culture  culture data
      * @param category category of food
      * @param dietType what diet it is compatible with
      */
@@ -145,7 +147,7 @@ public class UserModel {
         System.out.println("UPLOADING TO DB");
         int gluten_free = 0;
         int vegetarian = 0;
-        int vegan  = 0;
+        int vegan = 0;
         int kosher = 0;
         switch (dietType) {
             case GlutenFree:

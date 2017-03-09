@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.irs.main.R;
+import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.FoodDto;
 import com.irs.main.model.OnSwipeTouchListener;
 import com.irs.main.model.RestaurantDataModel;
@@ -90,9 +91,14 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         uploadButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(FoodFinderController.this,
-                        UploadPhotoController.class);
-                startActivity(i);
+                if (FBGoogLoginModel.getInstance().isLoggedIn()) {
+                    Intent i = new Intent(FoodFinderController.this,
+                            UploadPhotoController.class);
+                    startActivity(i);
+                } else {
+                    Toast.makeText(FoodFinderController.this,
+                            "You need to be logged in", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
