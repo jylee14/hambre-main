@@ -24,7 +24,7 @@ import com.irs.server.ServerApi;
 //TODO add name field, add catagory (food, desert or fruit etc...) dropdown
 //TODO save the photo to the database
 
-public class UploadPhoto extends FragmentActivity {
+public class UploadPhotoController extends FragmentActivity {
 
     private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;
@@ -55,19 +55,19 @@ public class UploadPhoto extends FragmentActivity {
         selectedPic = (ImageView)findViewById(R.id.selected_pic);
 
         cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
-        ArrayAdapter<String>adapter = new ArrayAdapter<String>(UploadPhoto.this,
+        ArrayAdapter<String>adapter = new ArrayAdapter<String>(UploadPhotoController.this,
                 android.R.layout.simple_spinner_item, culturePaths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cultureSpinner.setAdapter(adapter);
 
         dietSpinner = (Spinner)findViewById(R.id.dietary_spinner);
-        ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
+        ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhotoController.this,
                 android.R.layout.simple_spinner_item, dietPaths);
         dietSpinner.setAdapter(dietAdapter);
 
         categorySpinner = (Spinner)findViewById(R.id.category_spinner);
         ArrayAdapter<String> categoryAdapter = new
-                ArrayAdapter<String>(UploadPhoto.this, android.R.layout.simple_spinner_item,
+                ArrayAdapter<String>(UploadPhotoController.this, android.R.layout.simple_spinner_item,
                 categoryPaths);
         categorySpinner.setAdapter(categoryAdapter);
 
@@ -194,7 +194,7 @@ public class UploadPhoto extends FragmentActivity {
                     name = foodName.getText().toString();
                     System.out.println("Culture: " + culture + "\nDiet: " + diet +
                             "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
-                    Toast.makeText(UploadPhoto.this, "photo submitted!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
                     // upload image
                     ServerApi.getInstance().uploadFood(pic, picName + ".jpg", name, culture, category, "220d763d2aa724c6a59d5649138a0211", 0, 0, 0, 0);

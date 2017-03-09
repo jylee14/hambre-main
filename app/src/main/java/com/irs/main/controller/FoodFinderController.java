@@ -38,7 +38,7 @@ import com.squareup.picasso.Picasso;
 
 import java.lang.*;
 
-public class FoodFinderController extends FragmentActivity implements android.location.LocationListener{
+public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final int LIMIT = 20;
     private final int MAX_TRIES = 2;
     private final int METERS_PER_MILE = 1600;
@@ -70,6 +70,12 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         }
     };
 
+    @Override
+    public void onBackPressed() {
+        System.gc();
+        System.exit(0);
+    }
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -91,7 +97,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this,
-                        UploadPhoto.class);
+                        UploadPhotoController.class);
                 startActivity(i);
             }
         });
@@ -190,7 +196,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 culture = gallery[index].getCulture();
 
                 Location mloc = loc;
-                if(mloc == null) {
+                if (mloc == null) {
                     Toast.makeText(context, "LOL LOCATION", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -222,7 +228,9 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         return fromDB;
     }
 
-    /** Location Stuff */
+    /**
+     * Location Stuff
+     */
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void askGPS() {
         getLocation();
@@ -245,11 +253,11 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 LocationManager mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
                 loc = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, this);
-                if(loc == null)
+                if (loc == null)
                     throw new Exception();
             } catch (NullPointerException e) {
                 startActivity(new Intent(FoodFinderController.this, ErrorController.class));
-            } catch (Exception e){
+            } catch (Exception e) {
 
             }
         } else
@@ -265,7 +273,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 } else {
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
-                return ;
+                return;
         }
     }
 

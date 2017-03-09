@@ -58,7 +58,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".controller.UploadPhoto"
+            android:name=".controller.UploadPhotoController"
             android:configChanges="orientation"
             android:label="UploadPhoto"
             android:screenOrientation="portrait" />
