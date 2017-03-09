@@ -50,7 +50,7 @@ public class LandingController extends FragmentActivity {
         loginModel.setGoogleApiClient(mGoogleApiClient);
 
         // check if we are already logged in, if yes, start in foodFinderController
-        if(loginModel.loggedInPreviously()){
+        if (loginModel.loggedInPreviously()) {
             startActivity(new Intent(LandingController.this, FoodFinderController.class));
             return;
         }
@@ -119,7 +119,8 @@ public class LandingController extends FragmentActivity {
             }
 
             @Override
-            public void onCancel() {}
+            public void onCancel() {
+            }
 
             @Override
             public void onError(FacebookException error) {

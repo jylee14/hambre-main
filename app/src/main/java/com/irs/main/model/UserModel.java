@@ -34,7 +34,8 @@ public class UserModel {
     // singleton instance
     private static UserModel instance = new UserModel();
 
-    private UserModel() {}
+    private UserModel() {
+    }
 
     /**
      * Convenience helper method to update all user fields
@@ -54,6 +55,7 @@ public class UserModel {
 
     /**
      * Sets up a user with a given name and default values
+     *
      * @param name name of user
      */
     public void updateWithDefaults(String name) {

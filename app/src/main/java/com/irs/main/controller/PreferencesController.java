@@ -84,13 +84,13 @@ public class PreferencesController extends FragmentActivity {
     }
 
     private void logout() {
-        if(loginModel.isLoggedIntoFacebook() || loginModel.isLoggedIntoGoogle()) {
+        if (loginModel.isLoggedIntoFacebook() || loginModel.isLoggedIntoGoogle()) {
             new AlertDialog.Builder(this).setTitle("Logout Confirmation")
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(loginModel.isLoggedIntoGoogle())
+                            if (loginModel.isLoggedIntoGoogle())
                                 PreferencesController.this.logoutOfGoogle();
                             else
                                 logoutOfFacebook();

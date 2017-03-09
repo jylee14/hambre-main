@@ -34,11 +34,11 @@ public class FBGoogLoginModel {
         return instance;
     }
 
-    public boolean isLoggedIntoFacebook(){
+    public boolean isLoggedIntoFacebook() {
         return loggedIntoFacebook;
     }
 
-    public boolean isLoggedIntoGoogle(){
+    public boolean isLoggedIntoGoogle() {
         return loggedIntoGoogle;
     }
 
@@ -70,6 +70,7 @@ public class FBGoogLoginModel {
     /**
      * Returns if the user was logged in previously. Also logs in to our server
      * if the user had logged in
+     *
      * @return if the user was logged in previously
      */
     public boolean loggedInPreviously() {

@@ -70,12 +70,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         }
     };
 
-    @Override
-    public void onBackPressed() {
-        System.gc();
-        System.exit(0);
-    }
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

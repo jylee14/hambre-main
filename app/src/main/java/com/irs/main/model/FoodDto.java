@@ -51,7 +51,9 @@ public class FoodDto implements Parcelable {
         return culture;
     }
 
-    public String getTag() { return this.tag; }
+    public String getTag() {
+        return this.tag;
+    }
 
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Parcelable.Creator<FoodDto> CREATOR = new Parcelable.Creator<FoodDto>() {

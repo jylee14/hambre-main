@@ -18,9 +18,9 @@ public class RestaurantDataModel {
     /**
      * Method to retrieve a list of restaurants based on a search query
      *
-     * @param count       number of restaurants to retrieve (max 50)
-     * @param sortType    how to sort the response
-     * @param openNow     retrieve only open restaurants
+     * @param count    number of restaurants to retrieve (max 50)
+     * @param sortType how to sort the response
+     * @param openNow  retrieve only open restaurants
      * @return list of restaurants
      */
     public static BusinessDto[] getRestaurants(
@@ -45,7 +45,7 @@ public class RestaurantDataModel {
         params.put("limit", "" + count);
         params.put("open_now", openNow ? "true" : "false");
 
-        System.err.println("Lat: " + latitude + "\tLong: "+ longitude);
+        System.err.println("Lat: " + latitude + "\tLong: " + longitude);
         System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
@@ -53,19 +53,19 @@ public class RestaurantDataModel {
         return response.businesses();
     }
 
-    private static String noSpace(String link){
+    private static String noSpace(String link) {
         int spaces = 0;
-        for(int i = 0; i < link.length(); i++)
-            if(link.charAt(i) == ' ')
-                spaces ++;
+        for (int i = 0; i < link.length(); i++)
+            if (link.charAt(i) == ' ')
+                spaces++;
 
         char[] url = new char[(2 * spaces) + link.length()];
         int urlPos = url.length - 1;
-        for(int i = link.length() - 1; i >= 0; i--){
-            if(link.charAt(i) != ' '){
+        for (int i = link.length() - 1; i >= 0; i--) {
+            if (link.charAt(i) != ' ') {
                 url[urlPos] = link.charAt(i);
                 urlPos--;
-            }else{
+            } else {
                 url[urlPos] = '0';
                 url[urlPos - 1] = '2';
                 url[urlPos - 2] = '%';
@@ -76,10 +76,11 @@ public class RestaurantDataModel {
         return new String(url);
     }
 
-    public static void setLatitude(double userLat){
+    public static void setLatitude(double userLat) {
         latitude = userLat;
     }
-    public static void setLongitude(double userLong){
+
+    public static void setLongitude(double userLong) {
         longitude = userLong;
     }
 }
