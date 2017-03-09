@@ -36,9 +36,11 @@ public class YelpApiTest {
 
         // build params
         HashMap<String, String> params = new HashMap<>();
-        params.put("latitude", "37.786882");
-        params.put("longitude", "-122.399972");
+        params.put("latitude", "32.874633");
+        params.put("longitude", "-117.242336");
         params.put("categories", "food");
+        params.put("sort_by", "rating");
+        params.put("radius", 1600*10 + "");
         params.put("term", "japanese");
 
         BusinessResponseDto businessResponse = api.businessSearch(params);
