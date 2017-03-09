@@ -48,14 +48,20 @@ public class LandingController extends FragmentActivity {
                 .build();
 
         loginModel.setGoogleApiClient(mGoogleApiClient);
+        loginModel.setLanding(this);
 
         // check if we are already logged in, if yes, start in foodFinderController
         if (loginModel.loggedInPreviously()) {
             startActivity(new Intent(LandingController.this, FoodFinderController.class));
+            changeLandingScreenAfterLogin();
             return;
         }
 
-        setContentView(R.layout.activity_landing);
+        changeLoginScreenBeforeLogin();
+    }
+
+    public void changeLoginScreenBeforeLogin() {
+        setContentView(R.layout.activity_landing_logged_out);
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -63,6 +69,15 @@ public class LandingController extends FragmentActivity {
         facebookLoginButton();
         googleLoginButton();
         guestLogin();
+    }
+
+    private void continueButton() {
+        findViewById(R.id.button_continue).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LandingController.this, PreferencesController.class));
+            }
+        });
     }
 
     private void guestLogin() {
@@ -115,6 +130,7 @@ public class LandingController extends FragmentActivity {
                 loginModel.useFacebookToLogin();
 
                 startActivity(new Intent(LandingController.this, PreferencesController.class));
+                changeLandingScreenAfterLogin();
                 System.out.println("Facebook Login Success!");
             }
 
@@ -129,11 +145,18 @@ public class LandingController extends FragmentActivity {
         });
     }
 
+    private void changeLandingScreenAfterLogin() {
+        setContentView(R.layout.activity_landing_logged_in);
+        continueButton();
+    }
+
     private void googleLoginResult(Intent data) {
         GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
         if (result.isSuccess()) {
             loginModel.useGoogleToLogin(result);
+
             startActivity(new Intent(LandingController.this, PreferencesController.class));
+            changeLandingScreenAfterLogin();
         } else {
             Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
         }

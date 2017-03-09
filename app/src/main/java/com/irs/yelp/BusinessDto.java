@@ -141,6 +141,7 @@ public class BusinessDto implements Parcelable {
 
     /**
      * Convert to BusinessDto array from parcelable array
+     *
      * @param parcelables parcelables to convert from
      * @return array of objects
      */

@@ -11,11 +11,17 @@ public class DBUserToFoodDto {
         return food_id;
     }
 
-    public int user_id(){return user_id;}
+    public int user_id() {
+        return user_id;
+    }
 
-    public int liked(){return liked;}
+    public int liked() {
+        return liked;
+    }
 
-    public int disliked() {return disliked;}
+    public int disliked() {
+        return disliked;
+    }
 
     @Override
     public String toString() {
