@@ -7,6 +7,33 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.36"
+            android:background="@color/colorPrimaryDark"
+            android:fontFamily="monospace"
+            android:text="Upload Pictures"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btn_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.48"
+            android:background="@color/colorAccent"
+            android:fontFamily="monospace"
+            android:text="Settings"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/image"
         android:layout_width="wrap_content"
@@ -23,28 +50,36 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_gravity="center|bottom"
+        android:layout_gravity="bottom|center"
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_upload"
+            android:id="@+id/button_no"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:background="@color/colorPrimaryDark"
+            android:layout_height="45dp"
+            android:layout_margin="0dp"
+            android:layout_weight="1"
+            android:background="@color/noButton"
             android:fontFamily="monospace"
-            android:text="Upload Pictures"
-            android:textColor="@android:color/white" />
+            android:paddingRight="13dp"
+            android:text="@string/left"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_settings"
+            android:id="@+id/button_yes"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:background="@color/colorAccent"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:background="@color/yesButton"
             android:fontFamily="monospace"
-            android:text="Settings"
-            android:textColor="@android:color/white" />
+            android:paddingLeft="13dp"
+            android:text="@string/right"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
 </LinearLayout>
