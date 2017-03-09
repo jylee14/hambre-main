@@ -23,9 +23,13 @@ public class DBFoodDto {
         return name;
     }
 
-    public String description(){return description;}
+    public String description() {
+        return description;
+    }
 
-    public String getTag() {return tag; }
+    public String getTag() {
+        return tag;
+    }
 
     public String path() {
         return path;

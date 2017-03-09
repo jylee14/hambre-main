@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
+import com.irs.main.controller.LandingController;
 import com.irs.server.AuthDto;
 import com.irs.server.ServerApi;
 
@@ -18,6 +19,7 @@ public class FBGoogLoginModel {
     private GoogleSignInOptions gso;
     private GoogleApiClient googleApiClient;
     private CallbackManager cbmanager;
+    private LandingController landing;
 
     private boolean loggedIntoFacebook;
     private boolean loggedIntoGoogle;
@@ -54,6 +56,10 @@ public class FBGoogLoginModel {
 
     public void setGoogleApiClient(GoogleApiClient client) {
         googleApiClient = client;
+    }
+
+    public void setLanding(LandingController lc) {
+        landing = lc;
     }
 
     public GoogleApiClient getGoogleApiClient() {
@@ -142,5 +148,7 @@ public class FBGoogLoginModel {
     public void loggedOut() {
         loggedIntoFacebook = false;
         loggedIntoGoogle = false;
+
+        landing.changeLoginScreenBeforeLogin();
     }
 }

@@ -25,7 +25,7 @@ public class DBUserDto {
 
     // TODO: make 0/1 "ints" into booleans
     public int user_id() {
-       return user_id;
+        return user_id;
     }
 
     public String email() {
