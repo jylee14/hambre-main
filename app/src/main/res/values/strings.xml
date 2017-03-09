@@ -2,4 +2,18 @@
     <string name="app_name">Platanos</string>
     <string name="facebook_app_id">1131719993617566</string>
     <string name="server_img">http://159.203.246.214/irs/randomFood.php</string>
+    <string name="settings_and_preferences">Settings and Preferences</string>
+    <string name="dietary_preferences">Dietary Preferences</string>
+    <string name="logout">Logout</string>
+    <string name="set_maximum_distance">Set maximum distance:</string>
+    <string name="_1_mi">1 mi</string>
+    <string name="sort_recommendations_by">Sort Recommendations By:</string>
+    <string name="by_rating">By Rating</string>
+    <string name="by_distance">By Distance</string>
+    <string name="continue_button">Continue</string>
+
+    <string name="vegetarian">"1000"</string>
+    <string name="vegan">"0100"</string>
+    <string name="kosher">"0010"</string>
+    <string name="gluten">"0001"</string>
 </resources>

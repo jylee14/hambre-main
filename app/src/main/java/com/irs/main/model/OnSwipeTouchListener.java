@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 
 /**
- *  OnSwipeTouchListener
- *  The brains of the FoodFinderController Functionality
- *  will interpret the swiping motion of the user so that the controllers can use this
+ * OnSwipeTouchListener
+ * The brains of the FoodFinderController Functionality
+ * will interpret the swiping motion of the user so that the controllers can use this
  */
 
 public class OnSwipeTouchListener implements OnTouchListener {

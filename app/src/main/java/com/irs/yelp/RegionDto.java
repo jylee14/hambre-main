@@ -5,6 +5,7 @@ package com.irs.yelp;
  */
 public class RegionDto {
     private CoordinatesDto center;
+
     public CoordinatesDto center() {
         return center;
     }

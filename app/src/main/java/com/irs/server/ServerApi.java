@@ -283,7 +283,7 @@ public class ServerApi {
 
 
     /*Not for version 1.0
-    * Error: java.lang.IllegalStateException: Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path
+    * ErrorController: java.lang.IllegalStateException: Expected BEGIN_ARRAY but was BEGIN_OBJECT at line 1 column 2 path
     * */
 
     /*NOT TESTABLE*/

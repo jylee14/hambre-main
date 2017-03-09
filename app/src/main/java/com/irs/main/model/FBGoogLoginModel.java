@@ -1,25 +1,48 @@
 package com.irs.main.model;
 
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
+import android.os.StrictMode;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.OptionalPendingResult;
-
-import static android.content.ContentValues.TAG;
+import com.irs.server.AuthDto;
+import com.irs.server.ServerApi;
 
 public class FBGoogLoginModel {
-    private static GoogleSignInOptions gso;
-    private static CallbackManager cbmanager;
+    private static FBGoogLoginModel instance;
+    private GoogleSignInOptions gso;
+    private GoogleApiClient googleApiClient;
+    private CallbackManager cbmanager;
 
-    public static GoogleSignInOptions getGoogleSignInOptions() {
+    private boolean loggedIntoFacebook;
+    private boolean loggedIntoGoogle;
+
+    private FBGoogLoginModel() {
+        loggedIntoFacebook = false;
+        loggedIntoGoogle = false;
+    }
+
+    public static FBGoogLoginModel getInstance() {
+        if (instance == null) {
+            instance = new FBGoogLoginModel();
+        }
+        return instance;
+    }
+
+    public boolean isLoggedIntoFacebook() {
+        return loggedIntoFacebook;
+    }
+
+    public boolean isLoggedIntoGoogle() {
+        return loggedIntoGoogle;
+    }
+
+    public GoogleSignInOptions getGoogleSignInOptions() {
         if (gso == null) {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken("58151517395-7u4o0o77s2ff8dtbvio1v2tab2snf116.apps.googleusercontent.com")
@@ -29,35 +52,95 @@ public class FBGoogLoginModel {
         return gso;
     }
 
-    public static CallbackManager getFBManager() {
+    public void setGoogleApiClient(GoogleApiClient client) {
+        googleApiClient = client;
+    }
+
+    public GoogleApiClient getGoogleApiClient() {
+        return googleApiClient;
+    }
+
+    public CallbackManager getFBManager() {
         if (cbmanager == null) {
             cbmanager = CallbackManager.Factory.create();
         }
         return cbmanager;
     }
 
-    public static boolean loggedIn(GoogleApiClient mGoogleApiClient) {
-        boolean fb = AccessToken.getCurrentAccessToken() != null;
+    /**
+     * Returns if the user was logged in previously. Also logs in to our server
+     * if the user had logged in
+     *
+     * @return if the user was logged in previously
+     */
+    public boolean loggedInPreviously() {
+        // if facebook is logged in
+        if (AccessToken.getCurrentAccessToken() != null) {
+            useFacebookToLogin();
+            return true;
+        }
 
-        return fb | googleLoggedIn(mGoogleApiClient);
+        // else return whether google was logged in
+        return googleLoggedIn();
+
     }
 
     /**
      * Gets whether the user logged in via google previously
-     *
+     * <p>
      * "Adapted" from
      * http://stackoverflow.com/questions/35195673/check-whether-the-user-is-already-logged-in-using-auth-googlesigninapi
-     * @param mGoogleApiClient something from google
+     *
      * @return Whether the user logged in via google previously
      */
-    private static boolean googleLoggedIn(GoogleApiClient mGoogleApiClient) {
-        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
-        if(opr.isDone()){
-            GoogleSignInResult result = opr.get();
-            result.getSignInAccount();
+    private boolean googleLoggedIn() {
+        OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(googleApiClient);
+        if (opr.isDone()) {
+            useGoogleToLogin(opr.get());
+            loggedIntoGoogle = true;
+            loggedIntoFacebook = false;
             return true;
         }
         return false;
     }
 
+    public void useFacebookToLogin() {
+        // TODO: 3/8/17 ASYNC?
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        AuthDto response =
+                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
+        System.out.println("GOT DATA FROM SERVER: " + response.user());
+
+        UserModel.getInstance().loginAccount(response.user().api_key());
+        System.out.println("LOGGED IN TO SERVER");
+
+        loggedIntoFacebook = true;
+    }
+
+    public void useGoogleToLogin(GoogleSignInResult result) {
+        // TODO: 3/8/17 ASYNC?
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        GoogleSignInAccount acct = result.getSignInAccount();
+        System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
+
+        AuthDto response = ServerApi.getInstance().authServer(acct);
+        System.out.println("GOT DATA FROM SERVER: " + response.user());
+
+        UserModel.getInstance().loginAccount(response.user().api_key());
+        System.out.println("LOGGED IN TO SERVER");
+
+        loggedIntoGoogle = true;
+    }
+
+    /**
+     * Changes the values when the user logs out
+     */
+    public void loggedOut() {
+        loggedIntoFacebook = false;
+        loggedIntoGoogle = false;
+    }
 }

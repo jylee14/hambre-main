@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
 import com.irs.main.R;
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.CoordinatesDto;
@@ -19,11 +19,11 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
 
     ListView list;
     BusinessDto[] businesses;
-    String [] names;
-    String [] url;
-    String [] imageUrl;
-    double [] ratings;
-    String [] prices;
+    String[] names;
+    String[] url;
+    String[] imageUrl;
+    double[] ratings;
+    String[] prices;
     CoordinatesDto[] coordinates;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         Uri uri = Uri.parse(uriString);
         Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
         startActivity(intent);
-    } 
+    }
 
     public void run() {
         businesses = BusinessDto.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
@@ -66,7 +66,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         prices = new String[businesses.length];
         coordinates = new CoordinatesDto[businesses.length];
 
-        for(int i = 0; i < businesses.length; i++){
+        for (int i = 0; i < businesses.length; i++) {
             names[i] = businesses[i].name();
             url[i] = businesses[i].url();
             imageUrl[i] = businesses[i].image_url();
@@ -74,17 +74,17 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
             prices[i] = businesses[i].price();
             coordinates[i] = businesses[i].coordinates();
         }
-        RestaurantList adapter = new
-                RestaurantList(SelectRestaurantController.this,
+        RestaurantListController adapter = new
+                RestaurantListController(SelectRestaurantController.this,
                 names, url, imageUrl, ratings, prices, coordinates);
-        list = (ListView)findViewById(R.id.list);
+        list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
         //open yelp page of selected restaurant in browser
-        list.setOnItemClickListener( new AdapterView.OnItemClickListener(){
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id){
+                                    int position, long id) {
                 Intent browserIntent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(url[position]));
                 startActivity(browserIntent);

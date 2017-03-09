@@ -1,19 +1,15 @@
 package com.irs.main.controller;
 
-import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.app.FragmentActivity;;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -22,20 +18,28 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.irs.main.R;
-import com.irs.main.model.FoodDto;
+import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.UserModel;
 import com.irs.yelp.SortType;
 
-public class PreferencesController extends FragmentActivity{
+public class PreferencesController extends FragmentActivity {
     private TextView maxRad;
     private UserModel user = UserModel.getInstance();
+    private FBGoogLoginModel loginModel;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
+
+        loginModel = FBGoogLoginModel.getInstance();
 
         Button diet = (Button) findViewById(R.id.DPref);
         SeekBar rad = (SeekBar) findViewById(R.id.radius);
@@ -62,9 +66,85 @@ public class PreferencesController extends FragmentActivity{
                 user.setSortType(SortType.distance);
             }
         });
+        setLogout();
         distanceBar(rad);
         toNextPage(cont);
         toDietPreferences(diet);
+    }
+
+    private void setLogout() {
+        // TODO: 3/8/17 add confirmation dialogue
+        Button logout = (Button) findViewById(R.id.button_logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logout();
+            }
+        });
+    }
+
+    private void logout() {
+        if (loginModel.isLoggedIntoFacebook() || loginModel.isLoggedIntoGoogle()) {
+            new AlertDialog.Builder(this).setTitle("Logout Confirmation")
+                    .setMessage("Are you sure you want to logout?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (loginModel.isLoggedIntoGoogle())
+                                PreferencesController.this.logoutOfGoogle();
+                            else
+                                logoutOfFacebook();
+
+                            loginModel.loggedOut();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
+        } else {
+            Toast.makeText(this, "You're not logged in", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void logoutOfFacebook() {
+        if (loginModel.isLoggedIntoFacebook()) {
+            LoginManager.getInstance().logOut();
+            logoutToLanding();
+        }
+    }
+
+    private void logoutToLanding() {
+        Intent intent = new Intent(PreferencesController.this, LandingController.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void logoutOfGoogle() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        if (loginModel.isLoggedIntoGoogle()) {
+            final GoogleApiClient googleApiClient = loginModel.getGoogleApiClient();
+            googleApiClient.connect();
+            googleApiClient.registerConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                @Override
+                public void onConnected(@Nullable Bundle bundle) {
+                    if (googleApiClient.isConnected()) {
+                        Auth.GoogleSignInApi.signOut(googleApiClient).setResultCallback(new ResultCallback<Status>() {
+                            @Override
+                            public void onResult(@NonNull Status status) {
+                                logoutToLanding();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onConnectionSuspended(int i) {
+                    //Log.d(TAG, "Google API Client Connection Suspended");
+                }
+            });
+        }
     }
 
     private void toDietPreferences(Button diet) {
@@ -74,7 +154,7 @@ public class PreferencesController extends FragmentActivity{
         diet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(PreferencesController.this, DietRestriction.class);
+                Intent i = new Intent(PreferencesController.this, DietRestrictionController.class);
                 Bundle bundle = getIntent().getExtras();
                 if (bundle != null) i.putExtras(bundle);
                 startActivity(i);
@@ -100,7 +180,7 @@ public class PreferencesController extends FragmentActivity{
                         // switch to food finder screen
                         startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
                     } catch (Exception e) {
-                        startActivity(new Intent(PreferencesController.this, Error.class));
+                        startActivity(new Intent(PreferencesController.this, ErrorController.class));
                     }
                 }
             }

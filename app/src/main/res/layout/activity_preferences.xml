@@ -21,20 +21,27 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings and Preferences"
+            android:text="@string/settings_and_preferences"
             android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/DPref"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:background="@color/colorPrimaryDark"
-            android:fontFamily="monospace"
-            android:text="Dietary Preferences"
-            android:textColor="@android:color/white" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/DPref"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/colorPrimaryDark"
+                android:fontFamily="monospace"
+                android:text="@string/dietary_preferences"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
 
 
         <LinearLayout
@@ -46,7 +53,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".8"
-                android:text="Set maximum distance: "
+                android:text="@string/set_maximum_distance"
                 android:textSize="22sp" />
 
             <TextView
@@ -54,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight=".2"
-                android:text="1 mi"
+                android:text="@string/_1_mi"
                 android:textSize="22sp" />
         </LinearLayout>
 
@@ -74,7 +81,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Sort Recommendations By:" />
+                android:text="@string/sort_recommendations_by" />
 
             <RadioGroup
                 android:id="@+id/sorting"
@@ -87,16 +94,28 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
                     android:enabled="true"
-                    android:text="By Rating" />
+                    android:text="@string/by_rating" />
 
                 <RadioButton
                     android:id="@+id/dist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="15dp"
-                    android:text="By Distance" />
+                    android:text="@string/by_distance" />
+
             </RadioGroup>
         </LinearLayout>
+
+        <Button
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/colorAccent"
+            android:fontFamily="monospace"
+            android:text="@string/logout"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -111,9 +130,10 @@
             android:layout_gravity="bottom|center"
             android:background="@color/colorPrimaryDark"
             android:fontFamily="monospace"
-            android:text="Continue"
+            android:text="@string/continue_button"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
+
     </LinearLayout>
 
 </LinearLayout>

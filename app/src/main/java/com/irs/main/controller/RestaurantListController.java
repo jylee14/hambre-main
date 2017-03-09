@@ -23,17 +23,17 @@ import com.squareup.picasso.Picasso;
 
 import java.net.URL;
 
-public class RestaurantList extends ArrayAdapter<String> {
+public class RestaurantListController extends ArrayAdapter<String> {
     private final Activity context;
-    private final String []name;
-    private final String []url;
-    private final String []imageUrl;
-    private final double []rating;
-    private final String []price;
-    private final CoordinatesDto[]coordinates;
+    private final String[] name;
+    private final String[] url;
+    private final String[] imageUrl;
+    private final double[] rating;
+    private final String[] price;
+    private final CoordinatesDto[] coordinates;
 
-    RestaurantList(Activity context, String [] name, String[] url,
-                   String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates){
+    RestaurantListController(Activity context, String[] name, String[] url,
+                             String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates) {
 
         super(context, R.layout.list_single, name);
         this.context = context;
@@ -46,26 +46,26 @@ public class RestaurantList extends ArrayAdapter<String> {
     }
 
     @Override
-    public View getView(final int position, View view, ViewGroup parent){
+    public View getView(final int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View rowView = inflater.inflate(R.layout.list_single, null, true);
 
-        TextView txtName = (TextView)rowView.findViewById(R.id.name);
+        TextView txtName = (TextView) rowView.findViewById(R.id.name);
         txtName.setText(name[position]);
-        TextView txtPrice = (TextView)rowView.findViewById(R.id.price);
+        TextView txtPrice = (TextView) rowView.findViewById(R.id.price);
         txtPrice.setText(price[position]);
-        RatingBar ratingBar = (RatingBar)rowView.findViewById(R.id.rating);
-        ratingBar.setRating((float)rating[position]);
+        RatingBar ratingBar = (RatingBar) rowView.findViewById(R.id.rating);
+        ratingBar.setRating((float) rating[position]);
         Drawable progress = ratingBar.getProgressDrawable();
         DrawableCompat.setTint(progress, Color.BLACK);
 
-        ImageView imageView = (ImageView)rowView.findViewById(R.id.img);
-        Button mapButton = (Button)rowView.findViewById(R.id.map_button);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
+        Button mapButton = (Button) rowView.findViewById(R.id.map_button);
         mapButton.setFocusable(false);
 
-        mapButton.setOnClickListener(new View.OnClickListener(){
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 openMaps(coordinates[position], name[position]);
             }
         });
@@ -76,8 +76,7 @@ public class RestaurantList extends ArrayAdapter<String> {
             //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             //imageView.setImageBitmap(bmp);
             Picasso.with(context).load(url.toString()).into(imageView);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.out.println("KAAAAAAAAAAAAAAAAAAAAHHHHNNNN!!!");
         }
         return rowView;
