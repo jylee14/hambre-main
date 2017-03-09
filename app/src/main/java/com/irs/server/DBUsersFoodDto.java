@@ -7,13 +7,21 @@ public class DBUsersFoodDto {
     private int unliked;
 
 
-    public int user_id(){return user_id;}
+    public int user_id() {
+        return user_id;
+    }
 
-    public int food_id(){return food_id;}
+    public int food_id() {
+        return food_id;
+    }
 
-    public int liked(){return liked;}
+    public int liked() {
+        return liked;
+    }
 
-    public int unliked(){return unliked;}
+    public int unliked() {
+        return unliked;
+    }
 
     public String toString() {
         return "DBUsersFoodDto{" +
