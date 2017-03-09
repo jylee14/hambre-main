@@ -15,9 +15,14 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.irs.main.DietType;
 import com.irs.main.R;
 import com.irs.main.model.UserModel;
 import com.irs.server.ServerApi;
+
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by jeff on 3/3/17.
@@ -44,6 +49,13 @@ public class UploadPhoto extends FragmentActivity {
             "Indian", "Italian","Japanese", "Korean","Mexican","Russian" ,"Thai" };
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
         "Kosher", "Gluten Free"};
+    Map<String, DietType> dietMap = new HashMap<String, DietType>(){{
+        put("Gluten Free", DietType.GlutenFree);
+        put("Kosher", DietType.Kosher);
+        put("Vegan", DietType.Vegan);
+        put("Vegetarian", DietType.Vegetarian);
+        put("None", DietType.None);
+    }};
     private static final String[] categoryPaths = {"food", "desert", "fruit", "spicy"};
     private String picName = "";
 
@@ -63,12 +75,12 @@ public class UploadPhoto extends FragmentActivity {
         cultureSpinner.setAdapter(adapter);
 
         dietSpinner = (Spinner)findViewById(R.id.dietary_spinner);
-        ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
+        final ArrayAdapter<String>dietAdapter = new ArrayAdapter<String>(UploadPhoto.this,
                 android.R.layout.simple_spinner_item, dietPaths);
         dietSpinner.setAdapter(dietAdapter);
 
         categorySpinner = (Spinner)findViewById(R.id.category_spinner);
-        ArrayAdapter<String> categoryAdapter = new
+        final ArrayAdapter<String> categoryAdapter = new
                 ArrayAdapter<String>(UploadPhoto.this, android.R.layout.simple_spinner_item,
                 categoryPaths);
         categorySpinner.setAdapter(categoryAdapter);
@@ -76,6 +88,8 @@ public class UploadPhoto extends FragmentActivity {
         cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                culture = culturePaths[position];
+                /* not needed ?
                 switch(position){
                     case 0: //American (new)
                         culture = culturePaths[0];
@@ -110,7 +124,8 @@ public class UploadPhoto extends FragmentActivity {
                     case 10: //Thai
                         culture = culturePaths[10];
                         break;
-                }
+
+                }*/
             }
 
             @Override
@@ -122,6 +137,9 @@ public class UploadPhoto extends FragmentActivity {
         dietSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                diet = dietPaths[position];
+                /* don't need switch case, can use array
+                not sure why there is a default case
                 switch(position){
                     case 0://None
                         diet = dietPaths[0];
@@ -142,6 +160,7 @@ public class UploadPhoto extends FragmentActivity {
                         diet = "none";
                         break;
                 }
+                */
             }
 
             @Override
@@ -154,7 +173,8 @@ public class UploadPhoto extends FragmentActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //{"food", "desert", "fruit", "spicey"};
-                switch (position){
+                category = categoryPaths[position];
+                /*switch (position){
                     case 0://food
                         category = categoryPaths[0];
                         break;
@@ -170,9 +190,7 @@ public class UploadPhoto extends FragmentActivity {
                     default://food
                         category = categoryPaths[0];
                         break;
-
-
-                }
+                }*/
             }
 
             @Override
@@ -199,7 +217,7 @@ public class UploadPhoto extends FragmentActivity {
                     Toast.makeText(UploadPhoto.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
                     // upload image
-                    ServerApi.getInstance().uploadFood(pic, picName + ".jpg", name, culture, category, "220d763d2aa724c6a59d5649138a0211", 0, 0, 0, 0);
+                    UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
 
                     finish();
                 }
