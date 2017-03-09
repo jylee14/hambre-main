@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UploadPhotoController extends FragmentActivity {
+
+    private static final int CAMERA_REQUEST = 1888;
+    private static final int GALLERY_REQUEST = 1887;
 
     private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;
@@ -73,8 +75,8 @@ public class UploadPhotoController extends FragmentActivity {
         cameraButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent Intent3 = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-                startActivity(Intent3);
+                Intent Intent3 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(Intent3, CAMERA_REQUEST);
             }
         });
     }
@@ -194,8 +196,7 @@ public class UploadPhotoController extends FragmentActivity {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 2);
         intent.putExtra("return-data", true);
-        startActivityForResult(intent, 1);
-
+        startActivityForResult(intent, GALLERY_REQUEST);
     }
 
     @Override
@@ -204,7 +205,12 @@ public class UploadPhotoController extends FragmentActivity {
         if (resultCode != RESULT_OK) {
             return;
         }
-        if (requestCode == 1) {
+        // image from camera
+        if (requestCode == CAMERA_REQUEST) {
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            selectedPic.setImageBitmap(photo);
+        } else if (requestCode == GALLERY_REQUEST) {
+            // image from gallery
             final Bundle extras = data.getExtras();
             System.out.println("BUNDLE: " + extras.toString());
             if (extras != null) {
@@ -214,7 +220,6 @@ public class UploadPhotoController extends FragmentActivity {
                     if (value != null) {
                         System.out.println(" value: " + value.toString() + " class: " + value.getClass().getName());
                     }
-                    ;
                 }
             }
             if (extras != null) {

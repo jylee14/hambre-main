@@ -44,6 +44,10 @@ public class FBGoogLoginModel {
         return loggedIntoGoogle;
     }
 
+    public boolean isLoggedIn() {
+        return loggedIntoFacebook || loggedIntoGoogle;
+    }
+
     public GoogleSignInOptions getGoogleSignInOptions() {
         if (gso == null) {
             gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
