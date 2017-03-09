@@ -139,6 +139,11 @@ public class BusinessDto implements Parcelable {
     }
 
 
+    /**
+     * Convert to BusinessDto array from parcelable array
+     * @param parcelables parcelables to convert from
+     * @return array of objects
+     */
     public static BusinessDto[] toBusinessModel(Parcelable[] parcelables) {
         BusinessDto[] businesses = new BusinessDto[parcelables.length];
         System.arraycopy(parcelables, 0, businesses, 0, parcelables.length);
