@@ -34,11 +34,14 @@ public class RestaurantDataModel {
         //BusinessDto[] restaurants = new BusinessDto[count];
         String urlName = noSpace(query);
 
+        String categoriesParam = ((category == null || category == "") ? "food": category);
+        categoriesParam += ",restaurants";
+
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
         params.put("latitude", "" + latitude);
         params.put("longitude", "" + longitude);
-        params.put("categories", ((category == null || category == "") ? "food" : category));
+        params.put("categories", categoriesParam);
         params.put("term", urlName);
         params.put("sort_by", "" + sortType);
         params.put("radius", "" + radius);

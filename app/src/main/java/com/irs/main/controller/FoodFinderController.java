@@ -237,7 +237,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
         int tries = 0;
         boolean GPSPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-        boolean networkPermission = checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+        boolean networkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
         if (!GPSPermission && !networkPermission)
             ActivityCompat.requestPermissions(FoodFinderController.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
