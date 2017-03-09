@@ -31,9 +31,10 @@ public class RestaurantListController extends ArrayAdapter<String> {
     private final double[] rating;
     private final String[] price;
     private final CoordinatesDto[] coordinates;
+    private final double[] distances;
 
     RestaurantListController(Activity context, String[] name, String[] url,
-                             String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates) {
+                             String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates,double[] distances) {
 
         super(context, R.layout.list_single, name);
         this.context = context;
@@ -43,6 +44,7 @@ public class RestaurantListController extends ArrayAdapter<String> {
         this.rating = rating;
         this.price = price;
         this.coordinates = coordinates;
+        this.distances = distances;
     }
 
     @Override

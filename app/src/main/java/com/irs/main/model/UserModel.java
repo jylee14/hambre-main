@@ -32,6 +32,9 @@ public class UserModel {
 
     private boolean isGuest = true;
 
+    private double latitude;
+    private double longitude;
+
     // singleton instance
     private static UserModel instance = new UserModel();
 
@@ -219,5 +222,21 @@ public class UserModel {
 
     public String getApiKey() {
         return apiKey;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }

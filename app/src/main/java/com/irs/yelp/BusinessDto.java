@@ -21,6 +21,7 @@ public class BusinessDto implements Parcelable {
     String image_url;
     LocationDto location;
     String address;
+    double distance;
 
     protected BusinessDto(Parcel in) {
         rating = in.readDouble();
@@ -34,6 +35,7 @@ public class BusinessDto implements Parcelable {
         coordinate = in.readString();
         image_url = in.readString();
         address = in.readString();
+        distance = in.readDouble();
     }
 
     public static final Creator<BusinessDto> CREATOR = new Creator<BusinessDto>() {
@@ -96,6 +98,10 @@ public class BusinessDto implements Parcelable {
         return location;
     }
 
+    public double distance() {
+        return distance;
+    }
+
     public String toString() {
         return this.name + "\t" + this.phone + "\t" + this.rating + "\t" + this.price + "\t" + this.categories[0] + "\t" + this.location;
     }
@@ -136,6 +142,7 @@ public class BusinessDto implements Parcelable {
         dest.writeString(coordinates.toString());
         dest.writeString(image_url);
         dest.writeString(location.toString());
+        dest.writeDouble(distance);
     }
 
 
@@ -144,7 +151,7 @@ public class BusinessDto implements Parcelable {
      * @param parcelables parcelables to convert from
      * @return array of objects
      */
-    public static BusinessDto[] toBusinessModel(Parcelable[] parcelables) {
+    public static BusinessDto[] toBusinessModel(final Parcelable[] parcelables) {
         BusinessDto[] businesses = new BusinessDto[parcelables.length];
         System.arraycopy(parcelables, 0, businesses, 0, parcelables.length);
         return businesses;
