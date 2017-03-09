@@ -34,7 +34,7 @@ public class RestaurantDataModel {
         //BusinessDto[] restaurants = new BusinessDto[count];
         String urlName = noSpace(query);
 
-        String categoriesParam = ((category == null || category == "") ? "food": category);
+        String categoriesParam = ((category == null || category == "") ? "food" : category);
         categoriesParam += ",restaurants";
 
         // Set the POST params based on method parameters

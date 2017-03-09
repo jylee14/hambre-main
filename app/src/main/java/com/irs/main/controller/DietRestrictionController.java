@@ -56,6 +56,7 @@ public class DietRestrictionController extends FragmentActivity {
                 //push update to server);
                 //database.getUser(username)
                 //username.updateDiet(newPref, prefIndex);
+                UserModel.getInstance().saveToDatabaseAsync();
                 Toast.makeText(DietRestrictionController.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                 returnToPrev();
                 //else

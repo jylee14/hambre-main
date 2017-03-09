@@ -53,15 +53,17 @@ public class ServerApi {
     private DBUsersFoodDto[] usersFoodsCache;
 
     // singleton model private constructor
-    private ServerApi() {}
+    private ServerApi() {
+    }
 
     /**
      * helper method to get authorization from server
-     * @param token token to login with
+     *
+     * @param token         token to login with
      * @param loginEndpoint which endpoint to use
      * @return authorizatio data
      */
-    private AuthDto authServer(String token, String loginEndpoint){
+    private AuthDto authServer(String token, String loginEndpoint) {
         HashMap<String, String> params = new HashMap<>();
         params.put("id_token", token);
 
@@ -73,6 +75,7 @@ public class ServerApi {
 
     /**
      * authorize with Google
+     *
      * @param acct google data to sign in with
      * @return authorization data
      */
@@ -82,6 +85,7 @@ public class ServerApi {
 
     /**
      * authorize with Facebook
+     *
      * @param token token to sign in with
      * @return authorization data
      */
@@ -91,6 +95,7 @@ public class ServerApi {
 
     /**
      * get a user's preferences from the database
+     *
      * @param api_key user's api key
      * @return preferences object retrieved
      */
@@ -165,14 +170,15 @@ public class ServerApi {
 
     /**
      * Update user preferences in the db
-     * @param api_key key to update
-     * @param vegetarian 0/1 value for vegetarian
-     * @param vegan 0/1 value for vegan
-     * @param kosher 0/1 value for kosher
+     *
+     * @param api_key     key to update
+     * @param vegetarian  0/1 value for vegetarian
+     * @param vegan       0/1 value for vegan
+     * @param kosher      0/1 value for kosher
      * @param gluten_free 0/1 value for gluten_free
-     * @param by_rating 0/1 value for rating
+     * @param by_rating   0/1 value for rating
      * @param by_distance 0/1 value for distance
-     * @param distance 1-25 value for distance
+     * @param distance    1-25 value for distance
      * @return set params object
      */
     public DBSetPreferencesDto setPreferences(
@@ -205,6 +211,7 @@ public class ServerApi {
 
     /**
      * Set users preferences (convenience overload)
+     *
      * @param api_key  key of user
      * @param dietType user diet
      * @param sortType sort type
@@ -257,6 +264,7 @@ public class ServerApi {
 
     /**
      * endpoint to get food
+     *
      * @return array of food objects from database
      */
     public DBFoodDto[] getFood() {
@@ -271,7 +279,7 @@ public class ServerApi {
     }
 
     @Deprecated
-    public DBLinkTagToFoodDto getLinkTagToFood(int tag_id, int food_id){
+    public DBLinkTagToFoodDto getLinkTagToFood(int tag_id, int food_id) {
         // params are empty (no params needed for get food)
         HashMap<String, String> params = new HashMap<String, String>();
         params.put("food_id", food_id + "");
@@ -303,10 +311,11 @@ public class ServerApi {
     /**
      * Gets a users food data
      * NOTE: not used in current version
+     *
      * @param api_key user's key
      * @return array of DBUsersFoodDto representing liked and unliked foods
      */
-    public DBUsersFoodDto[] getUsersFood(String api_key){
+    public DBUsersFoodDto[] getUsersFood(String api_key) {
         HashMap<String, String> params = new HashMap<>();
         params.put("api_key", api_key + "");
 
@@ -327,13 +336,14 @@ public class ServerApi {
     /**
      * set a user to like or unlike a food
      * NOTE: unused in current version
-     * @param api_key user's key
-     * @param food_id id of food to set
-     * @param liked 0/1 user liked food?
+     *
+     * @param api_key  user's key
+     * @param food_id  id of food to set
+     * @param liked    0/1 user liked food?
      * @param disliked 0/1 user disliked food?
      * @return DBUserToFoodDto[] representing user data
      */
-    public DBUserToFoodDto[] setUserToFood(String api_key, int food_id, int liked, int disliked){
+    public DBUserToFoodDto[] setUserToFood(String api_key, int food_id, int liked, int disliked) {
         HashMap<String, String> params = new HashMap<>();
         params.put("food_id", food_id + "");
         params.put("api_key", api_key + "");
@@ -365,27 +375,29 @@ public class ServerApi {
 
     /**
      * Helper method to decompose a bitmap
+     *
      * @param bitmap bitmap to get data from (MUST BE JPEG FORMAT)
      * @return array of bytes representing bitmap
      */
     private byte[] convertBitmapToBytes(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte [] bytes = byteArrayOutputStream.toByteArray();
+        byte[] bytes = byteArrayOutputStream.toByteArray();
         return bytes;
     }
 
     /**
      * Food upload method
-     * @param picture bitmap to send
+     *
+     * @param picture     bitmap to send
      * @param pictureName name of picture
-     * @param name name of food
-     * @param culture culture of food (search term)
-     * @param category category of food (category filter)
-     * @param api_key user api key associated
-     * @param vegetarian 0/1 vegetarian?
-     * @param vegan 0/1 vegan?
-     * @param kosher 0/1 kosher?
+     * @param name        name of food
+     * @param culture     culture of food (search term)
+     * @param category    category of food (category filter)
+     * @param api_key     user api key associated
+     * @param vegetarian  0/1 vegetarian?
+     * @param vegan       0/1 vegan?
+     * @param kosher      0/1 kosher?
      * @param gluten_free 0/1 gluten_free?
      * @return the response string
      */
@@ -407,7 +419,7 @@ public class ServerApi {
         // image type is jpeg
         String imageType = "image/jpeg";
 
-        HashMap<String, String>  params = new HashMap<>();
+        HashMap<String, String> params = new HashMap<>();
 
         // set params based on method params
         params.put("name", name);
@@ -417,7 +429,7 @@ public class ServerApi {
         params.put("vegetarian", "" + vegetarian);
         params.put("vegan", "" + vegan);
         params.put("kosher", "" + kosher);
-        params.put("gluten_free","" + gluten_free);
+        params.put("gluten_free", "" + gluten_free);
         params.put("submit", "submit");
 
         // result is empty by default
@@ -455,14 +467,14 @@ public class ServerApi {
 
                 // everything here is NECESSARY for the data to go through correctly
                 // dashes, conntent headers, newlines etc.
-                imageQueryString += "--"+ boundary + "\n";
-                imageQueryString  += "Content-Disposition: form-data;";
-                imageQueryString  += " name=\"picture\";";
-                imageQueryString  += " filename=\"" + pictureName + "\"";
-                imageQueryString  += "\n";
-                imageQueryString  += "Content-Type: " + imageType;
-                imageQueryString  += "\n";
-                imageQueryString  += "\n";
+                imageQueryString += "--" + boundary + "\n";
+                imageQueryString += "Content-Disposition: form-data;";
+                imageQueryString += " name=\"picture\";";
+                imageQueryString += " filename=\"" + pictureName + "\"";
+                imageQueryString += "\n";
+                imageQueryString += "Content-Type: " + imageType;
+                imageQueryString += "\n";
+                imageQueryString += "\n";
 
                 // write the string bytes then the image bytes then two newlines
                 dataOS.writeBytes(imageQueryString);
@@ -546,7 +558,7 @@ public class ServerApi {
      * @param writeToBody should write to body of request or head?
      * @return
      */
-    private String getJSONResponse(String urlBase, String method, HashMap<String, String> params,boolean writeToBody) {
+    private String getJSONResponse(String urlBase, String method, HashMap<String, String> params, boolean writeToBody) {
         String result = null;
         // variables to verify connection
         int tries = 0;
@@ -557,7 +569,7 @@ public class ServerApi {
             // get access token
             try {
                 String queryString = "";
-                if(params != null) {
+                if (params != null) {
                     Iterator<String> keys = params.keySet().iterator();
                     for (int i = 0; i < params.size(); i++) {
                         String key = keys.next();
@@ -595,7 +607,7 @@ public class ServerApi {
                         urlBase += "?" + queryString;
 
                     url = new URL(urlBase);
-                    client = (HttpURLConnection)(url.openConnection());
+                    client = (HttpURLConnection) (url.openConnection());
                     client.setRequestProperty("User-Agent", "Mozilla/5.0");
                     client.setReadTimeout(10000);
                     client.setConnectTimeout(15000);
@@ -637,6 +649,7 @@ public class ServerApi {
 
     /**
      * get server singleton instance
+     *
      * @return
      */
     public static ServerApi getInstance() {

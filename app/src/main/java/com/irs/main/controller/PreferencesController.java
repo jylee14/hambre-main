@@ -84,7 +84,7 @@ public class PreferencesController extends FragmentActivity {
     }
 
     private void logout() {
-        if (loginModel.isLoggedIntoFacebook() || loginModel.isLoggedIntoGoogle()) {
+        if (loginModel.isLoggedIn()) {
             new AlertDialog.Builder(this).setTitle("Logout Confirmation")
                     .setMessage("Are you sure you want to logout?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
