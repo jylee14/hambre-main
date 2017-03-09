@@ -33,21 +33,14 @@
         android:id="@+id/name_txt"
         android:hint="Enter Name"/>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <TextView
-            android:layout_width="wrap_content"
+        <EditText
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Select Culture:  "
-            android:textSize="8pt"/>
-
-        <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/culture_spinner"
-            android:spinnerMode="dropdown">
-        </Spinner>
+            android:id="@+id/culture_txt"
+            android:hint="Enter Culture"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

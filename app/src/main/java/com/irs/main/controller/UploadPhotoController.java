@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,12 +18,13 @@ import android.widget.Toast;
 import com.irs.main.DietType;
 import com.irs.main.R;
 import com.irs.main.model.UserModel;
+import com.irs.server.ServerApi;
 
+import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UploadPhotoController extends FragmentActivity {
-
     private static final int CAMERA_REQUEST = 1888;
     private static final int GALLERY_REQUEST = 1887;
 
@@ -31,18 +33,18 @@ public class UploadPhotoController extends FragmentActivity {
     private EditText foodName;
     private ImageView selectedPic;
     private String culture, diet, category, name;
-    private Spinner cultureSpinner, dietSpinner, categorySpinner;
+    private Spinner  dietSpinner, categorySpinner;
+    private EditText cultureTxt;
 
     //TODO add all cultures in alphabetical order available in yelp API found at:
     //https://www.yelp.com/developers/documentation/v2/all_category_list
 
     //TODO also change switch statement below for cultureSpinner.OnItemSelected
 
-    private static final String[] culturePaths = {"American (new)", "American (traditional)", "Chinese", "Cuban",
-            "Indian", "Italian", "Japanese", "Korean", "Mexican", "Russian", "Thai"};
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
             "Kosher", "Gluten Free"};
-    Map<String, DietType> dietMap = new HashMap<String, DietType>() {{
+
+    Map<String, DietType> dietMap = new HashMap<String, DietType>(){{
         put("Gluten Free", DietType.GlutenFree);
         put("Kosher", DietType.Kosher);
         put("Vegan", DietType.Vegan);
@@ -53,15 +55,14 @@ public class UploadPhotoController extends FragmentActivity {
     private String picName = "";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload_photo);
 
-        foodName = (EditText) findViewById(R.id.name_txt);
-        selectedPic = (ImageView) findViewById(R.id.selected_pic);
+        foodName = (EditText)findViewById(R.id.name_txt);
+        selectedPic = (ImageView)findViewById(R.id.selected_pic);
+        cultureTxt = (EditText)findViewById(R.id.culture_txt);
 
-        setCultureSpinner();
         setDietSpinner();
         setCategorySpinner();
         setSaveButton();
@@ -92,35 +93,42 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
+    private void setSaveButton() {
+        saveButton = (Button) findViewById(R.id.save_photo_button);
+        saveButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(foodName.getText().toString().equals("") || cultureTxt.getText().toString().equals("")){
+                    Toast.makeText(UploadPhotoController.this, "Please fill in all text fields", Toast.LENGTH_SHORT).show();
+                }else {
+                    name = foodName.getText().toString();
+                    culture = cultureTxt.getText().toString();
+
+                    try {
+                        name = foodName.getText().toString();
+                        System.out.println("Culture: " + culture + "\nDiet: " + diet +
+                                "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
+                        Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
+
+                        // upload image
+                        UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
+
+                        finish();
+                    } catch (Exception ex) {
+                        System.out.println("You will be assimilated. Resistance is futile.");
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
     private void setChosePhotoButton() {
         chosePhotoButton = (Button) findViewById(R.id.chose_photo_button);
         chosePhotoButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickImage();
-            }
-        });
-    }
-
-    private void setSaveButton() {
-        saveButton = (Button) findViewById(R.id.save_photo_button);
-        saveButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    name = foodName.getText().toString();
-                    System.out.println("Culture: " + culture + "\nDiet: " + diet +
-                            "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
-                    Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
-
-                    // upload image
-                    UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
-
-                    finish();
-                } catch (Exception ex) {
-                    System.out.println("You will be assimilated. Resistance is futile.");
-                    ex.printStackTrace();
-                }
             }
         });
     }
@@ -164,29 +172,9 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
-    private void setCultureSpinner() {
-        cultureSpinner = (Spinner) findViewById(R.id.culture_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(UploadPhotoController.this,
-                android.R.layout.simple_spinner_item, culturePaths);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cultureSpinner.setAdapter(adapter);
 
-        cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                culture = culturePaths[position];
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    public void pickImage() {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+    public void pickImage(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         //TODO change these to crop and save as vertical phone pic
         intent.setType("image/*");
         intent.putExtra("crop", "true");
@@ -196,12 +184,12 @@ public class UploadPhotoController extends FragmentActivity {
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 2);
         intent.putExtra("return-data", true);
-        startActivityForResult(intent, GALLERY_REQUEST);
+        startActivityForResult(intent, 1);
+
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
             return;
         }
