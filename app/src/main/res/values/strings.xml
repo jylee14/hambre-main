@@ -16,4 +16,7 @@
     <string name="vegan">"0100"</string>
     <string name="kosher">"0010"</string>
     <string name="gluten">"0001"</string>
+
+    <string name="left">"&lt;"</string>
+    <string name="right">"&gt;"</string>
 </resources>
