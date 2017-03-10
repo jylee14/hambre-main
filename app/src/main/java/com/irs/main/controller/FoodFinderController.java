@@ -61,26 +61,38 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private UserModel user = UserModel.getInstance();
 
 
-    private static FoodDto[] dbfm = new FoodDto[20];
 
-    private final Thread getFoodThread = new Thread() {
-        public void run() {
-            System.err.println("Running bg food thread: " + android.os.Process.myTid());
-            dbfm = getFoodFromServer();
-            System.arraycopy(dbfm, 0, gallery, 0, gallery.length);
+    private class GetFoodFromServer extends AsyncTask<FoodDto[], Integer, FoodDto[]> {
+
+        @Override
+        protected FoodDto[] doInBackground(FoodDto[]... params) {
+            ServerApi api = ServerApi.getInstance();
+            DBFoodDto[] DBFoodDtos = api.getFood();
+            for (int i = 0; i < DBFoodDtos.length; i++) {
+                try {
+                    DBFoodDto tempDB = DBFoodDtos[i];
+                    FoodDto temp = new FoodDto(tempDB.name(), tempDB.getCulture(), tempDB.getTag(), "" + tempDB.path());
+                    params[0][i] = temp;
+                } catch (Exception e) {
+                    System.err.println("D'OH");
+                    e.printStackTrace();
+                }
+            }
+            return params[0];
         }
-    };
 
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        gallery = new FoodDto[10];
+
         setContentView(R.layout.activity_food_finder);
 
-        gallery = getFoodFromServer();
+
+        new GetFoodFromServer().execute(gallery);
         initButtons();
         swipeAnimation();
         askGPS();
@@ -199,7 +211,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         mainView.startAnimation(animLeave);
         index++;
         if (index == gallery.length) {
-            getFoodThread.run();
+            new GetFoodFromServer().execute(gallery);
             index = 0; //(index + 1);
         }
     }
@@ -238,23 +250,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         });
     }
 
-    public static FoodDto[] getFoodFromServer() {
-        //connecting db to main
-        ServerApi api = ServerApi.getInstance();
-        DBFoodDto[] DBFoodDtos = api.getFood();
-        FoodDto[] fromDB = new FoodDto[DBFoodDtos.length];
-        for (int i = 0; i < DBFoodDtos.length; i++) {
-            try {
-                DBFoodDto tempDB = DBFoodDtos[i];
-                FoodDto temp = new FoodDto(tempDB.name(), tempDB.name(), tempDB.getTag(), "" + tempDB.path());
-                fromDB[i] = temp;
-            } catch (Exception e) {
-                System.err.println("D'OH");
-                e.printStackTrace();
-            }
-        }
-        return fromDB;
-    }
+
 
     /**
      * Location Stuff
@@ -322,16 +318,13 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     @Override
     public void onProviderDisabled(String provider) {
-        //Log.d("Latitude","disable");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        //Log.d("Latitude","enable");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        //Log.d("Latitude", "status");
     }
 }

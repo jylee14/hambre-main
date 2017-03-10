@@ -7,6 +7,7 @@ package com.irs.server;
 public class DBFoodDto {
     private int food_id;
     private String name;
+    private String culture;
     private String description;
     private String path;
     private String tag;
@@ -22,6 +23,8 @@ public class DBFoodDto {
     public String name() {
         return name;
     }
+
+    public String getCulture() { return culture; }
 
     public String description() {
         return description;

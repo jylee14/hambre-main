@@ -112,7 +112,7 @@ public class UploadPhotoController extends FragmentActivity {
                         UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
                         Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
-                        startActivity(new Intent(UploadPhotoController.this, FoodFinderController.class));
+                        //startActivity(new Intent(UploadPhotoController.this, FoodFinderController.class));
                         finish();
                     } catch (Exception ex) {
                         System.out.println("You will be assimilated. Resistance is futile.");
@@ -180,9 +180,9 @@ public class UploadPhotoController extends FragmentActivity {
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
         intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 512);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 2);
+        intent.putExtra("outputY", 340);
+        intent.putExtra("aspectX", 3);
+        intent.putExtra("aspectY", 4);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, GALLERY_REQUEST);
 
