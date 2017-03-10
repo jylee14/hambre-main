@@ -115,7 +115,6 @@ public class DietRestrictionController extends FragmentActivity {
     }
 
     private void returnToPrev() {
-        Intent i = new Intent(DietRestrictionController.this, PreferencesController.class);
-        startActivity(i);
+        finish();
     }
 }

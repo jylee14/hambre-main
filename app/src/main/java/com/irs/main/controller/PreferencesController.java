@@ -178,7 +178,12 @@ public class PreferencesController extends FragmentActivity {
                         System.out.println("SAVED TO DB FROM PREFERENCES");
 
                         // switch to food finder screen
-                        startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
+                        if(user.getIsGuest() && user.firstPrefSet()) {
+                            user.setFirstPref(false);
+                            startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
+                        } else {
+                            finish();
+                        }
                     } catch (Exception e) {
                         startActivity(new Intent(PreferencesController.this, ErrorController.class));
                     }
