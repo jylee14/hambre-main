@@ -26,7 +26,7 @@ public class UploadPhotoController extends FragmentActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int GALLERY_REQUEST = 1887;
 
-    private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
+    private Button choosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;
     private EditText foodName;
     private ImageView selectedPic;
@@ -65,7 +65,7 @@ public class UploadPhotoController extends FragmentActivity {
         setDietSpinner();
         setCategorySpinner();
         setSaveButton();
-        setChosePhotoButton();
+        setChoosePhotoButton();
         setCancelButton();
         setCameraButton();
     }
@@ -123,9 +123,9 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
-    private void setChosePhotoButton() {
-        chosePhotoButton = (Button) findViewById(R.id.chose_photo_button);
-        chosePhotoButton.setOnClickListener(new Button.OnClickListener() {
+    private void setChoosePhotoButton() {
+        choosePhotoButton = (Button) findViewById(R.id.choose_photo_button);
+        choosePhotoButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickImage();
