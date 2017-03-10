@@ -13,7 +13,6 @@ import java.util.HashMap;
  */
 public class RestaurantDataModel {
     private YelpApi api = YelpApi.getInstance();
-    private static double latitude, longitude;
 
     /**
      * Method to retrieve a list of restaurants based on a search query
@@ -36,11 +35,14 @@ public class RestaurantDataModel {
 
         String categoriesParam = ((category == null || category == "") ? "food" : category);
         categoriesParam += ",restaurants";
+        if (UserModel.getInstance().getDietType().toYelpString() != null) {
+            categoriesParam += "," + UserModel.getInstance().getDietType().toYelpString();
+        }
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        params.put("latitude", "" + latitude);
-        params.put("longitude", "" + longitude);
+        params.put("latitude", "" + UserModel.getInstance().getLatitude());
+        params.put("longitude", "" + UserModel.getInstance().getLongitude());
         params.put("categories", categoriesParam);
         params.put("term", urlName);
         params.put("sort_by", "" + sortType);
@@ -48,10 +50,13 @@ public class RestaurantDataModel {
         params.put("limit", "" + count);
         params.put("open_now", openNow ? "true" : "false");
 
-        System.err.println("Lat: " + latitude + "\tLong: " + longitude);
+        System.err.println("Lat: " + UserModel.getInstance().getLatitude() + "\tLong: " + UserModel.getInstance().getLongitude());
         System.err.println("RUNNING RESTAURANT SEARCH");
         // get the response
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
+
+        // working here
+        System.out.println(response.businesses()[0].distance());
 
         return response.businesses();
     }
@@ -79,11 +84,4 @@ public class RestaurantDataModel {
         return new String(url);
     }
 
-    public static void setLatitude(double userLat) {
-        latitude = userLat;
-    }
-
-    public static void setLongitude(double userLong) {
-        longitude = userLong;
-    }
 }

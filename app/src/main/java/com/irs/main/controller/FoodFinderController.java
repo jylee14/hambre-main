@@ -202,8 +202,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 }
 
                 Toast.makeText(context, mloc.getLatitude() + ", " + mloc.getLongitude(), Toast.LENGTH_SHORT).show();
-                RestaurantDataModel.setLongitude(mloc.getLongitude());
-                RestaurantDataModel.setLatitude(mloc.getLatitude());
+                UserModel.getInstance().setLongitude(mloc.getLongitude());
+                UserModel.getInstance().setLatitude(mloc.getLatitude());
 
                 new LoadRestaurantsTask().execute(gallery[index]);
             }
