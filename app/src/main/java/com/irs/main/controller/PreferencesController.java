@@ -114,6 +114,7 @@ public class PreferencesController extends FragmentActivity {
     }
 
     private void logoutToLanding() {
+        user.setFirstPref(false);
         Intent intent = new Intent(PreferencesController.this, LandingController.class);
         startActivity(intent);
         finish();
@@ -178,10 +179,7 @@ public class PreferencesController extends FragmentActivity {
                         System.out.println("SAVED TO DB FROM PREFERENCES");
 
                         // switch to food finder screen
-                        if(user.getIsGuest() && !user.firstPrefSet()) {
-                            user.setFirstPref(true);
-                            startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
-                        } else if(!user.getIsGuest() && !user.firstPrefSet()){
+                        if(!user.firstPrefSet()) {
                             user.setFirstPref(true);
                             startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
                         } else {
