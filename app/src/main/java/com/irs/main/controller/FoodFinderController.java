@@ -60,10 +60,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private Animation animEnter, animLeave;
     private UserModel user = UserModel.getInstance();
 
-
-
     private class GetFoodFromServer extends AsyncTask<FoodDto[], Integer, FoodDto[]> {
-
         @Override
         protected FoodDto[] doInBackground(FoodDto[]... params) {
             ServerApi api = ServerApi.getInstance();
@@ -83,13 +80,11 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+
         setContentView(R.layout.activity_food_finder);
         gallery = new FoodDto[10];
 
