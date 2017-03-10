@@ -180,9 +180,9 @@ public class UploadPhotoController extends FragmentActivity {
         intent.putExtra("crop", "true");
         intent.putExtra("scale", true);
         intent.putExtra("outputX", 256);
-        intent.putExtra("outputY", 512);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 2);
+        intent.putExtra("outputY", 340);
+        intent.putExtra("aspectX", 3);
+        intent.putExtra("aspectY", 4);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, GALLERY_REQUEST);
 
