@@ -17,7 +17,6 @@ public class BusinessDto implements Parcelable {
     String name;
     String url;
     CoordinatesDto coordinates;
-    String coordinate;
     String image_url;
     LocationDto location;
     String address;
@@ -32,7 +31,7 @@ public class BusinessDto implements Parcelable {
         review_count = in.readInt();
         name = in.readString();
         url = in.readString();
-        coordinate = in.readString();
+        coordinates = CoordinatesDto.fromString(in.readString());
         image_url = in.readString();
         address = in.readString();
         distance = in.readDouble();
@@ -139,6 +138,7 @@ public class BusinessDto implements Parcelable {
         dest.writeInt(review_count);
         dest.writeString(name);
         dest.writeString(url);
+        System.out.println(coordinates().toString());
         dest.writeString(coordinates.toString());
         dest.writeString(image_url);
         dest.writeString(location.toString());
