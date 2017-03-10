@@ -2,8 +2,6 @@ package com.irs.main.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -20,8 +18,6 @@ import android.widget.TextView;
 import com.irs.main.R;
 import com.irs.yelp.CoordinatesDto;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.net.URL;
 import java.text.DecimalFormat;

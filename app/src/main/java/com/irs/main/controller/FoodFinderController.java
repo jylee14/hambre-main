@@ -9,8 +9,6 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-
-import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -34,10 +32,7 @@ import com.irs.server.DBFoodDto;
 import com.irs.server.ServerApi;
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.YelpApi;
-
 import com.squareup.picasso.Picasso;
-
-import java.lang.*;
 
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final int LIMIT = 20;

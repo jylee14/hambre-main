@@ -64,7 +64,7 @@ public class UserModel {
      * @param name name of user
      */
     public void updateWithDefaults(String name) {
-        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST, "");
+        updateUser(name, DietType.None, SortType.rating, MAX_DIST, "");
     }
 
     /**

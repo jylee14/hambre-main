@@ -1,7 +1,6 @@
 package com.irs.yelp;
 
 import java.security.InvalidParameterException;
-import java.util.InvalidPropertiesFormatException;
 
 /**
  * Model representing the Coordinates object in JSON response from Yelp API

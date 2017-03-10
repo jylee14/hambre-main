@@ -50,6 +50,7 @@ public class UploadPhotoController extends FragmentActivity {
         put("None", DietType.None);
     }};
 
+    // TODO: 3/10/17 Make this into culture
     private static final String[] categoryPaths = {"food", "dessert", "fruit", "spicy"};
     private String picName = "";
 
