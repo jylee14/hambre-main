@@ -31,7 +31,7 @@ public class UserModel {
     private String apiKey = "";
 
     private boolean isGuest = true;
-    private boolean guestFirstPref = true;
+    private boolean firstPref = false;
 
     private double latitude;
     private double longitude;
@@ -213,9 +213,9 @@ public class UserModel {
 
     public boolean getIsGuest() { return isGuest; }
 
-    public boolean firstPrefSet() { return guestFirstPref; }
+    public boolean firstPrefSet() { return firstPref; }
 
-    public void setFirstPref(boolean b) { guestFirstPref = b; }
+    public void setFirstPref(boolean b) { firstPref = b; }
 
     public SortType getSortType() {
         return sortType;
