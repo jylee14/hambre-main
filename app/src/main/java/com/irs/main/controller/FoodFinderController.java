@@ -111,6 +111,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 startActivity(i);
             }
         });
+
+        leftRightButtonClick();
     }
 
     private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
@@ -184,28 +186,54 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private void setSwipeTouchListener() {
         mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderController.this) {
             public void onSwipeLeft() {
-                mainView.startAnimation(animLeave);
-                index++;
-                if (index == gallery.length) {
-                    getFoodThread.run();
-                    index = 0; //(index + 1);
-                }
+                swipeLeftUpdate();
             }
 
             public void onSwipeRight() {
-                culture = gallery[index].getCulture();
+                swipeRightUpdate();
+            }
+        });
+    }
 
-                Location mloc = loc;
-                if (mloc == null) {
-                    Toast.makeText(context, "LOL LOCATION", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    public void swipeLeftUpdate() {
+        mainView.startAnimation(animLeave);
+        index++;
+        if (index == gallery.length) {
+            getFoodThread.run();
+            index = 0; //(index + 1);
+        }
+    }
 
-                Toast.makeText(context, "Our team of eggsperts are looking for restaurants near you", Toast.LENGTH_SHORT).show();
-                RestaurantDataModel.setLongitude(mloc.getLongitude());
-                RestaurantDataModel.setLatitude(mloc.getLatitude());
+    public void swipeRightUpdate() {
+        culture = gallery[index].getCulture();
 
-                new LoadRestaurantsTask().execute(gallery[index]);
+        Location mloc = loc;
+        if (mloc == null) {
+            Toast.makeText(context, "LOL LOCATION", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Toast.makeText(context, "Our team of eggsperts are looking for restaurants near you", Toast.LENGTH_SHORT).show();
+        RestaurantDataModel.setLongitude(mloc.getLongitude());
+        RestaurantDataModel.setLatitude(mloc.getLatitude());
+
+        new LoadRestaurantsTask().execute(gallery[index]);
+    }
+
+    private void leftRightButtonClick(){
+        Button LeftButton = (Button)findViewById(R.id.button_no);
+        LeftButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                swipeLeftUpdate();
+            }
+        });
+
+        Button RightButton = (Button)findViewById(R.id.button_yes);
+        RightButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                swipeRightUpdate();
             }
         });
     }

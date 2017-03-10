@@ -3,4 +3,6 @@
     <color name="colorPrimary">#fef15b</color>
     <color name="colorPrimaryDark">#e6c600</color>
     <color name="colorAccent">#db7004</color>
+    <color name="yesButton">#7fbc15</color>
+    <color name="noButton">#da4320</color>
 </resources>
