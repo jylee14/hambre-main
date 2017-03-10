@@ -21,7 +21,10 @@ import com.irs.main.R;
 import com.irs.yelp.CoordinatesDto;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
 import java.net.URL;
+import java.text.DecimalFormat;
 
 public class RestaurantListController extends ArrayAdapter<String> {
     private final Activity context;
@@ -32,6 +35,7 @@ public class RestaurantListController extends ArrayAdapter<String> {
     private final String[] price;
     private final CoordinatesDto[] coordinates;
     private final double[] distances;
+    private final double METERS_TO_MILES = 1609.344;
 
     RestaurantListController(Activity context, String[] name, String[] url,
                              String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates,double[] distances) {
@@ -60,6 +64,11 @@ public class RestaurantListController extends ArrayAdapter<String> {
         ratingBar.setRating((float) rating[position]);
         Drawable progress = ratingBar.getProgressDrawable();
         DrawableCompat.setTint(progress, Color.BLACK);
+
+        DecimalFormat df = new DecimalFormat("#.##");
+
+        TextView distanceTxt = (TextView)rowView.findViewById(R.id.distance_txt);
+        distanceTxt.setText("  " +df.format(distances[position]/METERS_TO_MILES) + " mi.");
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
         Button mapButton = (Button) rowView.findViewById(R.id.map_button);
