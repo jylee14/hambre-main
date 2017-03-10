@@ -25,6 +25,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
     double[] ratings;
     String[] prices;
     CoordinatesDto[] coordinates;
+    private double[] distances;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +66,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         ratings = new double[businesses.length];
         prices = new String[businesses.length];
         coordinates = new CoordinatesDto[businesses.length];
+        distances = new double[businesses.length];
 
         for (int i = 0; i < businesses.length; i++) {
             names[i] = businesses[i].name();
@@ -73,10 +75,11 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
             ratings[i] = businesses[i].rating();
             prices[i] = businesses[i].price();
             coordinates[i] = businesses[i].coordinates();
+            distances[i] = businesses[i].distance();
         }
         RestaurantListController adapter = new
                 RestaurantListController(SelectRestaurantController.this,
-                names, url, imageUrl, ratings, prices, coordinates);
+                names, url, imageUrl, ratings, prices, coordinates, distances);
         list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 

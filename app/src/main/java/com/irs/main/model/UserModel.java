@@ -32,6 +32,9 @@ public class UserModel {
 
     private boolean isGuest = true;
 
+    private double latitude;
+    private double longitude;
+
     // singleton instance
     private static UserModel instance = new UserModel();
 
@@ -196,6 +199,7 @@ public class UserModel {
         return dietType;
     }
 
+    @Deprecated
     public String getDietString() {
         String[] types = {"vegetarian", "vegan", "kosher", "gluten_free", "none"};
         for (int i = 0; i < DietType.values().length; i++) {
@@ -220,5 +224,21 @@ public class UserModel {
 
     public String getApiKey() {
         return apiKey;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 }
