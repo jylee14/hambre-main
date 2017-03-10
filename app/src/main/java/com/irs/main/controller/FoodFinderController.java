@@ -60,7 +60,10 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private Animation animEnter, animLeave;
     private UserModel user = UserModel.getInstance();
 
+
+
     private class GetFoodFromServer extends AsyncTask<FoodDto[], Integer, FoodDto[]> {
+
         @Override
         protected FoodDto[] doInBackground(FoodDto[]... params) {
             ServerApi api = ServerApi.getInstance();
@@ -84,9 +87,10 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        gallery = new FoodDto[10];
 
         setContentView(R.layout.activity_food_finder);
-        gallery = new FoodDto[10];
+
 
         new GetFoodFromServer().execute(gallery);
         initButtons();
@@ -314,16 +318,13 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     @Override
     public void onProviderDisabled(String provider) {
-        //Log.d("Latitude","disable");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-        //Log.d("Latitude","enable");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        //Log.d("Latitude", "status");
     }
 }
