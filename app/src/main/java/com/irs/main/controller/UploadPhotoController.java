@@ -65,7 +65,7 @@ public class UploadPhotoController extends FragmentActivity {
         setDietSpinner();
         setCategorySpinner();
         setSaveButton();
-        setChosePhotoButton();
+        setChosePhotoButton(); //TODO change derpy name
         setCancelButton();
         setCameraButton();
     }
