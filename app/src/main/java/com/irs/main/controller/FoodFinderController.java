@@ -50,7 +50,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     private YelpApi api;
     private Location loc;
-    private Bundle bundle;
     private String culture;
     private static FoodDto[] gallery = new FoodDto[10];
 
@@ -240,7 +239,13 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 
     /**
      * Location Stuff
