@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -51,14 +52,12 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private Location loc;
     private Bundle bundle;
     private String culture;
-    private FoodDto[] gallery;
+    private static FoodDto[] gallery = new FoodDto[10];
+
     private Animation animEnter, animLeave;
     private UserModel user = UserModel.getInstance();
 
-
-
     private class GetFoodFromServer extends AsyncTask<FoodDto[], Integer, FoodDto[]> {
-
         @Override
         protected FoodDto[] doInBackground(FoodDto[]... params) {
             ServerApi api = ServerApi.getInstance();
@@ -75,15 +74,12 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             }
             return params[0];
         }
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gallery = new FoodDto[10];
-
         setContentView(R.layout.activity_food_finder);
 
 
@@ -159,7 +155,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         try {
             api = YelpApi.getInstance();
             mainView = (ImageView) findViewById(R.id.image);
-
             Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
 
             setSwipeTouchListener();
@@ -312,14 +307,11 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     @Override
-    public void onProviderDisabled(String provider) {
-    }
+    public void onProviderDisabled(String provider) {}
 
     @Override
-    public void onProviderEnabled(String provider) {
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 }
