@@ -262,11 +262,10 @@ public class ServerApi {
     /**
      * endpoint to get food
      *
-     * @return array of food objects from database
+     * @return array of food objects from database or null if could not connect
      */
     public DBFoodDto[] getFood() {
         // query FOOD_ENDPOINT for a GET request with params
-        // TODO crashes here (?)
         String response = getJSONResponse(FOOD_ENDPOINT, "GET", null, false);
 
         // return parsed object
@@ -553,7 +552,7 @@ public class ServerApi {
      * @param method      String value either "GET" or "POST"
      * @param params      params to append to request
      * @param writeToBody should write to body of request or head?
-     * @return
+     * @return the response or null if could not connect
      */
     private String getJSONResponse(String urlBase, String method, HashMap<String, String> params, boolean writeToBody) {
         String result = null;
@@ -639,6 +638,7 @@ public class ServerApi {
         if (tries == CONNECTION_TRIES) {
             System.out.println("fatal error");
             // NO WIFI
+            return null;
         }
 
         return result;

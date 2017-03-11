@@ -1,6 +1,7 @@
 package com.irs.main.model;
 
 import android.os.StrictMode;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -115,8 +116,10 @@ public class FBGoogLoginModel {
     }
 
     public void useFacebookToLogin() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
+        // Strict mode forces this code to run synchronously. That way when view is switched, all this data is loaded
+
 
         try {
             AuthDto response = ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());

@@ -55,6 +55,11 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         protected FoodDto[] doInBackground(FoodDto[]... params) {
             ServerApi api = ServerApi.getInstance();
             DBFoodDto[] DBFoodDtos = api.getFood();
+            if (DBFoodDtos == null) {
+                // WIFI ERROR
+                Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
+                return null;
+            }
             for (int i = 0; i < DBFoodDtos.length; i++) {
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];

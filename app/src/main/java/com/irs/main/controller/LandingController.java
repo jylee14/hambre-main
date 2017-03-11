@@ -1,6 +1,7 @@
 package com.irs.main.controller;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
@@ -50,20 +51,23 @@ public class LandingController extends FragmentActivity {
         loginModel.setLanding(this);
 
         // check if we are already logged in, if yes, start in foodFinderController
-        if (loginModel.loggedInPreviously()) {
+        new CheckLoginAsync().execute();
+        /* if (loginModel.loggedInPreviously()) {
+            // this breaks because the activity is started before the login finishes.
             startActivity(new Intent(LandingController.this, FoodFinderController.class));
             changeLandingScreenAfterLogin();
             return;
         }
 
-        changeLoginScreenBeforeLogin();
+        // not logged in
+        changeLoginScreenBeforeLogin(); */
     }
 
     public void changeLoginScreenBeforeLogin() {
         setContentView(R.layout.activity_landing_logged_out);
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
 
         facebookLoginButton();
         googleLoginButton();
@@ -126,10 +130,10 @@ public class LandingController extends FragmentActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                loginModel.useFacebookToLogin();
+                /*
+                TODO: make this pseudo-async */
+                new LoginToFacebookAsync().execute();
 
-                startActivity(new Intent(LandingController.this, PreferencesController.class));
-                changeLandingScreenAfterLogin();
                 System.out.println("Facebook Login Success!");
             }
 
@@ -160,4 +164,41 @@ public class LandingController extends FragmentActivity {
             Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
         }
     }
+
+    private class LoginToFacebookAsync extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            loginModel.useFacebookToLogin();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            startActivity(new Intent(LandingController.this, PreferencesController.class));
+            changeLandingScreenAfterLogin();
+        }
+    }
+
+    private class CheckLoginAsync extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // Network operation
+            Boolean loginCheck = loginModel.loggedInPreviously();
+            return loginCheck;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean loginCheck) {
+            // logged in
+            if (loginCheck) {
+                startActivity(new Intent(LandingController.this, FoodFinderController.class));
+                changeLandingScreenAfterLogin();
+                return;
+
+            }
+            changeLoginScreenBeforeLogin();
+        }
+    }
+
 }
