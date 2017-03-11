@@ -56,8 +56,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             ServerApi api = ServerApi.getInstance();
             DBFoodDto[] DBFoodDtos = api.getFood();
             if (DBFoodDtos == null) {
-                // WIFI ERROR
-                Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
                 return null;
             }
             for (int i = 0; i < DBFoodDtos.length; i++) {
@@ -71,6 +69,16 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 }
             }
             return params[0];
+        }
+
+        @Override
+        protected void onPostExecute(FoodDto[] foodDtos) {
+            if (foodDtos == null) {
+                // WIFI ERROR
+                System.err.println("wifi error");
+                Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
+            }
+            Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
         }
     }
 
@@ -152,9 +160,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     private void swipeAnimation() {
         try {
-            YelpApi api = YelpApi.getInstance();
             mainView = (ImageView) findViewById(R.id.image);
-            Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
+            //Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
 
             setSwipeTouchListener();
 
