@@ -31,6 +31,7 @@ public class LandingController extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         loginModel = FBGoogLoginModel.getInstance();
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
