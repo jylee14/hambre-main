@@ -30,7 +30,7 @@ import com.irs.yelp.SortType;
 
 public class PreferencesController extends FragmentActivity {
     private TextView maxRad;
-    private UserModel user = UserModel.getInstance();
+    private final UserModel user = UserModel.getInstance();
     private FBGoogLoginModel loginModel;
 
     @RequiresApi(api = Build.VERSION_CODES.M)

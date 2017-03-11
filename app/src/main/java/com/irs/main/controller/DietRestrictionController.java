@@ -18,7 +18,7 @@ public class DietRestrictionController extends FragmentActivity {
 
     //private DietType dietTemp = DietType.None;
 
-    private UserModel user = UserModel.getInstance();
+    private final UserModel user = UserModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

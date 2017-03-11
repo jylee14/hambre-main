@@ -17,14 +17,14 @@ import com.irs.yelp.CoordinatesDto;
 //TODO check into adding a distance and if they are open or closed currently
 public class SelectRestaurantController extends FragmentActivity implements Runnable {
 
-    ListView list;
-    BusinessDto[] businesses;
-    String[] names;
-    String[] url;
-    String[] imageUrl;
-    double[] ratings;
-    String[] prices;
-    CoordinatesDto[] coordinates;
+    private ListView list;
+    private BusinessDto[] businesses;
+    private String[] names;
+    private String[] url;
+    private String[] imageUrl;
+    private double[] ratings;
+    private String[] prices;
+    private CoordinatesDto[] coordinates;
     private double[] distances;
 
     protected void onCreate(@Nullable Bundle savedInstanceState) {

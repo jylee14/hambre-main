@@ -22,8 +22,6 @@ import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 
 public class LandingController extends FragmentActivity {
-    private SignInButton goog;        //google login
-    private Button guestButton;
     private GoogleApiClient mGoogleApiClient;
     private FBGoogLoginModel loginModel;
 
@@ -81,7 +79,7 @@ public class LandingController extends FragmentActivity {
     }
 
     private void guestLogin() {
-        guestButton = (Button) findViewById(R.id.Guest);
+        Button guestButton = (Button) findViewById(R.id.Guest);
         guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,7 +91,7 @@ public class LandingController extends FragmentActivity {
     private void googleLoginButton() {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.
-        goog = (SignInButton) findViewById(R.id.Google);
+        SignInButton goog = (SignInButton) findViewById(R.id.Google);
 
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
