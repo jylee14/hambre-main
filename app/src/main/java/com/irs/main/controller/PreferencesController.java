@@ -8,7 +8,7 @@ import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.FragmentActivity;;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Button;
@@ -30,7 +30,7 @@ import com.irs.yelp.SortType;
 
 public class PreferencesController extends FragmentActivity {
     private TextView maxRad;
-    private UserModel user = UserModel.getInstance();
+    private final UserModel user = UserModel.getInstance();
     private FBGoogLoginModel loginModel;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -182,6 +182,7 @@ public class PreferencesController extends FragmentActivity {
                         if(!user.firstPrefSet()) {
                             user.setFirstPref(true);
                             startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
+                            finish();
                         } else {
                             finish();
                         }
@@ -213,5 +214,13 @@ public class PreferencesController extends FragmentActivity {
                 maxRad.setText(user.getMaxDist() + " mi");
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

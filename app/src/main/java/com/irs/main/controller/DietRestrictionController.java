@@ -1,6 +1,5 @@
 package com.irs.main.controller;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -19,7 +18,7 @@ public class DietRestrictionController extends FragmentActivity {
 
     //private DietType dietTemp = DietType.None;
 
-    private UserModel user = UserModel.getInstance();
+    private final UserModel user = UserModel.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

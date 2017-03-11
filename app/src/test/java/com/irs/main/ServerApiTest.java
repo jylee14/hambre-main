@@ -1,8 +1,5 @@
 package com.irs.main;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-
 import com.irs.main.model.FoodDto;
 import com.irs.server.DBCreateTagDto;
 import com.irs.server.DBFoodDto;

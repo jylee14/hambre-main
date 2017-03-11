@@ -115,35 +115,44 @@ public class FBGoogLoginModel {
     }
 
     public void useFacebookToLogin() {
-        // TODO: 3/8/17 ASYNC?
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        AuthDto response =
-                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
-        System.out.println("GOT DATA FROM SERVER: " + response.user());
+        try {
+            AuthDto response = ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
+            System.out.println("GOT DATA FROM SERVER: " + response.user());
 
-        UserModel.getInstance().loginAccount(response.user().api_key());
-        System.out.println("LOGGED IN TO SERVER");
+            UserModel.getInstance().loginAccount(response.user().api_key());
+            System.out.println("LOGGED IN TO SERVER");
 
-        loggedIntoFacebook = true;
+            loggedIntoFacebook = true;
+        } catch (NullPointerException e){
+            System.err.println("something was null");
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     public void useGoogleToLogin(GoogleSignInResult result) {
-        // TODO: 3/8/17 ASYNC?
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        GoogleSignInAccount acct = result.getSignInAccount();
-        System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
+        try {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
 
-        AuthDto response = ServerApi.getInstance().authServer(acct);
-        System.out.println("GOT DATA FROM SERVER: " + response.user());
+            AuthDto response = ServerApi.getInstance().authServer(acct);
+            System.out.println("GOT DATA FROM SERVER: " + response.user());
 
-        UserModel.getInstance().loginAccount(response.user().api_key());
-        System.out.println("LOGGED IN TO SERVER");
+            UserModel.getInstance().loginAccount(response.user().api_key());
+            System.out.println("LOGGED IN TO SERVER");
 
-        loggedIntoGoogle = true;
+            loggedIntoGoogle = true;
+        } catch (NullPointerException e){
+            System.err.println("one of the fields was null");
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     /**
