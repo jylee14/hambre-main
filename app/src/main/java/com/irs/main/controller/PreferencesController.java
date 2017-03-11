@@ -1,5 +1,6 @@
 package com.irs.main.controller;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -181,7 +182,8 @@ public class PreferencesController extends FragmentActivity {
                         // switch to food finder screen
                         if(!user.firstPrefSet()) {
                             user.setFirstPref(true);
-                            startActivity(new Intent(PreferencesController.this, FoodFinderController.class));
+                            Intent returnIntent = new Intent(PreferencesController.this, FoodFinderController.class);
+                            setResult(Activity.RESULT_OK, returnIntent);
                             finish();
                         } else {
                             finish();

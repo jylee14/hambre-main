@@ -29,6 +29,8 @@ public class ServerApi {
     // list of server endpoints
     private final String SERVER_BASE = "http://159.203.246.214/irs/";
     private final String FOOD_ENDPOINT = SERVER_BASE + "randomFood.php";
+    private final String FOOD_ENDPOINT_USER = SERVER_BASE + "userNewFood.php";
+    private final String FOOD_ENDPOINT_GUEST = SERVER_BASE + "foodGuest.php";
     private final String LOGIN_ENDPOINT_GOOG = SERVER_BASE + "googleLogin.php";
     private final String LOGIN_ENDPOINT_FB = SERVER_BASE + "facebookLogin.php";
     private final String GET_PREFERENCES_ENDPOINT = SERVER_BASE + "preferences.php";
@@ -268,6 +270,63 @@ public class ServerApi {
         // query FOOD_ENDPOINT for a GET request with params
         // TODO crashes here (?)
         String response = getJSONResponse(FOOD_ENDPOINT, "GET", null, false);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBFoodDto[] result = gson.fromJson(response, DBFoodDto[].class);
+        return result;
+    }
+
+    public DBFoodDto[] getFoodByUser(String api_key) {
+        // query FOOD_ENDPOINT for a GET request with params
+        // TODO crashes here (?)
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("api_key", api_key);
+        String response = getJSONResponse(FOOD_ENDPOINT_USER, "POST", params, true);
+
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBFoodDto[] result = gson.fromJson(response, DBFoodDto[].class);
+
+        System.out.println(response);
+        return result;
+    }
+
+    public DBFoodDto[] getFoodByParams(DietType dt) {
+        // query FOOD_ENDPOINT for a GET request with params
+        // TODO crashes here (?)
+        int vegetarian = 0;
+        int vegan = 0;
+        int kosher = 0;
+        int gluten_free = 0;
+
+        switch(dt){
+            case GlutenFree:
+                gluten_free = 1;
+                break;
+            case Vegetarian:
+                vegetarian = 1;
+                break;
+            case Vegan:
+                vegan = 1;
+                break;
+            case Kosher:
+                kosher = 1;
+                break;
+            default:
+                break;
+        }
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("vegetarian", vegetarian + "");
+        params.put("vegan", vegan + "");
+        params.put("kosher", kosher + "");
+        params.put("gluten_free", gluten_free + "");
+
+        String response = getJSONResponse(FOOD_ENDPOINT_GUEST, "POST", params, true);
+        System.out.println(response);
+
 
         // return parsed object
         Gson gson = new Gson();

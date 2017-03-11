@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.irs.main.DietType;
 import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 import com.irs.main.model.FoodDto;
@@ -33,6 +34,8 @@ import com.irs.server.ServerApi;
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.YelpApi;
 import com.squareup.picasso.Picasso;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final String server = "http://159.203.246.214/irs/";
@@ -54,7 +57,13 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         @Override
         protected FoodDto[] doInBackground(FoodDto[]... params) {
             ServerApi api = ServerApi.getInstance();
-            DBFoodDto[] DBFoodDtos = api.getFood();
+            DBFoodDto[] DBFoodDtos;
+
+            if(user.getIsGuest()){
+                DBFoodDtos = api.getFoodByParams(user.getDietType());
+            }else{
+                DBFoodDtos = api.getFoodByUser(user.getApiKey());
+            }
             for (int i = 0; i < DBFoodDtos.length; i++) {
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];
@@ -74,7 +83,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_finder);
-
         new GetFoodFromServer().execute(gallery);
         initButtons();
         swipeAnimation();
@@ -103,7 +111,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this,
                         PreferencesController.class);
-                startActivity(i);
+                startActivityForResult(i, 2301);
             }
         });
 
@@ -287,6 +295,16 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data){
+        if(requestCode == 2301){
+            System.out.println("returned from preferences");
+            gallery = new FoodDto[10];
+            index = 0;
+            new GetFoodFromServer().execute(gallery);
         }
     }
 
