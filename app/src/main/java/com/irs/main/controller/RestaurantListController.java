@@ -31,7 +31,7 @@ public class RestaurantListController extends ArrayAdapter<String> {
     private final String[] price;
     private final CoordinatesDto[] coordinates;
     private final double[] distances;
-    private final double METERS_TO_MILES = 1609.344;
+    private final double METERS_TO_MILES = 1600;
 
     RestaurantListController(Activity context, String[] name, String[] url,
                              String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates,double[] distances) {
