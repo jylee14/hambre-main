@@ -184,9 +184,12 @@ public class PreferencesController extends FragmentActivity {
                             user.setFirstPref(true);
                             Intent returnIntent = new Intent(PreferencesController.this, FoodFinderController.class);
                             startActivity(returnIntent);
-                        } else {
+                        } else if (user.getChangedPrefs()) {
                             Intent returnIntent = new Intent(PreferencesController.this, FoodFinderController.class);
-                            setResult(Activity.RESULT_OK, returnIntent);
+                            setResult(244, returnIntent);
+                            finish();
+                        }
+                        else{
                             finish();
                         }
                     } catch (Exception e) {

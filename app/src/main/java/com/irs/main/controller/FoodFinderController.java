@@ -316,10 +316,18 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     @Override
     public void onActivityResult (int requestCode, int resultCode, Intent data){
-        if(requestCode == 2301){
+        if(resultCode == 244){
             System.out.println("returned from preferences");
             gallery.clear();
-            new GetFoodFromServer().execute();
+            try {
+                new GetFoodFromServer().execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            FoodDto curr = gallery.peek();
+            Picasso.with(context).load(server + curr.getLink()).into(mainView);
         }
     }
 
