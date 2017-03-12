@@ -1,20 +1,13 @@
 package com.irs.main.controller;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -33,31 +26,13 @@ public class LandingController extends FragmentActivity {
     private FBGoogLoginModel loginModel;
 
     private static final String TAG = "LoginActivity";
-    private static final String NETWORK_LOGIN_ERROR = "Could not login! No network connection available";
     private static final int GOOG_SIGN_IN = 9001;
-
-    private AlertDialog.Builder networkAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         loginModel = FBGoogLoginModel.getInstance();
-
-        networkAlert = new AlertDialog.Builder(LandingController.this).setTitle("No Connection")
-                        .setMessage("You need a network connection to use this app. Please connect to a network and try again")
-                        .setNegativeButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                System.exit(0);
-                            }
-                        }).setCancelable(false);
-
-        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        if (activeNetwork == null) { // not connected to the internet
-            networkAlert.show();
-        }
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
@@ -75,23 +50,20 @@ public class LandingController extends FragmentActivity {
         loginModel.setLanding(this);
 
         // check if we are already logged in, if yes, start in foodFinderController
-        new CheckLoginAsync().execute();
-        /* if (loginModel.loggedInPreviously()) {
-            // this breaks because the activity is started before the login finishes.
+        if (loginModel.loggedInPreviously()) {
             startActivity(new Intent(LandingController.this, FoodFinderController.class));
             changeLandingScreenAfterLogin();
             return;
         }
 
-        // not logged in
-        changeLoginScreenBeforeLogin(); */
+        changeLoginScreenBeforeLogin();
     }
 
     public void changeLoginScreenBeforeLogin() {
         setContentView(R.layout.activity_landing_logged_out);
 
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
         facebookLoginButton();
         googleLoginButton();
@@ -154,8 +126,10 @@ public class LandingController extends FragmentActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
-                new LoginToFacebookAsync().execute();
+                loginModel.useFacebookToLogin();
 
+                startActivity(new Intent(LandingController.this, PreferencesController.class));
+                changeLandingScreenAfterLogin();
                 System.out.println("Facebook Login Success!");
             }
 
@@ -186,44 +160,4 @@ public class LandingController extends FragmentActivity {
             Log.d(TAG, "Google sign in failed." + result.getStatus().getStatusCode());
         }
     }
-
-    private class LoginToFacebookAsync extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            boolean success = loginModel.useFacebookToLogin();
-            return success;
-
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                startActivity(new Intent(LandingController.this, PreferencesController.class));
-                changeLandingScreenAfterLogin();
-            }
-        }
-    }
-
-    private class CheckLoginAsync extends AsyncTask<Void, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // Network operation
-            Boolean loginCheck = loginModel.loggedInPreviously();
-            return loginCheck;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean loginCheck) {
-            // logged in
-            if (loginCheck !=  null && loginCheck == true) {
-                startActivity(new Intent(LandingController.this, FoodFinderController.class));
-                changeLandingScreenAfterLogin();
-                return;
-
-            }
-            changeLoginScreenBeforeLogin();
-        }
-    }
-
 }
