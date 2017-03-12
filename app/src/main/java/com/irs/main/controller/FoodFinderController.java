@@ -61,13 +61,20 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         @Override
         protected Void doInBackground(Void... params) {
             ServerApi api = ServerApi.getInstance();
+          
+            /* From Krikor Branch. commented out for merge 
+            DBFoodDto[] DBFoodDtos = api.getFood();
+            if (DBFoodDtos == null) {
+                return null;
+            */
             DBFoodDto[] DBFoodDtos;
 
-            if(user.getIsGuest()){
+            if(user.getIsGuest())
                 DBFoodDtos = api.getFoodByParams(user.getDietType());
-            }else{
+            else
                 DBFoodDtos = api.getFoodByUser(user.getApiKey());
-            }
+
+           
             for (int i = 0; i < DBFoodDtos.length; i++) {
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];
@@ -79,6 +86,16 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 }
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(FoodDto[] foodDtos) {
+            if (foodDtos == null) {
+                // WIFI ERROR
+                System.err.println("wifi error");
+                Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
+            }
+            Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
         }
     }
 
@@ -158,7 +175,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     private void swipeAnimation() {
-
         try {
             YelpApi api = YelpApi.getInstance();
             FoodDto curr = gallery.peek();
