@@ -11,12 +11,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.irs.main.R;
+import com.irs.main.model.UserModel;
 import com.irs.yelp.BusinessDto;
 import com.irs.yelp.CoordinatesDto;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 //TODO check into adding a distance and if they are open or closed currently
 public class SelectRestaurantController extends FragmentActivity implements Runnable {
-
     private ListView list;
     private BusinessDto[] businesses;
     private String[] names;
@@ -27,11 +30,10 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
     private CoordinatesDto[] coordinates;
     private double[] distances;
 
+    private final UserModel user = UserModel.getInstance();
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        //StrictMode.setThreadPolicy(policy);
 
         //animate Activity transition
         overridePendingTransition(R.anim.animation_activity_enter,
@@ -48,18 +50,12 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
 
     }
 
-    private void openMaps(String coordinates, String label) {
-        String uriBegin = "geo:" + coordinates;
-        String query = coordinates + "(" + label + ")";
-        String encodedQuery = Uri.encode(query);
-        String uriString = uriBegin + "?q=" + encodedQuery + "&z=16";
-        Uri uri = Uri.parse(uriString);
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, uri);
-        startActivity(intent);
-    }
-
     public void run() {
         businesses = BusinessDto.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
+        businesses = trimArray(businesses);
+
+        System.out.println(businesses.length);
+
         names = new String[businesses.length];
         url = new String[businesses.length];
         imageUrl = new String[businesses.length];
@@ -77,9 +73,11 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
             coordinates[i] = businesses[i].coordinates();
             distances[i] = businesses[i].distance();
         }
+
         RestaurantListController adapter = new
                 RestaurantListController(SelectRestaurantController.this,
                 names, url, imageUrl, ratings, prices, coordinates, distances);
+
         list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
@@ -93,6 +91,23 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
                 startActivity(browserIntent);
             }
         });
+    }
 
+    private BusinessDto[] trimArray(BusinessDto[] businesses){
+        System.out.println("Removing restaurants that are too far away");
+        System.out.println("User's max distance: " + user.getMaxDist());
+        ArrayList<BusinessDto> nearby = new ArrayList<>();
+
+        for(int i = 0; i < businesses.length; i++){
+            System.out.println(businesses[i].distance());
+            double restaurantDistance = businesses[i].distance()/1609.344;
+
+            if(restaurantDistance < user.getMaxDist()){
+                nearby.add(businesses[i]);
+            }
+        }
+
+        nearby.trimToSize();
+        return nearby.toArray(new BusinessDto[0]);
     }
 }

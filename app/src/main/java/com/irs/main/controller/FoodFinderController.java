@@ -9,6 +9,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -58,6 +59,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             if (DBFoodDtos == null) {
                 return null;
             }
+
             for (int i = 0; i < DBFoodDtos.length; i++) {
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];
@@ -68,6 +70,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                     e.printStackTrace();
                 }
             }
+
             return params[0];
         }
 
@@ -87,8 +90,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_finder);
-
         new GetFoodFromServer().execute(gallery);
+
         initButtons();
         swipeAnimation();
         askGPS();
@@ -100,12 +103,10 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             @Override
             public void onClick(View v) {
                 if (FBGoogLoginModel.getInstance().isLoggedIn()) {
-                    Intent i = new Intent(FoodFinderController.this,
-                            UploadPhotoController.class);
+                    Intent i = new Intent(FoodFinderController.this, UploadPhotoController.class);
                     startActivity(i);
                 } else {
-                    Toast.makeText(FoodFinderController.this,
-                            "You need to be logged in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodFinderController.this, "You need to be logged in", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -114,13 +115,30 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         settingsButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(FoodFinderController.this,
-                        PreferencesController.class);
+                Intent i = new Intent(FoodFinderController.this, PreferencesController.class);
                 startActivity(i);
             }
         });
 
         leftRightButtonClick();
+    }
+
+    private void leftRightButtonClick(){
+        Button LeftButton = (Button)findViewById(R.id.button_no);
+        LeftButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                swipeLeftUpdate();
+            }
+        });
+
+        Button RightButton = (Button)findViewById(R.id.button_yes);
+        RightButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                swipeRightUpdate();
+            }
+        });
     }
 
     private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
@@ -132,13 +150,14 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             FoodDto food = params[0];
             try {
                 System.out.println(culture);
-                // TODO: set gps based location in first param
                 int METERS_PER_MILE = 1600;
                 int LIMIT = 20;
                 response = RestaurantDataModel.getRestaurants(
+                        user.getLatitude(),
+                        user.getLongitude(),
                         food.getTag(), food.getCulture(),
-                        UserModel.getInstance().getSortType(),
-                        UserModel.getInstance().getMaxDist() * METERS_PER_MILE,
+                        user.getSortType(),
+                        user.getMaxDist() * METERS_PER_MILE,
                         LIMIT, false);
                 System.out.println("Response: " + response[0].name());
             } catch (Exception e) {
@@ -162,7 +181,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         try {
             mainView = (ImageView) findViewById(R.id.image);
             //Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
-
             setSwipeTouchListener();
 
             animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
@@ -217,33 +235,16 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
         Location mloc = loc;
         if (mloc == null) {
-            Toast.makeText(context, "LOL LOCATION", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,
+                    "couldn't get your location!!\nPlease enable location in settings",
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
         Toast.makeText(context, "Our team of eggsperts are looking for restaurants near you", Toast.LENGTH_SHORT).show();
         UserModel.getInstance().setLongitude(mloc.getLongitude());
         UserModel.getInstance().setLatitude(mloc.getLatitude());
-
         new LoadRestaurantsTask().execute(gallery[index]);
-    }
-
-    private void leftRightButtonClick(){
-        Button LeftButton = (Button)findViewById(R.id.button_no);
-        LeftButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                swipeLeftUpdate();
-            }
-        });
-
-        Button RightButton = (Button)findViewById(R.id.button_yes);
-        RightButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                swipeRightUpdate();
-            }
-        });
     }
 
     @Override
@@ -271,7 +272,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         boolean networkPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
 
         if (!GPSPermission && !networkPermission)
-            ActivityCompat.requestPermissions(FoodFinderController.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
 
         if (GPSPermission || networkPermission) {
             try {
@@ -285,8 +286,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             } catch (Exception e) {
                 System.err.println("location is still null");
             }
-        } else
-            Toast.makeText(context, "This app needs location permissions to perform", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -294,7 +294,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         switch (requestCode) {
             case LOCATION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "Permission Granted!", Toast.LENGTH_SHORT).show();
+                    startActivity(getIntent());
+                    finish();
                 } else {
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }

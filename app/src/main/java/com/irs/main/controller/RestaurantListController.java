@@ -33,7 +33,8 @@ class RestaurantListController extends ArrayAdapter<String> {
     private final double[] distances;
 
     RestaurantListController(Activity context, String[] name, String[] url,
-                             String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates,double[] distances) {
+                             String[] imageUrl, double[] rating, String[] price,
+                             CoordinatesDto[] coordinates,double[] distances) {
 
         super(context, R.layout.list_single, name);
         this.context = context;
@@ -63,7 +64,7 @@ class RestaurantListController extends ArrayAdapter<String> {
         DecimalFormat df = new DecimalFormat("#.##");
 
         TextView distanceTxt = (TextView)rowView.findViewById(R.id.distance_txt);
-        double METERS_TO_MILES = 1600;
+        double METERS_TO_MILES = 1609.344;
         distanceTxt.setText("  " +df.format(distances[position]/ METERS_TO_MILES) + " mi.");
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
@@ -77,11 +78,8 @@ class RestaurantListController extends ArrayAdapter<String> {
             }
         });
 
-        //TODO this might block the UI thread.
         try {
             URL url = new URL(imageUrl[position]);
-            //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            //imageView.setImageBitmap(bmp);
             Picasso.with(context).load(url.toString()).into(imageView);
         } catch (Exception e) {
             System.out.println("KAAAAAAAAAAAAAAAAAAAAHHHHNNNN!!!");

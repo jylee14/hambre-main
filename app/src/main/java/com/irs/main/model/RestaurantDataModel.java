@@ -24,6 +24,8 @@ public class RestaurantDataModel {
      * @return list of restaurants
      */
     public static BusinessDto[] getRestaurants(
+            double latitude,
+            double longitude,
             String category,
             String query,
             SortType sortType,
@@ -42,8 +44,10 @@ public class RestaurantDataModel {
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        params.put("latitude", "" + UserModel.getInstance().getLatitude());
-        params.put("longitude", "" + UserModel.getInstance().getLongitude());
+        //params.put("latitude", "" + UserModel.getInstance().getLatitude());
+        //params.put("longitude", "" + UserModel.getInstance().getLongitude());
+        params.put("latitude", "" + latitude);
+        params.put("longitude", "" + longitude);
         params.put("categories", categoriesParam);
         params.put("term", urlName);
         params.put("sort_by", "" + sortType);
