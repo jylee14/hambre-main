@@ -82,12 +82,17 @@ public class FBGoogLoginModel {
      * Returns if the user was logged in previously. Also logs in to our server
      * if the user had logged in
      *
-     * @return if the user was logged in previously
+     * @return if the user was logged in previously, null if we could not login
      */
-    public boolean loggedInPreviously() {
+    public Boolean loggedInPreviously() {
         // if facebook is logged in
         if (AccessToken.getCurrentAccessToken() != null) {
-            useFacebookToLogin();
+            boolean success = useFacebookToLogin();
+            if (!success) {
+                // can't login because there is no connection
+                return null;
+                // System.exit(-1);
+            }
             return true;
         }
 
@@ -115,7 +120,11 @@ public class FBGoogLoginModel {
         return false;
     }
 
-    public void useFacebookToLogin() {
+    /**
+     * Login with facebook
+     * @return false if login failed
+     */
+    public boolean useFacebookToLogin() {
         //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         //StrictMode.setThreadPolicy(policy);
         // Strict mode forces this code to run synchronously. That way when view is switched, all this data is loaded
@@ -129,10 +138,12 @@ public class FBGoogLoginModel {
             System.out.println("LOGGED IN TO SERVER");
 
             loggedIntoFacebook = true;
+            return true;
         } catch (NullPointerException e){
             System.err.println("something was null");
             e.printStackTrace();
-            System.exit(-1);
+            return false;
+            //System.exit(-1);
         }
     }
 

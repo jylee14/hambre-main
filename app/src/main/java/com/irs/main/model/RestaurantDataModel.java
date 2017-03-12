@@ -57,7 +57,7 @@ public class RestaurantDataModel {
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
 
         // working here
-        System.out.println(response.businesses()[0].distance());
+        //System.out.println(response.businesses()[0].distance());
 
         return response.businesses();
     }
