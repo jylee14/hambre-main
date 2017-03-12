@@ -108,7 +108,7 @@ public class UploadPhotoController extends FragmentActivity {
                                 "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
 
                         // upload image
-                        UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
+                        UserModel.getInstance().uploadPhotoAsync(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
                         Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
                         //startActivity(new Intent(UploadPhotoController.this, FoodFinderController.class));

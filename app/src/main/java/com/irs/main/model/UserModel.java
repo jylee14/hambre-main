@@ -177,6 +177,29 @@ public class UserModel {
                 vegetarian, vegan, kosher, gluten_free);
     }
 
+    /**
+     * upload a photo to db with user data
+     *
+     * @param pic      picture to upload
+     * @param picName  name of picture
+     * @param foodName name of food
+     * @param culture  culture data
+     * @param category category of food
+     * @param dietType what diet it is compatible with
+     */
+    public void uploadPhotoAsync(final Bitmap pic, final String picName, final String foodName, final String culture, final String category, final DietType dietType) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                uploadPhoto(pic, picName, foodName, culture, category, dietType);
+
+                // Thanks Java
+                return null;
+            }
+        }.execute();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
