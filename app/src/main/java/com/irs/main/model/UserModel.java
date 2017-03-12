@@ -32,6 +32,7 @@ public class UserModel {
 
     private boolean isGuest = true;
     private boolean firstPref = false;
+    private boolean changedPrefs = false;
 
     private double latitude;
     private double longitude;
@@ -186,12 +187,19 @@ public class UserModel {
 
     public void setDietType(DietType dietType) {
         this.dietType = dietType;
+        changedPrefs = true;
     }
 
     public void setSortType(SortType sortType) {
         this.sortType = sortType;
     }
 
+    public void setChangedPrefs(Boolean bool){
+        changedPrefs = bool;
+    }
+    public boolean getChangedPrefs(){
+        return changedPrefs;
+    }
     /**
      * Gets the maximum distance that the user is willing to go
      *
