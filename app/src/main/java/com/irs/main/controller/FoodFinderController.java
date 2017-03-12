@@ -1,6 +1,7 @@
 package com.irs.main.controller;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -34,13 +35,18 @@ import com.irs.yelp.BusinessDto;
 import com.irs.yelp.YelpApi;
 import com.squareup.picasso.Picasso;
 
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.concurrent.ExecutionException;
+
+import static android.content.Context.LOCATION_SERVICE;
+
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final String server = "http://159.203.246.214/irs/";
-    private final int LOCATION_REQUEST_CODE = 101;
     private final Context context = this;
+    private final int LOCATION_REQUEST_CODE = 101;
 
-    private static FoodDto[] gallery = new FoodDto[10];
-
+    private static Queue<FoodDto> gallery = new LinkedList<FoodDto>();
     private ImageView mainView;
     private int index = 0;
 
@@ -50,22 +56,29 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private Animation animEnter, animLeave;
     private UserModel user = UserModel.getInstance();
 
-    private class GetFoodFromServer extends AsyncTask<FoodDto[], Integer, FoodDto[]> {
+    private class GetFoodFromServer extends AsyncTask<Void, Integer, Void> {
+        private final ProgressDialog dialog = new ProgressDialog(FoodFinderController.this);
         @Override
-        protected FoodDto[] doInBackground(FoodDto[]... params) {
+        protected Void doInBackground(Void... params) {
             ServerApi api = ServerApi.getInstance();
-            DBFoodDto[] DBFoodDtos = api.getFood();
+            DBFoodDto[] DBFoodDtos;
+
+            if(user.getIsGuest()){
+                DBFoodDtos = api.getFoodByParams(user.getDietType());
+            }else{
+                DBFoodDtos = api.getFoodByUser(user.getApiKey());
+            }
             for (int i = 0; i < DBFoodDtos.length; i++) {
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];
                     FoodDto temp = new FoodDto(tempDB.name(), tempDB.getCulture(), tempDB.getTag(), "" + tempDB.path());
-                    params[0][i] = temp;
+                    gallery.add(temp);
                 } catch (Exception e) {
                     System.err.println("D'OH");
                     e.printStackTrace();
                 }
             }
-            return params[0];
+            return null;
         }
     }
 
@@ -74,8 +87,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_finder);
-
-        new GetFoodFromServer().execute(gallery);
+        new GetFoodFromServer().execute();
         initButtons();
         swipeAnimation();
         askGPS();
@@ -103,7 +115,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this,
                         PreferencesController.class);
-                startActivity(i);
+                startActivityForResult(i, 2301);
             }
         });
 
@@ -146,10 +158,12 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     private void swipeAnimation() {
+
         try {
             YelpApi api = YelpApi.getInstance();
+            FoodDto curr = gallery.peek();
             mainView = (ImageView) findViewById(R.id.image);
-            Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
+            Picasso.with(context).load(server + curr.getLink()).into(mainView);
 
             setSwipeTouchListener();
 
@@ -164,7 +178,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
                 public void onAnimationEnd(Animation animation) {
                     try {
-                        Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
+                        FoodDto curr = gallery.peek();
+                        Picasso.with(context).load(server + curr.getLink()).into(mainView);
                     } catch (Exception e) {
                         e.printStackTrace();
                         startActivity(new Intent(FoodFinderController.this, ErrorController.class));
@@ -192,16 +207,25 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     private void swipeLeftUpdate() {
-        mainView.startAnimation(animLeave);
-        index++;
-        if (index == gallery.length) {
-            new GetFoodFromServer().execute(gallery);
-            index = 0; //(index + 1);
+        if(!gallery.isEmpty()) {
+            gallery.remove();
         }
+        if (gallery.isEmpty()) {
+            try {
+                new GetFoodFromServer().execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            System.out.println("finished retrieving new food");
+        }
+        mainView.startAnimation(animLeave);
     }
 
     private void swipeRightUpdate() {
-        culture = gallery[index].getCulture();
+        FoodDto curr = gallery.peek();
+        culture = curr.getCulture();
 
         Location mloc = loc;
         if (mloc == null) {
@@ -213,7 +237,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         UserModel.getInstance().setLongitude(mloc.getLongitude());
         UserModel.getInstance().setLatitude(mloc.getLatitude());
 
-        new LoadRestaurantsTask().execute(gallery[index]);
+        new LoadRestaurantsTask().execute(curr);
     }
 
     private void leftRightButtonClick(){
@@ -287,6 +311,15 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data){
+        if(requestCode == 2301){
+            System.out.println("returned from preferences");
+            gallery.clear();
+            new GetFoodFromServer().execute();
         }
     }
 
