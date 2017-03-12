@@ -6,6 +6,7 @@ import com.irs.yelp.SortType;
 import com.irs.yelp.YelpApi;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * DataController class which accesses the Yelp API to get Restaurant Data in the form of the
@@ -33,7 +34,7 @@ public class RestaurantDataModel {
         //BusinessDto[] restaurants = new BusinessDto[count];
         String urlName = noSpace(query);
 
-        String categoriesParam = ((category == null || category == "") ? "food" : category);
+        String categoriesParam = ((category == null || Objects.equals(category, "")) ? "food" : category);
         categoriesParam += ",restaurants";
         if (UserModel.getInstance().getDietType().toYelpString() != null) {
             categoriesParam += "," + UserModel.getInstance().getDietType().toYelpString();

@@ -37,7 +37,7 @@ public class UserModel {
     private double longitude;
 
     // singleton instance
-    private static UserModel instance = new UserModel();
+    private static final UserModel instance = new UserModel();
 
     private UserModel() {
     }
@@ -146,25 +146,34 @@ public class UserModel {
      */
     public void uploadPhoto(Bitmap pic, String picName, String foodName, String culture, String category, DietType dietType) {
         System.out.println("UPLOADING TO DB");
-        int gluten_free = 0;
         int vegetarian = 0;
         int vegan = 0;
         int kosher = 0;
+        int gluten_free = 0;
+
         switch (dietType) {
-            case GlutenFree:
-                gluten_free = 1;
+            case Vegetarian:
+                vegetarian = 1;
                 break;
             case Vegan:
                 vegan = 1;
                 break;
-            case Vegetarian:
-                vegetarian = 1;
-                break;
             case Kosher:
-                kosher = 1;
+                 kosher = 1;
                 break;
+            case GlutenFree:
+                gluten_free = 1;
+                break;
+            default:
+                vegetarian = 0;
+                vegan = 0;
+                kosher = 0;
+                gluten_free = 0;
         }
-        ServerApi.getInstance().uploadFood(pic, picName + ".jpg", foodName, culture, category, apiKey, 0, 0, 0, 0);
+
+        ServerApi.getInstance().uploadFood(pic, picName + ".jpg",
+                foodName, culture, category, apiKey,
+                vegetarian, vegan, kosher, gluten_free);
     }
 
     public void setName(String name) {

@@ -96,8 +96,8 @@ public class UploadPhotoController extends FragmentActivity {
         saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (foodName.getText().toString().equals("") || cultureTxt.getText().toString().equals("")) {
-                    Toast.makeText(UploadPhotoController.this, "Please fill in all text fields", Toast.LENGTH_SHORT).show();
+                if (pic == null || foodName.getText().toString().equals("") || cultureTxt.getText().toString().equals("")) {
+                    Toast.makeText(UploadPhotoController.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         name = foodName.getText().toString();
@@ -201,5 +201,13 @@ public class UploadPhotoController extends FragmentActivity {
             pic = (Bitmap) data.getExtras().get("data");
             selectedPic.setImageBitmap(pic);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }
