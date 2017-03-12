@@ -1,6 +1,7 @@
 package com.irs.main.controller;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -36,13 +37,14 @@ import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
 
 import static android.content.Context.LOCATION_SERVICE;
 
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final String server = "http://159.203.246.214/irs/";
-    private final int LOCATION_REQUEST_CODE = 101;
     private final Context context = this;
+    private final int LOCATION_REQUEST_CODE = 101;
 
     private static Queue<FoodDto> gallery = new LinkedList<FoodDto>();
     private ImageView mainView;
@@ -55,6 +57,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private UserModel user = UserModel.getInstance();
 
     private class GetFoodFromServer extends AsyncTask<Void, Integer, Void> {
+        private final ProgressDialog dialog = new ProgressDialog(FoodFinderController.this);
         @Override
         protected Void doInBackground(Void... params) {
             ServerApi api = ServerApi.getInstance();
@@ -155,6 +158,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     private void swipeAnimation() {
+
         try {
             YelpApi api = YelpApi.getInstance();
             FoodDto curr = gallery.peek();
@@ -174,7 +178,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
                 public void onAnimationEnd(Animation animation) {
                     try {
-                        Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
+                        FoodDto curr = gallery.peek();
+                        Picasso.with(context).load(server + curr.getLink()).into(mainView);
                     } catch (Exception e) {
                         e.printStackTrace();
                         startActivity(new Intent(FoodFinderController.this, ErrorController.class));
@@ -202,14 +207,20 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     private void swipeLeftUpdate() {
-        mainView.startAnimation(animLeave);
         if(!gallery.isEmpty()) {
             gallery.remove();
         }
         if (gallery.isEmpty()) {
-            new GetFoodFromServer().execute();
+            try {
+                new GetFoodFromServer().execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             System.out.println("finished retrieving new food");
         }
+        mainView.startAnimation(animLeave);
     }
 
     private void swipeRightUpdate() {
