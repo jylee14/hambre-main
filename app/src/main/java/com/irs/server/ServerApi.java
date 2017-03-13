@@ -1,7 +1,6 @@
 package com.irs.server;
 
 import android.graphics.Bitmap;
-import android.util.Base64;
 
 import com.facebook.AccessToken;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -11,13 +10,11 @@ import com.irs.yelp.SortType;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -32,6 +29,8 @@ public class ServerApi {
     // list of server endpoints
     private final String SERVER_BASE = "http://159.203.246.214/irs/";
     private final String FOOD_ENDPOINT = SERVER_BASE + "randomFood.php";
+    private final String FOOD_ENDPOINT_USER = SERVER_BASE + "userNewFood.php";
+    private final String FOOD_ENDPOINT_GUEST = SERVER_BASE + "foodGuest.php";
     private final String LOGIN_ENDPOINT_GOOG = SERVER_BASE + "googleLogin.php";
     private final String LOGIN_ENDPOINT_FB = SERVER_BASE + "facebookLogin.php";
     private final String GET_PREFERENCES_ENDPOINT = SERVER_BASE + "preferences.php";
@@ -265,12 +264,68 @@ public class ServerApi {
     /**
      * endpoint to get food
      *
-     * @return array of food objects from database
+     * @return array of food objects from database or null if could not connect
      */
     public DBFoodDto[] getFood() {
         // query FOOD_ENDPOINT for a GET request with params
-        // TODO crashes here (?)
         String response = getJSONResponse(FOOD_ENDPOINT, "GET", null, false);
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBFoodDto[] result = gson.fromJson(response, DBFoodDto[].class);
+        return result;
+    }
+
+    public DBFoodDto[] getFoodByUser(String api_key) {
+        // query FOOD_ENDPOINT for a GET request with params
+        // TODO crashes here (?)
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("api_key", api_key);
+        String response = getJSONResponse(FOOD_ENDPOINT_USER, "POST", params, true);
+
+
+        // return parsed object
+        Gson gson = new Gson();
+        DBFoodDto[] result = gson.fromJson(response, DBFoodDto[].class);
+
+        System.out.println(response);
+        return result;
+    }
+
+    public DBFoodDto[] getFoodByParams(DietType dt) {
+        // query FOOD_ENDPOINT for a GET request with params
+        // TODO crashes here (?)
+        int vegetarian = 0;
+        int vegan = 0;
+        int kosher = 0;
+        int gluten_free = 0;
+
+        switch(dt){
+            case GlutenFree:
+                gluten_free = 1;
+                break;
+            case Vegetarian:
+                vegetarian = 1;
+                break;
+            case Vegan:
+                vegan = 1;
+                break;
+            case Kosher:
+                kosher = 1;
+                break;
+            default:
+                break;
+        }
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("vegetarian", vegetarian + "");
+        params.put("vegan", vegan + "");
+        params.put("kosher", kosher + "");
+        params.put("gluten_free", gluten_free + "");
+
+        String response = getJSONResponse(FOOD_ENDPOINT_GUEST, "POST", params, true);
+        System.out.println(response);
+
 
         // return parsed object
         Gson gson = new Gson();
@@ -556,7 +611,7 @@ public class ServerApi {
      * @param method      String value either "GET" or "POST"
      * @param params      params to append to request
      * @param writeToBody should write to body of request or head?
-     * @return
+     * @return the response or null if could not connect
      */
     private String getJSONResponse(String urlBase, String method, HashMap<String, String> params, boolean writeToBody) {
         String result = null;
@@ -642,6 +697,7 @@ public class ServerApi {
         if (tries == CONNECTION_TRIES) {
             System.out.println("fatal error");
             // NO WIFI
+            return null;
         }
 
         return result;

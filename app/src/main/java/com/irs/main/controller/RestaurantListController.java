@@ -2,8 +2,6 @@ package com.irs.main.controller;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -21,12 +19,10 @@ import com.irs.main.R;
 import com.irs.yelp.CoordinatesDto;
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.net.URL;
 import java.text.DecimalFormat;
 
-public class RestaurantListController extends ArrayAdapter<String> {
+class RestaurantListController extends ArrayAdapter<String> {
     private final Activity context;
     private final String[] name;
     private final String[] url;
@@ -35,10 +31,10 @@ public class RestaurantListController extends ArrayAdapter<String> {
     private final String[] price;
     private final CoordinatesDto[] coordinates;
     private final double[] distances;
-    private final double METERS_TO_MILES = 1609.344;
 
     RestaurantListController(Activity context, String[] name, String[] url,
-                             String[] imageUrl, double[] rating, String[] price, CoordinatesDto[] coordinates,double[] distances) {
+                             String[] imageUrl, double[] rating, String[] price,
+                             CoordinatesDto[] coordinates,double[] distances) {
 
         super(context, R.layout.list_single, name);
         this.context = context;
@@ -68,7 +64,8 @@ public class RestaurantListController extends ArrayAdapter<String> {
         DecimalFormat df = new DecimalFormat("#.##");
 
         TextView distanceTxt = (TextView)rowView.findViewById(R.id.distance_txt);
-        distanceTxt.setText("  " +df.format(distances[position]/METERS_TO_MILES) + " mi.");
+        double METERS_TO_MILES = 1609.344;
+        distanceTxt.setText("  " +df.format(distances[position]/ METERS_TO_MILES) + " mi.");
 
         ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
         Button mapButton = (Button) rowView.findViewById(R.id.map_button);
@@ -81,11 +78,8 @@ public class RestaurantListController extends ArrayAdapter<String> {
             }
         });
 
-        //TODO this might block the UI thread.
         try {
             URL url = new URL(imageUrl[position]);
-            //Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            //imageView.setImageBitmap(bmp);
             Picasso.with(context).load(url.toString()).into(imageView);
         } catch (Exception e) {
             System.out.println("KAAAAAAAAAAAAAAAAAAAAHHHHNNNN!!!");

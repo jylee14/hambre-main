@@ -6,6 +6,7 @@ import com.irs.yelp.SortType;
 import com.irs.yelp.YelpApi;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * DataController class which accesses the Yelp API to get Restaurant Data in the form of the
@@ -23,6 +24,8 @@ public class RestaurantDataModel {
      * @return list of restaurants
      */
     public static BusinessDto[] getRestaurants(
+            double latitude,
+            double longitude,
             String category,
             String query,
             SortType sortType,
@@ -33,7 +36,7 @@ public class RestaurantDataModel {
         //BusinessDto[] restaurants = new BusinessDto[count];
         String urlName = noSpace(query);
 
-        String categoriesParam = ((category == null || category == "") ? "food" : category);
+        String categoriesParam = ((category == null || Objects.equals(category, "")) ? "food" : category);
         categoriesParam += ",restaurants";
         if (UserModel.getInstance().getDietType().toYelpString() != null) {
             categoriesParam += "," + UserModel.getInstance().getDietType().toYelpString();
@@ -41,8 +44,10 @@ public class RestaurantDataModel {
 
         // Set the POST params based on method parameters
         HashMap<String, String> params = new HashMap<>();
-        params.put("latitude", "" + UserModel.getInstance().getLatitude());
-        params.put("longitude", "" + UserModel.getInstance().getLongitude());
+        //params.put("latitude", "" + UserModel.getInstance().getLatitude());
+        //params.put("longitude", "" + UserModel.getInstance().getLongitude());
+        params.put("latitude", "" + latitude);
+        params.put("longitude", "" + longitude);
         params.put("categories", categoriesParam);
         params.put("term", urlName);
         params.put("sort_by", "" + sortType);
@@ -56,7 +61,7 @@ public class RestaurantDataModel {
         BusinessResponseDto response = YelpApi.getInstance().businessSearch(params);
 
         // working here
-        System.out.println(response.businesses()[0].distance());
+        //System.out.println(response.businesses()[0].distance());
 
         return response.businesses();
     }

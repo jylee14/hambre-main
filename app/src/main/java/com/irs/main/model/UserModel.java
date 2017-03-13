@@ -32,12 +32,13 @@ public class UserModel {
 
     private boolean isGuest = true;
     private boolean firstPref = false;
+    private boolean changedPrefs = false;
 
     private double latitude;
     private double longitude;
 
     // singleton instance
-    private static UserModel instance = new UserModel();
+    private static final UserModel instance = new UserModel();
 
     private UserModel() {
     }
@@ -64,7 +65,7 @@ public class UserModel {
      * @param name name of user
      */
     public void updateWithDefaults(String name) {
-        updateUser(name, DietType.GlutenFree.None, SortType.rating, MAX_DIST, "");
+        updateUser(name, DietType.None, SortType.rating, MAX_DIST, "");
     }
 
     /**
@@ -146,25 +147,57 @@ public class UserModel {
      */
     public void uploadPhoto(Bitmap pic, String picName, String foodName, String culture, String category, DietType dietType) {
         System.out.println("UPLOADING TO DB");
-        int gluten_free = 0;
         int vegetarian = 0;
         int vegan = 0;
         int kosher = 0;
+        int gluten_free = 0;
+
         switch (dietType) {
-            case GlutenFree:
-                gluten_free = 1;
+            case Vegetarian:
+                vegetarian = 1;
                 break;
             case Vegan:
                 vegan = 1;
                 break;
-            case Vegetarian:
-                vegetarian = 1;
-                break;
             case Kosher:
-                kosher = 1;
+                 kosher = 1;
                 break;
+            case GlutenFree:
+                gluten_free = 1;
+                break;
+            default:
+                vegetarian = 0;
+                vegan = 0;
+                kosher = 0;
+                gluten_free = 0;
         }
-        ServerApi.getInstance().uploadFood(pic, picName + ".jpg", foodName, culture, category, apiKey, 0, 0, 0, 0);
+
+        ServerApi.getInstance().uploadFood(pic, picName + ".jpg",
+                foodName, culture, category, apiKey,
+                vegetarian, vegan, kosher, gluten_free);
+    }
+
+    /**
+     * upload a photo to db with user data
+     *
+     * @param pic      picture to upload
+     * @param picName  name of picture
+     * @param foodName name of food
+     * @param culture  culture data
+     * @param category category of food
+     * @param dietType what diet it is compatible with
+     */
+    public void uploadPhotoAsync(final Bitmap pic, final String picName, final String foodName, final String culture, final String category, final DietType dietType) {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                uploadPhoto(pic, picName, foodName, culture, category, dietType);
+
+                // Thanks Java
+                return null;
+            }
+        }.execute();
     }
 
     public void setName(String name) {
@@ -177,12 +210,19 @@ public class UserModel {
 
     public void setDietType(DietType dietType) {
         this.dietType = dietType;
+        changedPrefs = true;
     }
 
     public void setSortType(SortType sortType) {
         this.sortType = sortType;
     }
 
+    public void setChangedPrefs(Boolean bool){
+        changedPrefs = bool;
+    }
+    public boolean getChangedPrefs(){
+        return changedPrefs;
+    }
     /**
      * Gets the maximum distance that the user is willing to go
      *

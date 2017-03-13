@@ -7,10 +7,10 @@ import android.os.Parcelable;
  * The class represents the current food shown on the food selection activity.
  */
 public class FoodDto implements Parcelable {
-    private String name; // name of food
-    private String culture; // culture of the food
-    private String tag;
-    private String link; // link to the picture
+    private final String name; // name of food
+    private final String culture; // culture of the food
+    private final String tag;
+    private final String link; // link to the picture
 
     /**
      * Constructor for the food with name, culture and image link
@@ -68,13 +68,11 @@ public class FoodDto implements Parcelable {
 
 
     @Override
-    /** Function used for parcel override. Don't worry about it */
     public int describeContents() {
         return 0;
     }
 
     @Override
-    /** Creates a parcel out of the current object. Don't worry about it */
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(culture);

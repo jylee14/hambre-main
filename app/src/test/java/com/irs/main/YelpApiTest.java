@@ -47,6 +47,7 @@ public class YelpApiTest {
 
         for (BusinessDto business : businessResponse.businesses()) {
             System.out.println(business.toString());
+            System.out.println(business.coordinates().toString());
         }
     }
 }

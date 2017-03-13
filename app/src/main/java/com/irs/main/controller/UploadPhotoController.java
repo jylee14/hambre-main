@@ -26,12 +26,10 @@ public class UploadPhotoController extends FragmentActivity {
     private static final int CAMERA_REQUEST = 1888;
     private static final int GALLERY_REQUEST = 1887;
 
-    private Button chosePhotoButton, saveButton, cancelButton, cameraButton;
     private Bitmap pic;
     private EditText foodName;
     private ImageView selectedPic;
     private String culture, diet, category, name;
-    private Spinner dietSpinner, categorySpinner;
     private EditText cultureTxt;
 
     //TODO add all cultures in alphabetical order available in yelp API found at:
@@ -42,7 +40,7 @@ public class UploadPhotoController extends FragmentActivity {
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
             "Kosher", "Gluten Free"};
 
-    Map<String, DietType> dietMap = new HashMap<String, DietType>() {{
+    private final Map<String, DietType> dietMap = new HashMap<String, DietType>() {{
         put("Gluten Free", DietType.GlutenFree);
         put("Kosher", DietType.Kosher);
         put("Vegan", DietType.Vegan);
@@ -50,6 +48,7 @@ public class UploadPhotoController extends FragmentActivity {
         put("None", DietType.None);
     }};
 
+    // TODO: 3/10/17 Make this into culture
     private static final String[] categoryPaths = {"food", "dessert", "fruit", "spicy"};
     private String picName = "";
 
@@ -65,13 +64,13 @@ public class UploadPhotoController extends FragmentActivity {
         setDietSpinner();
         setCategorySpinner();
         setSaveButton();
-        setChosePhotoButton();
+        setChoosePhotoButton();
         setCancelButton();
         setCameraButton();
     }
 
     private void setCameraButton() {
-        cameraButton = (Button) findViewById(R.id.camera_button);
+        Button cameraButton = (Button) findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +81,7 @@ public class UploadPhotoController extends FragmentActivity {
     }
 
     private void setCancelButton() {
-        cancelButton = (Button) findViewById(R.id.cancel_photo_button);
+        Button cancelButton = (Button) findViewById(R.id.cancel_photo_button);
         cancelButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,12 +92,12 @@ public class UploadPhotoController extends FragmentActivity {
     }
 
     private void setSaveButton() {
-        saveButton = (Button) findViewById(R.id.save_photo_button);
+        Button saveButton = (Button) findViewById(R.id.save_photo_button);
         saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (foodName.getText().toString().equals("") || cultureTxt.getText().toString().equals("")) {
-                    Toast.makeText(UploadPhotoController.this, "Please fill in all text fields", Toast.LENGTH_SHORT).show();
+                if (pic == null || foodName.getText().toString().equals("") || cultureTxt.getText().toString().equals("")) {
+                    Toast.makeText(UploadPhotoController.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         name = foodName.getText().toString();
@@ -109,7 +108,7 @@ public class UploadPhotoController extends FragmentActivity {
                                 "\ncategory: " + category + "\nname: " + name + "\npicName: " + picName);
 
                         // upload image
-                        UserModel.getInstance().uploadPhoto(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
+                        UserModel.getInstance().uploadPhotoAsync(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
                         Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
                         //startActivity(new Intent(UploadPhotoController.this, FoodFinderController.class));
@@ -123,9 +122,9 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
-    private void setChosePhotoButton() {
-        chosePhotoButton = (Button) findViewById(R.id.chose_photo_button);
-        chosePhotoButton.setOnClickListener(new Button.OnClickListener() {
+    private void setChoosePhotoButton() {
+        Button choosePhotoButton = (Button) findViewById(R.id.choose_photo_button);
+        choosePhotoButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pickImage();
@@ -134,7 +133,7 @@ public class UploadPhotoController extends FragmentActivity {
     }
 
     private void setCategorySpinner() {
-        categorySpinner = (Spinner) findViewById(R.id.category_spinner);
+        Spinner categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         final ArrayAdapter<String> categoryAdapter = new
                 ArrayAdapter<>(UploadPhotoController.this, android.R.layout.simple_spinner_item,
                 categoryPaths);
@@ -154,7 +153,7 @@ public class UploadPhotoController extends FragmentActivity {
     }
 
     private void setDietSpinner() {
-        dietSpinner = (Spinner) findViewById(R.id.dietary_spinner);
+        Spinner dietSpinner = (Spinner) findViewById(R.id.dietary_spinner);
         final ArrayAdapter<String> dietAdapter = new ArrayAdapter<>(UploadPhotoController.this,
                 android.R.layout.simple_spinner_item, dietPaths);
         dietSpinner.setAdapter(dietAdapter);
@@ -173,7 +172,7 @@ public class UploadPhotoController extends FragmentActivity {
     }
 
 
-    public void pickImage() {
+    private void pickImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         //TODO change these to crop and save as vertical phone pic
         intent.setType("image/*");
@@ -188,7 +187,7 @@ public class UploadPhotoController extends FragmentActivity {
 
     }
 
-    private String getPicName(String name) throws UnsupportedEncodingException {
+    private String getPicName(String name){
         return name + "_" + pic.hashCode();
     }
 
@@ -202,5 +201,13 @@ public class UploadPhotoController extends FragmentActivity {
             pic = (Bitmap) data.getExtras().get("data");
             selectedPic.setImageBitmap(pic);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

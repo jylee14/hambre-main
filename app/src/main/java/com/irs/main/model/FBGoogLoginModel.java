@@ -1,6 +1,7 @@
 package com.irs.main.model;
 
 import android.os.StrictMode;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -81,12 +82,17 @@ public class FBGoogLoginModel {
      * Returns if the user was logged in previously. Also logs in to our server
      * if the user had logged in
      *
-     * @return if the user was logged in previously
+     * @return if the user was logged in previously, null if we could not login
      */
-    public boolean loggedInPreviously() {
+    public Boolean loggedInPreviously() {
         // if facebook is logged in
         if (AccessToken.getCurrentAccessToken() != null) {
-            useFacebookToLogin();
+            boolean success = useFacebookToLogin();
+            if (!success) {
+                // can't login because there is no connection
+                return null;
+                // System.exit(-1);
+            }
             return true;
         }
 
@@ -114,36 +120,53 @@ public class FBGoogLoginModel {
         return false;
     }
 
-    public void useFacebookToLogin() {
-        // TODO: 3/8/17 ASYNC?
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+    /**
+     * Login with facebook
+     * @return false if login failed
+     */
+    public boolean useFacebookToLogin() {
+        //StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        //StrictMode.setThreadPolicy(policy);
+        // Strict mode forces this code to run synchronously. That way when view is switched, all this data is loaded
 
-        AuthDto response =
-                ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
-        System.out.println("GOT DATA FROM SERVER: " + response.user());
 
-        UserModel.getInstance().loginAccount(response.user().api_key());
-        System.out.println("LOGGED IN TO SERVER");
+        try {
+            AuthDto response = ServerApi.getInstance().authServer(AccessToken.getCurrentAccessToken());
+            System.out.println("GOT DATA FROM SERVER: " + response.user());
 
-        loggedIntoFacebook = true;
+            UserModel.getInstance().loginAccount(response.user().api_key());
+            System.out.println("LOGGED IN TO SERVER");
+
+            loggedIntoFacebook = true;
+            return true;
+        } catch (NullPointerException e){
+            System.err.println("something was null");
+            e.printStackTrace();
+            return false;
+            //System.exit(-1);
+        }
     }
 
     public void useGoogleToLogin(GoogleSignInResult result) {
-        // TODO: 3/8/17 ASYNC?
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        GoogleSignInAccount acct = result.getSignInAccount();
-        System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
+        try {
+            GoogleSignInAccount acct = result.getSignInAccount();
+            System.out.println("SIGNED IN GOOGLE: " + acct.getEmail());
 
-        AuthDto response = ServerApi.getInstance().authServer(acct);
-        System.out.println("GOT DATA FROM SERVER: " + response.user());
+            AuthDto response = ServerApi.getInstance().authServer(acct);
+            System.out.println("GOT DATA FROM SERVER: " + response.user());
 
-        UserModel.getInstance().loginAccount(response.user().api_key());
-        System.out.println("LOGGED IN TO SERVER");
+            UserModel.getInstance().loginAccount(response.user().api_key());
+            System.out.println("LOGGED IN TO SERVER");
 
-        loggedIntoGoogle = true;
+            loggedIntoGoogle = true;
+        } catch (NullPointerException e){
+            System.err.println("one of the fields was null");
+            e.printStackTrace();
+            System.exit(-1);
+        }
     }
 
     /**
