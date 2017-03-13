@@ -35,15 +35,16 @@ import com.irs.yelp.BusinessDto;
 import com.irs.yelp.YelpApi;
 import com.squareup.picasso.Picasso;
 
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
+
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final String server = "http://159.203.246.214/irs/";
-    private final int LOCATION_REQUEST_CODE = 101;
     private final Context context = this;
 
-    private static FoodDto[] gallery = new FoodDto[10];
+    private static Deque<FoodDto> gallery = new ConcurrentLinkedDeque<>();
 
     private ImageView mainView;
-    private int index = 0;
 
     private Location loc;
     private String culture;
@@ -51,9 +52,9 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private Animation animEnter, animLeave;
     private UserModel user = UserModel.getInstance();
 
-    private class GetFoodFromServer extends AsyncTask<FoodDto[], Integer, FoodDto[]> {
+    private class GetFoodFromServer extends AsyncTask<Deque<FoodDto>, Integer, Deque<FoodDto>> {
         @Override
-        protected FoodDto[] doInBackground(FoodDto[]... params) {
+        protected Deque<FoodDto> doInBackground(Deque<FoodDto>... params) {
             ServerApi api = ServerApi.getInstance();
             DBFoodDto[] DBFoodDtos = api.getFood();
             if (DBFoodDtos == null) {
@@ -64,7 +65,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];
                     FoodDto temp = new FoodDto(tempDB.name(), tempDB.getCulture(), tempDB.getTag(), "" + tempDB.path());
-                    params[0][i] = temp;
+                    params[0].push(temp);
                 } catch (Exception e) {
                     System.err.println("D'OH");
                     e.printStackTrace();
@@ -75,13 +76,14 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         }
 
         @Override
-        protected void onPostExecute(FoodDto[] foodDtos) {
+        protected void onPostExecute(Deque<FoodDto> foodDtos) {
             if (foodDtos == null) {
                 // WIFI ERROR
                 System.err.println("wifi error");
                 Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
             }
-            Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
+            Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
+            gallery.pop();
         }
     }
 
@@ -180,7 +182,6 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private void swipeAnimation() {
         try {
             mainView = (ImageView) findViewById(R.id.image);
-            //Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
             setSwipeTouchListener();
 
             animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
@@ -194,7 +195,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
                 public void onAnimationEnd(Animation animation) {
                     try {
-                        Picasso.with(context).load(server + gallery[index].getLink()).into(mainView);
+                        Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
+                        gallery.pop();
                     } catch (Exception e) {
                         e.printStackTrace();
                         startActivity(new Intent(FoodFinderController.this, ErrorController.class));
@@ -223,15 +225,13 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     private void swipeLeftUpdate() {
         mainView.startAnimation(animLeave);
-        index++;
-        if (index == gallery.length) {
+        if (gallery.peek() == null)
             new GetFoodFromServer().execute(gallery);
-            index = 0; //(index + 1);
-        }
+
     }
 
     private void swipeRightUpdate() {
-        culture = gallery[index].getCulture();
+        culture = gallery.peek().getCulture();
 
         Location mloc = loc;
         if (mloc == null) {
@@ -244,7 +244,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         Toast.makeText(context, "Our team of eggsperts are looking for restaurants near you", Toast.LENGTH_SHORT).show();
         UserModel.getInstance().setLongitude(mloc.getLongitude());
         UserModel.getInstance().setLatitude(mloc.getLatitude());
-        new LoadRestaurantsTask().execute(gallery[index]);
+        new LoadRestaurantsTask().execute(gallery.poll());
     }
 
     @Override
@@ -291,6 +291,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        final int LOCATION_REQUEST_CODE = 101;
         switch (requestCode) {
             case LOCATION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
