@@ -86,25 +86,36 @@ public class PreferencesController extends FragmentActivity {
 
     private void logout() {
         if (loginModel.isLoggedIn()) {
-            new AlertDialog.Builder(this).setTitle("Logout Confirmation")
-                    .setMessage("Are you sure you want to logout?")
+            new AlertDialog.Builder(this).setTitle("Logging out...")
+                    .setMessage("Do you want to save your preferences before logging out?")
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if (loginModel.isLoggedIntoGoogle())
-                                PreferencesController.this.logoutOfGoogle();
-                            else
-                                logoutOfFacebook();
-
-                            loginModel.loggedOut();
+                            // save preferences
+                            UserModel.getInstance().saveToDatabaseAsync();
+                            logoutCommon();
                         }
 
                     })
-                    .setNegativeButton("No", null)
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            logoutCommon();
+                        }
+                    })
                     .show();
         } else {
             Toast.makeText(this, "You're not logged in", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void logoutCommon(){
+        if (loginModel.isLoggedIntoGoogle())
+            PreferencesController.this.logoutOfGoogle();
+        else
+            logoutOfFacebook();
+
+        loginModel.loggedOut();
     }
 
     private void logoutOfFacebook() {
