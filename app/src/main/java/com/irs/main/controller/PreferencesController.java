@@ -33,6 +33,8 @@ public class PreferencesController extends FragmentActivity {
     private TextView maxRad;
     private final UserModel user = UserModel.getInstance();
     private FBGoogLoginModel loginModel;
+    private SeekBar rad;
+    private RadioGroup pref;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -43,17 +45,22 @@ public class PreferencesController extends FragmentActivity {
         loginModel = FBGoogLoginModel.getInstance();
 
         Button diet = (Button) findViewById(R.id.DPref);
-        SeekBar rad = (SeekBar) findViewById(R.id.radius);
+        rad = (SeekBar) findViewById(R.id.radius);
         maxRad = (TextView) findViewById(R.id.currMax);
-        RadioGroup pref = (RadioGroup) findViewById(R.id.sorting);
+        pref = (RadioGroup) findViewById(R.id.sorting);
         RadioButton rate = (RadioButton) findViewById(R.id.rate);
         RadioButton dist = (RadioButton) findViewById(R.id.dist);
         Button cont = (Button) findViewById(R.id.cont);
 
-        pref.check((UserModel.getInstance().getSortType() == SortType.distance) ? R.id.dist : R.id.rate);
-
-        rad.setProgress(user.getMaxDist());
-        maxRad.setText("" + user.getMaxDist() + " mi");
+        if(LandingController.isGuest) {
+            rad.setProgress(1);
+            maxRad.setText("1 mi");
+            pref.check(R.id.rate);
+        }else{
+            pref.check((UserModel.getInstance().getSortType() == SortType.distance) ? R.id.dist : R.id.rate);
+            rad.setProgress(user.getMaxDist());
+            maxRad.setText("" + user.getMaxDist() + " mi");
+        }
 
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -186,12 +193,13 @@ public class PreferencesController extends FragmentActivity {
                     Toast.makeText(PreferencesController.this, "Radius cannot be 0 miles", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
-                        // save preferences
-                        UserModel.getInstance().saveToDatabaseAsync();
-                        System.out.println("SAVED TO DB FROM PREFERENCES");
-
+                        if(!LandingController.isGuest) {
+                            // save preferences
+                            UserModel.getInstance().saveToDatabaseAsync();
+                            System.out.println("SAVED TO DB FROM PREFERENCES");
+                        }
                         // switch to food finder screen
-                        if(!user.firstPrefSet()) {
+                        if (!user.firstPrefSet()) {
                             user.setFirstPref(true);
                             Intent returnIntent = new Intent(PreferencesController.this, FoodFinderController.class);
                             startActivity(returnIntent);
@@ -200,8 +208,7 @@ public class PreferencesController extends FragmentActivity {
                             setResult(244, returnIntent);
                             user.setChangedPrefs(false);
                             finish();
-                        }
-                        else{
+                        } else {
                             finish();
                         }
                     } catch (Exception e) {

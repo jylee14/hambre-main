@@ -31,6 +31,7 @@ import com.irs.main.model.FBGoogLoginModel;
 public class LandingController extends FragmentActivity {
     private GoogleApiClient mGoogleApiClient;
     private FBGoogLoginModel loginModel;
+    protected static boolean isGuest = false;
 
     private static final String TAG = "LoginActivity";
     private static final String NETWORK_LOGIN_ERROR = "Could not login! No network connection available";
@@ -109,6 +110,7 @@ public class LandingController extends FragmentActivity {
 
     private void guestLogin() {
         Button guestButton = (Button) findViewById(R.id.Guest);
+        isGuest = true;
         guestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,6 +127,7 @@ public class LandingController extends FragmentActivity {
         goog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isGuest = false;
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                 startActivityForResult(signInIntent, GOOG_SIGN_IN);
             }
@@ -154,6 +157,7 @@ public class LandingController extends FragmentActivity {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
+                isGuest = false;
                 new LoginToFacebookAsync().execute();
 
                 System.out.println("Facebook Login Success!");
