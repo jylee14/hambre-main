@@ -29,8 +29,10 @@ public class DietRestrictionController extends FragmentActivity {
         save = (Button) findViewById(R.id.save);
         cancel = (Button) findViewById(R.id.cancel);
 
-        //set the preference to the preference of the user on the server
-        setPreferences();
+        if(LandingController.isGuest)
+            prefs.check(R.id.none);
+        else
+            setPreferences();
 
         setOnCheckedChangeListener();
         createSaveChangesOnClickListener();
@@ -51,15 +53,11 @@ public class DietRestrictionController extends FragmentActivity {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if not guest mode
-                //push update to server);
-                //database.getUser(username)
-                //username.updateDiet(newPref, prefIndex);
-                UserModel.getInstance().saveToDatabaseAsync();
-                Toast.makeText(DietRestrictionController.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                if(!LandingController.isGuest) {
+                    UserModel.getInstance().saveToDatabaseAsync();
+                    Toast.makeText(DietRestrictionController.this, "Changes saved!", Toast.LENGTH_SHORT).show();
+                }
                 returnToPrev();
-                //else
-                //propagate the data throughout the app via preferenceID
             }
         });
     }
@@ -85,7 +83,8 @@ public class DietRestrictionController extends FragmentActivity {
                         dietTemp = DietType.GlutenFree;
                         break;
                 }
-                user.setDietType(dietTemp);
+                if(!LandingController.isGuest)
+                    user.setDietType(dietTemp);
             }
         });
     }
