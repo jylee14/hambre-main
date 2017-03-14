@@ -29,8 +29,10 @@ public class DietRestrictionController extends FragmentActivity {
         save = (Button) findViewById(R.id.save);
         cancel = (Button) findViewById(R.id.cancel);
 
-        //set the preference to the preference of the user on the server
-        setPreferences();
+        if(LandingController.isGuest)
+            prefs.check(R.id.none);
+        else
+            setPreferences();
 
         setOnCheckedChangeListener();
         createSaveChangesOnClickListener();
