@@ -37,6 +37,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutionException;
+
+import static android.content.Context.LOCATION_SERVICE;
 
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
     private final String server = "http://159.203.246.214/irs/";
@@ -57,6 +60,11 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         protected Deque<FoodDto> doInBackground(Deque<FoodDto>... params) {
             ServerApi api = ServerApi.getInstance();
             DBFoodDto[] DBFoodDtos = api.getFood();
+            if(user.getIsGuest())
+                DBFoodDtos = api.getFoodByParams(user.getDietType());
+            else
+                DBFoodDtos = api.getFoodByUser(user.getApiKey());
+
             if (DBFoodDtos == null) {
                 return null;
             }
@@ -82,8 +90,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 System.err.println("wifi error");
                 Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
             }
-            Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
-            gallery.pop();
+            //Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
+            //gallery.pop();
         }
     }
 
@@ -92,8 +100,13 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_finder);
-        new GetFoodFromServer().execute(gallery);
-
+        try {
+            new GetFoodFromServer().execute(gallery).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         initButtons();
         swipeAnimation();
         askGPS();
@@ -118,7 +131,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(FoodFinderController.this, PreferencesController.class);
-                startActivity(i);
+                startActivityForResult(i, 2301);
             }
         });
 
@@ -182,6 +195,9 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     private void swipeAnimation() {
         try {
             mainView = (ImageView) findViewById(R.id.image);
+            FoodDto curr = gallery.peek();
+            Picasso.with(context).load(server + curr.getLink()).into(mainView);
+
             setSwipeTouchListener();
 
             animEnter = AnimationUtils.loadAnimation(this, R.anim.animation_enter);
@@ -195,8 +211,8 @@ public class FoodFinderController extends FragmentActivity implements android.lo
 
                 public void onAnimationEnd(Animation animation) {
                     try {
+                        gallery.peek();
                         Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
-                        gallery.pop();
                     } catch (Exception e) {
                         e.printStackTrace();
                         startActivity(new Intent(FoodFinderController.this, ErrorController.class));
@@ -224,9 +240,19 @@ public class FoodFinderController extends FragmentActivity implements android.lo
     }
 
     private void swipeLeftUpdate() {
+        if(!gallery.isEmpty()){
+            gallery.remove();
+        }
+        if(gallery.isEmpty()) {
+            try {
+                new GetFoodFromServer().execute(gallery).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
         mainView.startAnimation(animLeave);
-        if (gallery.peek() == null)
-            new GetFoodFromServer().execute(gallery);
 
     }
 
@@ -301,6 +327,23 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                     Toast.makeText(this, "Permission Denied!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult (int requestCode, int resultCode, Intent data){
+        if(resultCode == 244){
+            System.out.println("returned from preferences");
+            gallery.clear();
+            try {
+                new GetFoodFromServer().execute(gallery).get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+            FoodDto curr = gallery.peek();
+            Picasso.with(context).load(server + curr.getLink()).into(mainView);
         }
     }
 
