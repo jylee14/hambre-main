@@ -29,9 +29,9 @@ import com.irs.main.R;
 import com.irs.main.model.FBGoogLoginModel;
 
 public class LandingController extends FragmentActivity {
-    private GoogleApiClient mGoogleApiClient;
-    private FBGoogLoginModel loginModel;
-    protected static boolean isGuest = false;
+    private GoogleApiClient mGoogleApiClient;  // used for google login
+    private FBGoogLoginModel loginModel;  // used for facebook login
+    protected static boolean isGuest = false;   // used for checking if user is using guest account
 
     private static final String TAG = "LoginActivity";
     private static final String NETWORK_LOGIN_ERROR = "Could not login! No network connection available";
@@ -43,7 +43,7 @@ public class LandingController extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        loginModel = FBGoogLoginModel.getInstance();
+        loginModel = FBGoogLoginModel.getInstance();    // Create instance of facebook login
 
         networkAlert = new AlertDialog.Builder(LandingController.this).setTitle("No Connection")
                         .setMessage("You need a network connection to use this app. Please connect to a network and try again")
@@ -54,6 +54,7 @@ public class LandingController extends FragmentActivity {
                             }
                         }).setCancelable(false);
 
+        // Check if user is connected to the internet. Notify the user if not active network found.
         ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         if (activeNetwork == null) { // not connected to the internet
@@ -99,6 +100,8 @@ public class LandingController extends FragmentActivity {
         guestLogin();
     }
 
+    // Handles event when user click on continue button to take user into "settings and preferences"
+    // screen
     private void continueButton() {
         findViewById(R.id.button_continue).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +111,7 @@ public class LandingController extends FragmentActivity {
         });
     }
 
+    // User chooses to use guest account; take user to "settings and preferences" screen.
     private void guestLogin() {
         Button guestButton = (Button) findViewById(R.id.Guest);
         isGuest = true;
@@ -119,6 +123,7 @@ public class LandingController extends FragmentActivity {
         });
     }
 
+    // User uses google account. Take user to "Settings and preferences" screen
     private void googleLoginButton() {
         // Build a GoogleApiClient with access to the Google Sign-In API and the
         // options specified by gso.

@@ -40,6 +40,7 @@ public class UploadPhotoController extends FragmentActivity {
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
             "Kosher", "Gluten Free"};
 
+    // Container for dietype.
     private final Map<String, DietType> dietMap = new HashMap<String, DietType>() {{
         put("Gluten Free", DietType.GlutenFree);
         put("Kosher", DietType.Kosher);
@@ -69,6 +70,7 @@ public class UploadPhotoController extends FragmentActivity {
         setCameraButton();
     }
 
+    // Method to handle case if user decides to use camera to take a picture to upload.
     private void setCameraButton() {
         Button cameraButton = (Button) findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(new Button.OnClickListener() {
@@ -80,6 +82,7 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
+    // Cancels upload photo activity and takes user back to "Food Finder" screen.
     private void setCancelButton() {
         Button cancelButton = (Button) findViewById(R.id.cancel_photo_button);
         cancelButton.setOnClickListener(new Button.OnClickListener() {
@@ -91,6 +94,7 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
+    // Method to submit the image to the database for review.
     private void setSaveButton() {
         Button saveButton = (Button) findViewById(R.id.save_photo_button);
         saveButton.setOnClickListener(new Button.OnClickListener() {
@@ -122,6 +126,7 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
+    // Method to handle case when user wants to upload photo from gallery.
     private void setChoosePhotoButton() {
         Button choosePhotoButton = (Button) findViewById(R.id.choose_photo_button);
         choosePhotoButton.setOnClickListener(new Button.OnClickListener() {
@@ -132,6 +137,7 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
+    // Method to select which category the food image falls under.
     private void setCategorySpinner() {
         Spinner categorySpinner = (Spinner) findViewById(R.id.category_spinner);
         final ArrayAdapter<String> categoryAdapter = new
@@ -140,6 +146,7 @@ public class UploadPhotoController extends FragmentActivity {
         categorySpinner.setAdapter(categoryAdapter);
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            // Select item.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 category = categoryPaths[position];
@@ -152,6 +159,7 @@ public class UploadPhotoController extends FragmentActivity {
         });
     }
 
+    // Method for setting dietary restriction.
     private void setDietSpinner() {
         Spinner dietSpinner = (Spinner) findViewById(R.id.dietary_spinner);
         final ArrayAdapter<String> dietAdapter = new ArrayAdapter<>(UploadPhotoController.this,
@@ -159,6 +167,7 @@ public class UploadPhotoController extends FragmentActivity {
         dietSpinner.setAdapter(dietAdapter);
 
         dietSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            // Select item.
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 diet = dietPaths[position];
@@ -172,6 +181,7 @@ public class UploadPhotoController extends FragmentActivity {
     }
 
 
+    //Crop image to viewable state.
     private void pickImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         //TODO change these to crop and save as vertical phone pic

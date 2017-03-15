@@ -45,11 +45,14 @@ public class PreferencesController extends FragmentActivity {
         loginModel = FBGoogLoginModel.getInstance();
 
         Button diet = (Button) findViewById(R.id.DPref);
-        rad = (SeekBar) findViewById(R.id.radius);
-        maxRad = (TextView) findViewById(R.id.currMax);
+        rad = (SeekBar) findViewById(R.id.radius);          // bar for changing max distance
+        maxRad = (TextView) findViewById(R.id.currMax);     // displays max distance
         pref = (RadioGroup) findViewById(R.id.sorting);
+
+        // Used to display restaurants based on rating  or distance.
         RadioButton rate = (RadioButton) findViewById(R.id.rate);
         RadioButton dist = (RadioButton) findViewById(R.id.dist);
+
         Button cont = (Button) findViewById(R.id.cont);
 
         if(LandingController.isGuest) {
@@ -62,6 +65,7 @@ public class PreferencesController extends FragmentActivity {
             maxRad.setText("" + user.getMaxDist() + " mi");
         }
 
+        // Set type of sorting for list of  restaurants
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +78,7 @@ public class PreferencesController extends FragmentActivity {
                 user.setSortType(SortType.distance);
             }
         });
+
         setLogout();
         distanceBar(rad);
         toNextPage(cont);
@@ -91,6 +96,7 @@ public class PreferencesController extends FragmentActivity {
         });
     }
 
+    // Handle event for when user clicks on logout button.
     private void logout() {
         if (loginModel.isLoggedIn()) {
             new AlertDialog.Builder(this).setTitle("Logging out...")
@@ -116,6 +122,7 @@ public class PreferencesController extends FragmentActivity {
         }
     }
 
+    // Method to logout user if user used google login.
     private void logoutCommon(){
         if (loginModel.isLoggedIntoGoogle())
             PreferencesController.this.logoutOfGoogle();
@@ -125,6 +132,7 @@ public class PreferencesController extends FragmentActivity {
         loginModel.loggedOut();
     }
 
+    //Method to logout user if user used facebook login.
     private void logoutOfFacebook() {
         if (loginModel.isLoggedIntoFacebook()) {
             LoginManager.getInstance().logOut();
@@ -132,6 +140,7 @@ public class PreferencesController extends FragmentActivity {
         }
     }
 
+    // Method to take user to login screen.
     private void logoutToLanding() {
         user.setFirstPref(false);
         Intent intent = new Intent(PreferencesController.this, LandingController.class);

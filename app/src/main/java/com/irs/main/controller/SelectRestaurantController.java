@@ -21,14 +21,14 @@ import java.util.ArrayList;
 //TODO check into adding a distance and if they are open or closed currently
 public class SelectRestaurantController extends FragmentActivity implements Runnable {
     private ListView list;
-    private BusinessDto[] businesses;
-    private String[] names;
+    private BusinessDto[] businesses;         //the restaurants and their details.
+    private String[] names;                  //restaurant names
     private String[] url;
     private String[] imageUrl;
-    private double[] ratings;
-    private String[] prices;
-    private CoordinatesDto[] coordinates;
-    private double[] distances;
+    private double[] ratings;                //restaurant ratings
+    private String[] prices;                 //restaurant pricing
+    private CoordinatesDto[] coordinates;    // restaurant coordinates
+    private double[] distances;              // distances of restaurants
 
     private final UserModel user = UserModel.getInstance();
 
@@ -50,6 +50,8 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
 
     }
 
+    // Load the restaurants and fill the list viewed by the user
+    // with restaurants and each of the restaurants details.
     public void run() {
         businesses = BusinessDto.toBusinessModel(getIntent().getParcelableArrayExtra("model"));
         businesses = trimArray(businesses);
@@ -64,6 +66,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         coordinates = new CoordinatesDto[businesses.length];
         distances = new double[businesses.length];
 
+        // Get restaurant details and store them in the appropriate container.
         for (int i = 0; i < businesses.length; i++) {
             names[i] = businesses[i].name();
             url[i] = businesses[i].url();
@@ -78,6 +81,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
                 RestaurantListController(SelectRestaurantController.this,
                 names, url, imageUrl, ratings, prices, coordinates, distances);
 
+        // Fill display with restaurants details for the user to see.
         list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
@@ -93,6 +97,7 @@ public class SelectRestaurantController extends FragmentActivity implements Runn
         });
     }
 
+    // Method to remove restaurants that are not in the distance the user has specified.
     private BusinessDto[] trimArray(BusinessDto[] businesses){
         System.out.println("Removing restaurants that are too far away");
         System.out.println("User's max distance: " + user.getMaxDist());
