@@ -42,24 +42,28 @@ import java.util.concurrent.ExecutionException;
 import static android.content.Context.LOCATION_SERVICE;
 
 public class FoodFinderController extends FragmentActivity implements android.location.LocationListener {
-    private final String server = "http://159.203.246.214/irs/";
-    private final Context context = this;
+    private final String server = "http://159.203.246.214/irs/";  // Contains the food images
+    private final Context context = this; // The activity
 
-    private static Deque<FoodDto> gallery = new ConcurrentLinkedDeque<>();
+    private static Deque<FoodDto> gallery = new ConcurrentLinkedDeque<>(); // Local container for images
 
     private ImageView mainView;
 
-    private Location loc;
-    private String culture;
+    private Location loc;   // User's last location (longitude and langitude coordinates)
+    private String culture;  // The cuisine/category of the food
 
-    private Animation animEnter, animLeave;
+    private Animation animEnter, animLeave;         // Animation for swiping left and right
     private UserModel user = UserModel.getInstance();
 
     private class GetFoodFromServer extends AsyncTask<Deque<FoodDto>, Integer, Deque<FoodDto>> {
+
+
         @Override
         protected Deque<FoodDto> doInBackground(Deque<FoodDto>... params) {
             ServerApi api = ServerApi.getInstance();
             DBFoodDto[] DBFoodDtos = api.getFood();
+
+            // Check if user is using a guest account or not.
             if(user.getIsGuest())
                 DBFoodDtos = api.getFoodByParams(user.getDietType());
             else
@@ -69,6 +73,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 return null;
             }
 
+            // Get food from the server.
             for (int i = 0; i < DBFoodDtos.length; i++) {
                 try {
                     DBFoodDto tempDB = DBFoodDtos[i];
@@ -90,8 +95,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
                 System.err.println("wifi error");
                 Toast.makeText(FoodFinderController.this, "Could not connect to network!", Toast.LENGTH_SHORT).show();
             }
-            //Picasso.with(context).load(server + gallery.peek().getLink()).into(mainView);
-            //gallery.pop();
+
         }
     }
 
@@ -112,12 +116,17 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         askGPS();
     }
 
+    // Handle the event when user clicks on upload pictures button or settings button.
     private void initButtons() {
         Button uploadButton = (Button) findViewById(R.id.btn_upload);
         uploadButton.setOnClickListener(new Button.OnClickListener() {
+
+            // Only allow user to upload screen if they are using an account that is not
+            // a guest account.
             @Override
             public void onClick(View v) {
                 if (FBGoogLoginModel.getInstance().isLoggedIn()) {
+                    //Take user to the upload photo screen.
                     Intent i = new Intent(FoodFinderController.this, UploadPhotoController.class);
                     startActivity(i);
                 } else {
@@ -126,6 +135,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             }
         });
 
+        // Go to the settings and preferences screen if user clicks on settings button.
         Button settingsButton = (Button) findViewById(R.id.btn_settings);
         settingsButton.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -138,6 +148,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         leftRightButtonClick();
     }
 
+    // Handle events for user swiping left or right.
     private void leftRightButtonClick(){
         Button LeftButton = (Button)findViewById(R.id.button_no);
         LeftButton.setOnClickListener(new View.OnClickListener(){
@@ -156,6 +167,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         });
     }
 
+    // Get list of restaurants based on the food item selected by user through the yelp api.
     private class LoadRestaurantsTask extends AsyncTask<FoodDto, Integer, BusinessDto[]> {
         @SafeVarargs
         @Override
@@ -164,6 +176,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
             BusinessDto[] response = null;
             FoodDto food = params[0];
             try {
+                // Use the user's location to get restaurants in a distance user has specified.
                 System.out.println(culture);
                 int METERS_PER_MILE = 1600;
                 int LIMIT = 20;
@@ -192,6 +205,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         }
     }
 
+    // Handle swipe animation.
     private void swipeAnimation() {
         try {
             mainView = (ImageView) findViewById(R.id.image);
@@ -227,6 +241,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         }
     }
 
+    // Listens for user left swipes and right swipes.
     private void setSwipeTouchListener() {
         mainView.setOnTouchListener(new OnSwipeTouchListener(FoodFinderController.this) {
             public void onSwipeLeft() {
@@ -239,6 +254,7 @@ public class FoodFinderController extends FragmentActivity implements android.lo
         });
     }
 
+    // Get more pictures if user has swiped through of images in the current gallery.
     private void swipeLeftUpdate() {
         if(!gallery.isEmpty()){
             gallery.remove();

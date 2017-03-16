@@ -13,8 +13,8 @@ import com.irs.main.model.UserModel;
 
 public class DietRestrictionController extends FragmentActivity {
     private RadioGroup prefs;
-    private Button save;
-    private Button cancel;
+    private Button save;        //Button to save preferences
+    private Button cancel;      //Button to discard current preference changes
 
     //private DietType dietTemp = DietType.None;
 
@@ -29,16 +29,16 @@ public class DietRestrictionController extends FragmentActivity {
         save = (Button) findViewById(R.id.save);
         cancel = (Button) findViewById(R.id.cancel);
 
-        if(LandingController.isGuest)
-            prefs.check(R.id.none);
-        else
-            setPreferences();
-
+        // Set preference base on user account.
+        setPreferences();
+      
         setOnCheckedChangeListener();
         createSaveChangesOnClickListener();
         setCancelOnClickListener();
     }
 
+    //Clicking cancel button discards changes currently made to dietary preferences;
+    //return to the setting and preferences page afterwards.
     private void setCancelOnClickListener() {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +49,8 @@ public class DietRestrictionController extends FragmentActivity {
         });
     }
 
+    // Clicking on save button saves dietery preferences to the database;
+    //return to the setting and preferences page afterwards.
     private void createSaveChangesOnClickListener() {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +64,7 @@ public class DietRestrictionController extends FragmentActivity {
         });
     }
 
+    // Listen for changes in dietery preferences made by the user and set it.
     private void setOnCheckedChangeListener() {
         prefs.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -83,12 +86,12 @@ public class DietRestrictionController extends FragmentActivity {
                         dietTemp = DietType.GlutenFree;
                         break;
                 }
-                if(!LandingController.isGuest)
-                    user.setDietType(dietTemp);
+                user.setDietType(dietTemp);
             }
         });
     }
 
+    // Set the preferences for the user's diet.
     private void setPreferences() {
         switch (user.getDietType()) {
             case None:
@@ -112,6 +115,7 @@ public class DietRestrictionController extends FragmentActivity {
         }
     }
 
+    // Close activity.
     private void returnToPrev() {
         finish();
     }

@@ -47,6 +47,7 @@ class RestaurantListController extends ArrayAdapter<String> {
         this.distances = distances;
     }
 
+    // Handle view for allowing user to see list of restaurants based on chosen food item.
     @Override
     public View getView(final int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
@@ -71,6 +72,7 @@ class RestaurantListController extends ArrayAdapter<String> {
         Button mapButton = (Button) rowView.findViewById(R.id.map_button);
         mapButton.setFocusable(false);
 
+        //Listen for user clicking of "open map" button.
         mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,6 +89,7 @@ class RestaurantListController extends ArrayAdapter<String> {
         return rowView;
     }
 
+    // Method to display the location for the click restaurant.
     private void openMaps(CoordinatesDto coordinates, String label) {
         String uriBegin = "geo:" + coordinates;
         String query = coordinates.toString() + "(" + label + ")";
