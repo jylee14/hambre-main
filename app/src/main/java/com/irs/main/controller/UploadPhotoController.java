@@ -49,7 +49,7 @@ public class UploadPhotoController extends FragmentActivity {
         put("None", DietType.None);
     }};
 
-    // TODO: 3/10/17 Make this into culture
+
     private static final String[] categoryPaths = {"food", "dessert", "fruit", "spicy"};
     private static final String [] culturePaths = {"American", "Chinese","Indian", "Italian",
             "Japanese", "Jewish", "Korean", "Mediterranean", "Mexican" , "Middle Eastern",
@@ -63,7 +63,7 @@ public class UploadPhotoController extends FragmentActivity {
 
         foodName = (EditText) findViewById(R.id.name_txt);
         selectedPic = (ImageView) findViewById(R.id.selected_pic);
-        cultureTxt = (EditText) findViewById(R.id.culture_txt);
+        //cultureTxt = (EditText) findViewById(R.id.culture_txt);
 
         setDietSpinner();
         setCategorySpinner();
@@ -71,6 +71,7 @@ public class UploadPhotoController extends FragmentActivity {
         setChoosePhotoButton();
         setCancelButton();
         setCameraButton();
+        setCultureSpinner();
     }
 
     // Method to handle case if user decides to use camera to take a picture to upload.
@@ -108,7 +109,7 @@ public class UploadPhotoController extends FragmentActivity {
                 } else {
                     try {
                         name = foodName.getText().toString();
-                        culture = cultureTxt.getText().toString();
+                        //culture = cultureTxt.getText().toString();
                         String picName = getPicName(name);
                         
                         System.out.println("Culture: " + culture + "\nDiet: " + diet +
@@ -174,6 +175,24 @@ public class UploadPhotoController extends FragmentActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 diet = dietPaths[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setCultureSpinner(){
+        Spinner cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
+        final ArrayAdapter<String> cultureAdapter = new ArrayAdapter<>(UploadPhotoController.this,
+                android.R.layout.simple_spinner_item, culturePaths);
+        cultureSpinner.setAdapter(cultureAdapter);
+        cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                culture = culturePaths[position];
             }
 
             @Override
