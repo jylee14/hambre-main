@@ -30,10 +30,7 @@ public class DietRestrictionController extends FragmentActivity {
         cancel = (Button) findViewById(R.id.cancel);
 
         // Set preference base on user account.
-        if(LandingController.isGuest)
-            prefs.check(R.id.none);
-        else
-            setPreferences();
+        setPreferences();
 
         setOnCheckedChangeListener();
         createSaveChangesOnClickListener();
@@ -89,8 +86,7 @@ public class DietRestrictionController extends FragmentActivity {
                         dietTemp = DietType.GlutenFree;
                         break;
                 }
-                if(!LandingController.isGuest)
-                    user.setDietType(dietTemp);
+                user.setDietType(dietTemp);
             }
         });
     }

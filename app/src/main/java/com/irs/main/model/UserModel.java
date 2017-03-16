@@ -288,4 +288,17 @@ public class UserModel {
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
+
+    //log the guest out
+    public void logOut(){
+        if(isGuest){
+            dietType = DietType.None;
+            sortType = SortType.rating;
+            maxDist = 1;
+            apiKey = "";
+            isGuest = true;
+            firstPref = false;
+            changedPrefs = false;
+        }
+    }
 }

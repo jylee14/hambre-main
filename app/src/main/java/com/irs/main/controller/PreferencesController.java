@@ -55,15 +55,9 @@ public class PreferencesController extends FragmentActivity {
 
         Button cont = (Button) findViewById(R.id.cont);
 
-        if(LandingController.isGuest) {
-            rad.setProgress(1);
-            maxRad.setText("1 mi");
-            pref.check(R.id.rate);
-        }else{
-            pref.check((UserModel.getInstance().getSortType() == SortType.distance) ? R.id.dist : R.id.rate);
-            rad.setProgress(user.getMaxDist());
-            maxRad.setText("" + user.getMaxDist() + " mi");
-        }
+        pref.check((user.getSortType() == SortType.distance) ? R.id.dist : R.id.rate);
+        rad.setProgress(user.getMaxDist());
+        maxRad.setText("" + user.getMaxDist() + " mi");
 
         // Set type of sorting for list of  restaurants
         rate.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +99,7 @@ public class PreferencesController extends FragmentActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             // save preferences
-                            UserModel.getInstance().saveToDatabaseAsync();
+                            user.saveToDatabaseAsync();
                             logoutCommon();
                         }
 
@@ -118,7 +112,7 @@ public class PreferencesController extends FragmentActivity {
                     })
                     .show();
         } else {
-            Toast.makeText(this, "You're not logged in", Toast.LENGTH_SHORT).show();
+            logoutToLanding();
         }
     }
 
@@ -143,6 +137,7 @@ public class PreferencesController extends FragmentActivity {
     // Method to take user to login screen.
     private void logoutToLanding() {
         user.setFirstPref(false);
+        user.logOut();
         Intent intent = new Intent(PreferencesController.this, LandingController.class);
         startActivity(intent);
         finish();
@@ -204,8 +199,13 @@ public class PreferencesController extends FragmentActivity {
                     try {
                         if(!LandingController.isGuest) {
                             // save preferences
-                            UserModel.getInstance().saveToDatabaseAsync();
+                            user.saveToDatabaseAsync();
                             System.out.println("SAVED TO DB FROM PREFERENCES");
+                        }else{
+                            if(pref.getCheckedRadioButtonId() == R.id.dist)
+                                user.setSortType(SortType.distance);
+                            else
+                                user.setSortType(SortType.rating);
                         }
                         // switch to food finder screen
                         if (!user.firstPrefSet()) {
