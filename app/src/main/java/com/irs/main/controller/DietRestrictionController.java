@@ -31,7 +31,7 @@ public class DietRestrictionController extends FragmentActivity {
 
         // Set preference base on user account.
         setPreferences();
-
+      
         setOnCheckedChangeListener();
         createSaveChangesOnClickListener();
         setCancelOnClickListener();
