@@ -51,6 +51,9 @@ public class UploadPhotoController extends FragmentActivity {
 
     // TODO: 3/10/17 Make this into culture
     private static final String[] categoryPaths = {"food", "dessert", "fruit", "spicy"};
+    private static final String [] culturePaths = {"American", "Chinese","Indian", "Italian",
+            "Japanese", "Jewish", "Korean", "Mediterranean", "Mexican" , "Middle Eastern",
+            "Sushi", "Thai"};
     private String picName = "";
 
     @Override
