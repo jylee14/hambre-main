@@ -31,16 +31,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/name_txt"
-        android:hint="Enter Name"/>
+        android:hint="Enter Dish Name: "/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <EditText
-            android:layout_width="fill_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/culture_txt"
-            android:hint="Enter Culture"/>
+            android:text="Select Culture: "
+            android:textSize="8pt"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/culture_spinner"
+            android:spinnerMode="dropdown">
+        </Spinner>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

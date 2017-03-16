@@ -30,12 +30,6 @@ public class UploadPhotoController extends FragmentActivity {
     private EditText foodName;
     private ImageView selectedPic;
     private String culture, diet, category, name;
-    private EditText cultureTxt;
-
-    //TODO add all cultures in alphabetical order available in yelp API found at:
-    //https://www.yelp.com/developers/documentation/v2/all_category_list
-
-    //TODO also change switch statement below for cultureSpinner.OnItemSelected
 
     private static final String[] dietPaths = {"None", "Vegetarian", "Vegan",
             "Kosher", "Gluten Free"};
@@ -49,9 +43,11 @@ public class UploadPhotoController extends FragmentActivity {
         put("None", DietType.None);
     }};
 
-    // TODO: 3/10/17 Make this into culture
+
     private static final String[] categoryPaths = {"food", "dessert", "fruit", "spicy"};
-    private String picName = "";
+    private static final String [] culturePaths = {"American", "Chinese","Indian", "Italian",
+            "Japanese", "Jewish", "Korean", "Mediterranean", "Mexican" , "Middle Eastern",
+            "Sushi", "Thai"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +56,6 @@ public class UploadPhotoController extends FragmentActivity {
 
         foodName = (EditText) findViewById(R.id.name_txt);
         selectedPic = (ImageView) findViewById(R.id.selected_pic);
-        cultureTxt = (EditText) findViewById(R.id.culture_txt);
 
         setDietSpinner();
         setCategorySpinner();
@@ -68,6 +63,7 @@ public class UploadPhotoController extends FragmentActivity {
         setChoosePhotoButton();
         setCancelButton();
         setCameraButton();
+        setCultureSpinner();
     }
 
     // Method to handle case if user decides to use camera to take a picture to upload.
@@ -100,12 +96,12 @@ public class UploadPhotoController extends FragmentActivity {
         saveButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pic == null || foodName.getText().toString().equals("") || cultureTxt.getText().toString().equals("")) {
+                if (pic == null || foodName.getText().toString().equals("")) {
                     Toast.makeText(UploadPhotoController.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 } else {
                     try {
                         name = foodName.getText().toString();
-                        culture = cultureTxt.getText().toString();
+
                         String picName = getPicName(name);
                         
                         System.out.println("Culture: " + culture + "\nDiet: " + diet +
@@ -115,7 +111,6 @@ public class UploadPhotoController extends FragmentActivity {
                         UserModel.getInstance().uploadPhotoAsync(pic, picName + ".jpg", name, culture, category, dietMap.get(diet));
                         Toast.makeText(UploadPhotoController.this, "photo submitted!", Toast.LENGTH_SHORT).show();
 
-                        //startActivity(new Intent(UploadPhotoController.this, FoodFinderController.class));
                         finish();
                     } catch (Exception ex) {
                         System.out.println("You will be assimilated. Resistance is futile.");
@@ -171,6 +166,24 @@ public class UploadPhotoController extends FragmentActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 diet = dietPaths[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setCultureSpinner(){
+        Spinner cultureSpinner = (Spinner)findViewById(R.id.culture_spinner);
+        final ArrayAdapter<String> cultureAdapter = new ArrayAdapter<>(UploadPhotoController.this,
+                android.R.layout.simple_spinner_item, culturePaths);
+        cultureSpinner.setAdapter(cultureAdapter);
+        cultureSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                culture = culturePaths[position];
             }
 
             @Override
