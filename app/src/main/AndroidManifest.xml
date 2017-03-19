@@ -63,8 +63,9 @@
             android:label="UploadPhoto"
             android:screenOrientation="portrait" />
 
-        <uses-feature
-            android:name="android.hardware.camera"
-            android:required="true" />
     </application>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
 </manifest>
