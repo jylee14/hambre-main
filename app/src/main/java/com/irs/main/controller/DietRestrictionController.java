@@ -19,6 +19,7 @@ public class DietRestrictionController extends FragmentActivity {
     //private DietType dietTemp = DietType.None;
 
     private final UserModel user = UserModel.getInstance();
+    private final DietType prev = user.getDietType();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class DietRestrictionController extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(DietRestrictionController.this, "Changes discarded", Toast.LENGTH_SHORT).show();
+                user.setDietType(prev);
                 returnToPrev();
             }
         });
@@ -56,7 +58,7 @@ public class DietRestrictionController extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 if(!LandingController.isGuest) {
-                    UserModel.getInstance().saveToDatabaseAsync();
+                    user.saveToDatabaseAsync();
                     Toast.makeText(DietRestrictionController.this, "Changes saved!", Toast.LENGTH_SHORT).show();
                 }
                 returnToPrev();
