@@ -19,7 +19,7 @@ public class DietRestrictionController extends FragmentActivity {
     //private DietType dietTemp = DietType.None;
 
     private final UserModel user = UserModel.getInstance();
-    private final DietType prev = user.getDietType();   //just in case no save happens
+    private final DietType prev = user.getDietType();   //just in case discard happens
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
